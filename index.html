@@ -434,20 +434,21 @@
             window.open(`https://wa.me/5521995969378?text=${encodeURIComponent(message)}`, '_blank');
         }
 
-        // --- PRODUCTS DATA ---
+        // --- PRODUCTS DATA (LINKS ESTÁVEIS DA WIKIMEDIA) ---
+        // Se a imagem falhar, o 'onerror' cria um placeholder com o nome do produto.
         const products = [
             // CONSOLES
             { id: 1, name: "PlayStation 5 Slim", category: "console", price: "R$ 3.799,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/PlayStation_5_and_DualSense_with_transparent_background.png/640px-PlayStation_5_and_DualSense_with_transparent_background.png", desc: "Digital Edition, 1TB SSD" },
-            { id: 2, name: "Xbox Series S", category: "console", price: "R$ 2.699,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Microsoft-Xbox-Series-S-Console-L.jpg/800px-Microsoft-Xbox-Series-S-Console-L.jpg", desc: "512GB SSD, Compacto" },
+            { id: 2, name: "Xbox Series S", category: "console", price: "R$ 2.699,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Microsoft-Xbox-Series-S-Console-L.jpg/640px-Microsoft-Xbox-Series-S-Console-L.jpg", desc: "512GB SSD, Compacto" },
             { id: 3, name: "Nintendo Switch OLED", category: "console", price: "R$ 2.199,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Nintendo_Switch_Console.png/640px-Nintendo_Switch_Console.png", desc: "Tela 7 pol, Joy-Cons" },
             { id: 4, name: "PlayStation 4 Slim", category: "console", price: "R$ 1.599,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/PS4-Console-wDS4.jpg/640px-PS4-Console-wDS4.jpg", desc: "500GB, Seminovo c/ Garantia" },
-            { id: 5, name: "Xbox Series X", category: "console", price: "R$ 4.499,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Xbox-Series-X-Console-wController-FL.jpg/800px-Xbox-Series-X-Console-wController-FL.jpg", desc: "1TB SSD, 4K Nativo" },
+            { id: 5, name: "Xbox Series X", category: "console", price: "R$ 4.499,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Xbox-Series-X-Console-wController-FL.jpg/640px-Xbox-Series-X-Console-wController-FL.jpg", desc: "1TB SSD, 4K Nativo" },
             
             // GAMES
             { id: 6, name: "God of War Ragnarok", category: "games", price: "R$ 299,00", image: "https://upload.wikimedia.org/wikipedia/en/e/ee/God_of_War_Ragnar%C3%B6k_cover.jpg", desc: "PS5 Mídia Física" },
             { id: 7, name: "GTA V Premium", category: "games", price: "R$ 149,00", image: "https://upload.wikimedia.org/wikipedia/en/a/a5/Grand_Theft_Auto_V.png", desc: "PS4 / Xbox One" },
             { id: 8, name: "EA Sports FC 24", category: "games", price: "R$ 249,00", image: "https://upload.wikimedia.org/wikipedia/en/thumb/8/88/EA_Sports_FC_24_cover.jpg/220px-EA_Sports_FC_24_cover.jpg", desc: "PS5 / PS4" },
-            { id: 9, name: "Spider-Man 2", category: "games", price: "R$ 349,00", image: "https://gmedia.playstation.com/is/image/SIEPDC/marvels-spider-man-2-keyart-01-en-25may23?$1600px$", desc: "Exclusivo PS5" },
+            { id: 9, name: "Spider-Man 2", category: "games", price: "R$ 349,00", image: "https://upload.wikimedia.org/wikipedia/en/thumb/4/46/Video_Game_Cover_-_Marvel%27s_Spider-Man_2.jpg/220px-Video_Game_Cover_-_Marvel%27s_Spider-Man_2.jpg", desc: "Exclusivo PS5" },
             { id: 10, name: "Mario Kart 8 Deluxe", category: "games", price: "R$ 299,00", image: "https://upload.wikimedia.org/wikipedia/en/b/b5/MarioKart8Boxart.jpg", desc: "Nintendo Switch" },
             
             // ACESSÓRIOS
@@ -457,10 +458,10 @@
             { id: 15, name: "Joy-Con Par", category: "acessorios", price: "R$ 499,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Nintendo-Switch-Joy-Con-Grip-FL.jpg/640px-Nintendo-Switch-Joy-Con-Grip-FL.jpg", desc: "Neon Red/Blue" },
             
             // HARDWARE
-            { id: 17, name: "Kit Upgrade Ryzen 5", category: "hardware", price: "R$ 1.899,00", image: "https://m.media-amazon.com/images/I/51f2hk8+jPL._AC_SL1000_.jpg", desc: "Ryzen 5600G + B450M" },
-            { id: 18, name: "SSD NVMe 1TB", category: "hardware", price: "R$ 399,00", image: "https://m.media-amazon.com/images/I/61p6-M2X1AL._AC_SL1500_.jpg", desc: "Kingston NV2" },
-            { id: 19, name: "Memória RAM 16GB", category: "hardware", price: "R$ 249,00", image: "https://m.media-amazon.com/images/I/61+4T0jkXQL._AC_SL1000_.jpg", desc: "DDR4 3200Mhz Fury" },
-            { id: 20, name: "Fonte 600W", category: "hardware", price: "R$ 299,00", image: "https://m.media-amazon.com/images/I/718t8tr+sIL._AC_SL1500_.jpg", desc: "80 Plus Bronze" },
+            { id: 17, name: "Kit Upgrade Ryzen 5", category: "hardware", price: "R$ 1.899,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/AMD_Ryzen_5_2600_Box.jpg/640px-AMD_Ryzen_5_2600_Box.jpg", desc: "Ryzen 5600G + B450M" },
+            { id: 18, name: "SSD NVMe 1TB", category: "hardware", price: "R$ 399,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Samsung_960_PRO_512GB_NVMe_SSD.jpg/640px-Samsung_960_PRO_512GB_NVMe_SSD.jpg", desc: "Kingston NV2" },
+            { id: 19, name: "Memória RAM 16GB", category: "hardware", price: "R$ 249,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/DDR4_SDRAM_module.jpg/640px-DDR4_SDRAM_module.jpg", desc: "DDR4 3200Mhz Fury" },
+            { id: 20, name: "Fonte 600W", category: "hardware", price: "R$ 299,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Power_supply_unit_of_a_PC.jpg/640px-Power_supply_unit_of_a_PC.jpg", desc: "80 Plus Bronze" },
         ];
 
         const faqs = [
@@ -491,10 +492,11 @@
                 filtered.forEach(p => {
                     const card = document.createElement('div');
                     card.className = 'product-card bg-card rounded-xl overflow-hidden border border-base flex flex-col h-full group cursor-pointer';
+                    // Tratamento de erro (onerror) adicionado: se a imagem não carregar, cria um quadrado cinza com o nome.
                     card.innerHTML = `
                         <div class="product-img-box">
                             <img src="${p.image}" alt="${p.name}" loading="lazy" 
-                                 onerror="this.src='https://placehold.co/400x400/e2e8f0/1e293b?text=Sem+Foto'">
+                                 onerror="this.onerror=null;this.src='https://placehold.co/400x400/e2e8f0/1e293b?text=${encodeURIComponent(p.name)}'">
                             <span class="absolute top-2 right-2 bg-black text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide border border-atomic-yellow">${p.category}</span>
                         </div>
                         <div class="p-4 flex-grow flex flex-col">
