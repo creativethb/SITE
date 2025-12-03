@@ -13,7 +13,7 @@
 
         /* --- STYLES GERAIS --- */
         html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; overflow-x: hidden; } /* Previne scroll horizontal indesejado */
         h1, h2, h3, .brand-font { font-family: 'Rajdhani', sans-serif; }
 
         /* Cores da Marca */
@@ -37,9 +37,43 @@
         .dark .border-base { border-color: #334155; }
         .dark .hero-overlay { background: linear-gradient(90deg, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.8) 60%, rgba(15,23,42,0.5) 100%); }
 
+        /* --- ANIMAÇÕES (MICRO-MOVIMENTOS) --- */
+        
+        /* 1. Fade Up (Ao rolar a página) */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 2. Pulse no Botão Principal */
+        @keyframes subtle-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+        .btn-pulse {
+            animation: subtle-pulse 2s infinite;
+        }
+
+        /* 3. Hover Lift (Ícones de Serviço) */
+        .service-icon-box {
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .service-row:hover .service-icon-box {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* 4. Clique (Active State) */
+        button:active { transform: scale(0.95); }
+
         /* Product Card & Images */
-        .product-card { transition: all 0.3s ease; }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .product-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); } /* Efeito elástico sutil */
+        .product-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
         .product-img-box {
             height: 200px; display: flex; align-items: center; justify-content: center;
             background: #fff; position: relative; overflow: hidden;
@@ -47,9 +81,9 @@
         }
         .product-img-box img {
             max-height: 100%; max-width: 100%; object-fit: contain;
-            transition: transform 0.3s ease;
+            transition: transform 0.5s ease;
         }
-        .product-card:hover .product-img-box img { transform: scale(1.05); }
+        .product-card:hover .product-img-box img { transform: scale(1.1); }
 
         /* Video Facade */
         .video-facade {
@@ -58,6 +92,8 @@
         }
         .video-facade img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; transition: opacity 0.3s; }
         .video-facade:hover img { opacity: 0.7; }
+        .play-btn { transition: transform 0.3s ease; }
+        .video-facade:hover .play-btn { transform: translate(-50%, -50%) scale(1.2); }
         
         /* Banner Fix */
         .hero-section {
@@ -73,7 +109,12 @@
         }
         
         /* Nav Links Hover */
-        .nav-link { transition: color 0.2s; }
+        .nav-link { position: relative; transition: color 0.2s; }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: -2px; left: 0;
+            background-color: #FFD700; transition: width 0.3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
         .light .nav-link:hover { color: #d97706; }
         .dark .nav-link:hover { color: #FFD700; }
 
@@ -101,21 +142,26 @@
             font-size: 0.7rem; font-weight: bold;
             width: 18px; height: 18px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
+            animation: pop-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        @keyframes pop-in { from { transform: scale(0); } to { transform: scale(1); } }
 
         /* Map Container */
         .map-container iframe {
             width: 100%;
             height: 100%;
             border-radius: 1rem;
+            filter: grayscale(0.2);
+            transition: filter 0.3s;
         }
+        .map-container:hover iframe { filter: grayscale(0); }
         
         /* Review Card */
         .review-card {
             transition: transform 0.3s ease;
         }
         .review-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-5px);
         }
 
         /* Back to Top Button */
@@ -162,10 +208,10 @@
     </div>
 
     <!-- Navbar -->
-    <nav class="sticky top-0 z-50 bg-card border-b border-base shadow-sm">
+    <nav class="sticky top-0 z-50 bg-card border-b border-base shadow-sm transition-all duration-300" id="navbar">
         <div class="container mx-auto px-4 h-20 flex justify-between items-center">
-            <!-- Logos (AGORA CLICÁVEL) -->
-            <a href="#" onclick="location.reload()" class="flex items-center gap-3 hover:opacity-80 transition">
+            <!-- Logos -->
+            <a href="#" onclick="location.reload()" class="flex items-center gap-3 hover:opacity-80 transition transform hover:scale-105 duration-200">
                 <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/atomiclogo.webp" alt="Logo" class="h-12 w-12 rounded-full shadow-md bg-black">
                 <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/Atomic%20frase.webp" alt="Atomic Games" class="h-8 w-auto logo-shadow hidden sm:block">
             </a>
@@ -180,7 +226,7 @@
 
             <!-- Actions -->
             <div class="flex items-center gap-4">
-                <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition transform hover:rotate-12">
                     <i class="ph ph-sun text-2xl hidden dark:block text-yellow-400"></i>
                     <i class="ph ph-moon text-2xl block dark:hidden text-slate-700"></i>
                 </button>
@@ -191,7 +237,7 @@
                     <div id="cartCount" class="badge hidden">0</div>
                 </button>
 
-                <a href="https://wa.me/5521995969378" target="_blank" class="hidden sm:flex items-center gap-2 atomic-yellow-bg text-black px-5 py-2 rounded-full font-bold text-sm hover:brightness-110 transition shadow-lg">
+                <a href="https://wa.me/5521995969378" target="_blank" class="hidden sm:flex items-center gap-2 atomic-yellow-bg text-black px-5 py-2 rounded-full font-bold text-sm hover:brightness-110 transition shadow-lg hover:shadow-yellow-500/50">
                     <i class="ph-bold ph-whatsapp-logo text-lg"></i>
                     <span>Fale Conosco</span>
                 </a>
@@ -199,20 +245,20 @@
         </div>
     </nav>
 
-    <!-- Hero Section (ADAPTIVE HEADER) -->
+    <!-- Hero Section -->
     <header class="relative border-b border-base overflow-hidden hero-section" style="min-height: 600px;">
         <div class="absolute inset-0 z-0 hero-overlay md:block hidden"></div>
 
         <div class="container mx-auto px-4 h-full relative z-10 flex flex-col md:flex-row items-center justify-center py-6 md:py-24 gap-8 md:gap-12">
             
-            <div class="md:w-1/2 space-y-6 flex flex-col items-center md:items-start text-center md:text-left">
+            <div class="md:w-1/2 space-y-6 flex flex-col items-center md:items-start text-center md:text-left reveal-on-scroll">
                 
-                <!-- MOBILE BANNER (Full Width Trick) -->
+                <!-- MOBILE BANNER (Full Width) -->
                 <div class="block md:hidden w-[calc(100%+2rem)] -ml-4 mb-2 overflow-hidden shadow-lg border-b border-yellow-500/50">
                     <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/baner%20mobile.webp" alt="Atomic Games Banner" class="w-full h-auto object-cover">
                 </div>
 
-                <div class="inline-flex items-center gap-2 px-3 py-1 atomic-yellow-bg text-black rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
+                <div class="inline-flex items-center gap-2 px-3 py-1 atomic-yellow-bg text-black rounded-full text-xs font-bold uppercase tracking-wider shadow-sm transform hover:scale-105 transition">
                     <i class="ph-fill ph-map-pin"></i> Madureira - RJ
                 </div>
                 <h1 class="text-4xl md:text-7xl font-bold leading-tight drop-shadow-sm text-base">
@@ -223,7 +269,7 @@
                     Somos especialistas em assistência técnica e a loja mais completa da região.
                 </p>
                 <div class="flex flex-wrap justify-center md:justify-start gap-4 pt-4 w-full">
-                    <button onclick="document.getElementById('store').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 atomic-yellow-bg text-black rounded-lg font-bold shadow-md hover:-translate-y-1 transition flex items-center gap-2 w-full md:w-auto justify-center">
+                    <button onclick="document.getElementById('store').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 atomic-yellow-bg text-black rounded-lg font-bold shadow-md hover:-translate-y-1 transition flex items-center gap-2 w-full md:w-auto justify-center btn-pulse">
                         <i class="ph-bold ph-shopping-bag"></i> Ver Produtos
                     </button>
                     <button onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-base text-base rounded-lg font-bold hover:text-yellow-600 transition flex items-center gap-2 w-full md:w-auto justify-center">
@@ -232,11 +278,11 @@
                 </div>
             </div>
 
-            <div class="md:w-1/2 w-full flex justify-center">
-                <div class="relative w-full max-w-lg aspect-video bg-black rounded-2xl shadow-2xl overflow-hidden border-4 border-white dark:border-slate-700 hidden md:block">
+            <div class="md:w-1/2 w-full flex justify-center reveal-on-scroll" style="transition-delay: 200ms;">
+                <div class="relative w-full max-w-lg aspect-video bg-black rounded-2xl shadow-2xl overflow-hidden border-4 border-white dark:border-slate-700 hidden md:block group">
                     <div class="video-facade" id="videoFacade" onclick="loadVideo()" data-video-id="bDAR4bkn0mY">
                         <img src="https://img.youtube.com/vi/bDAR4bkn0mY/maxresdefault.jpg" onerror="this.src='https://placehold.co/800x450/000/FFD700?text=ATOMIC+GAMES'">
-                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 atomic-yellow-bg rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition z-20 cursor-pointer">
+                        <div class="play-btn absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 atomic-yellow-bg rounded-full flex items-center justify-center shadow-lg z-20 cursor-pointer">
                             <i class="ph-fill ph-play text-2xl text-black ml-1"></i>
                         </div>
                         <div class="absolute bottom-4 w-full text-center text-white font-bold tracking-wider text-sm z-20 uppercase shadow-black drop-shadow-md">
@@ -253,7 +299,7 @@
     <section id="store" class="py-16 bg-base border-b border-base scroll-mt-20">
         <div class="container mx-auto px-4">
             
-            <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-6 reveal-on-scroll">
                 <div>
                     <h2 class="text-4xl font-bold mb-2 text-base">Catálogo <span class="atomic-yellow-text">Atomic</span></h2>
                     <p class="text-muted">Adicione itens ao carrinho e finalize no WhatsApp.</p>
@@ -264,13 +310,13 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="ph-bold ph-magnifying-glass text-muted group-focus-within:text-yellow-500"></i>
                         </div>
-                        <input type="text" id="searchInput" placeholder="Buscar produto..." class="w-full bg-card text-base border border-base rounded-full py-2.5 pl-10 pr-4 focus:outline-none focus:border-yellow-500 transition text-sm font-medium shadow-sm">
+                        <input type="text" id="searchInput" placeholder="Buscar produto..." class="w-full bg-card text-base border border-base rounded-full py-2.5 pl-10 pr-4 focus:outline-none focus:border-yellow-500 transition-all duration-300 focus:w-full text-sm font-medium shadow-sm focus:shadow-md">
                     </div>
                 </div>
             </div>
 
-            <!-- Botões de Filtro -->
-            <div class="flex flex-wrap gap-2 mb-8 justify-center md:justify-start" id="categoryFilters">
+            <!-- Filtros -->
+            <div class="flex flex-wrap gap-2 mb-8 justify-center md:justify-start reveal-on-scroll" id="categoryFilters" style="transition-delay: 100ms;">
                 <button class="filter-btn active px-5 py-2 rounded-full text-sm font-bold border border-transparent transition bg-black text-white hover:bg-gray-800" data-category="all">Todos</button>
                 <button class="filter-btn px-5 py-2 rounded-full text-sm font-bold border border-base bg-card text-muted hover:border-yellow-400 hover:text-yellow-600 transition" data-category="console">Consoles</button>
                 <button class="filter-btn px-5 py-2 rounded-full text-sm font-bold border border-base bg-card text-muted hover:border-yellow-400 hover:text-yellow-600 transition" data-category="games">Jogos</button>
@@ -278,15 +324,15 @@
                 <button class="filter-btn px-5 py-2 rounded-full text-sm font-bold border border-base bg-card text-muted hover:border-yellow-400 hover:text-yellow-600 transition" data-category="hardware">Hardware</button>
             </div>
 
-            <!-- GRID DE PRODUTOS -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6" id="productGrid">
+            <!-- GRID -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6 reveal-on-scroll" id="productGrid" style="transition-delay: 200ms;">
                 <!-- Products injected by JS -->
             </div>
             
-            <!-- Botão Ver Mais (Mobile) -->
-            <div id="loadMoreContainer" class="hidden text-center mt-8">
-                 <button id="btnLoadMore" class="px-8 py-3 border-2 border-base bg-card text-base rounded-full font-bold hover:border-yellow-500 hover:text-yellow-600 transition shadow-sm">
-                    Ver Todos os Produtos <i class="ph-bold ph-caret-down"></i>
+            <!-- Botão Ver Mais (Universal: Mobile & Desktop) -->
+            <div id="loadMoreContainer" class="hidden text-center mt-12 reveal-on-scroll">
+                 <button id="btnLoadMore" class="group px-8 py-3 border-2 border-base bg-card text-base rounded-full font-bold hover:border-yellow-500 hover:text-yellow-600 transition shadow-sm">
+                    Ver Todos os Produtos <i class="ph-bold ph-caret-down group-hover:translate-y-1 transition-transform inline-block"></i>
                 </button>
             </div>
 
@@ -296,7 +342,7 @@
                 <p class="text-muted">Tente buscar por outro termo.</p>
             </div>
 
-            <div class="mt-16 bg-card rounded-2xl p-8 text-center border border-base border-dashed shadow-sm">
+            <div class="mt-16 bg-card rounded-2xl p-8 text-center border border-base border-dashed shadow-sm reveal-on-scroll">
                 <h3 class="text-2xl font-bold mb-2">Não encontrou o que procura?</h3>
                 <p class="text-muted mb-6">Temos muito mais itens na loja física. Fale direto com um vendedor.</p>
                 <a href="https://wa.me/5521995969378?text=Ol%C3%A1%2C%20n%C3%A3o%20achei%20o%20produto%20que%20eu%20queria%20no%20site.%20Pode%20me%20ajudar%3F" target="_blank" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full font-bold transition shadow-lg transform hover:scale-105">
@@ -310,36 +356,36 @@
     <!-- SECTION 3: Services (Simulador de Reparo) -->
     <section id="services" class="py-16 bg-card border-b border-base">
         <div class="container mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
-            <div>
+            <div class="reveal-on-scroll">
                 <h2 class="text-3xl font-bold mb-6">Assistência Técnica de Elite</h2>
                 <div class="space-y-6">
-                    <div class="flex gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center text-2xl"><i class="ph-fill ph-clock-countdown"></i></div>
+                    <div class="flex gap-4 service-row cursor-default">
+                        <div class="service-icon-box w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center text-2xl"><i class="ph-fill ph-clock-countdown"></i></div>
                         <div><h4 class="font-bold">Orçamento Rápido</h4><p class="text-sm text-muted">Diagnóstico ágil para você não ficar sem jogar.</p></div>
                     </div>
-                    <div class="flex gap-4">
-                        <div class="w-12 h-12 rounded-xl bg-green-100 dark:bg-green-900/30 text-green-600 flex items-center justify-center text-2xl"><i class="ph-fill ph-circuitry"></i></div>
+                    <div class="flex gap-4 service-row cursor-default">
+                        <div class="service-icon-box w-12 h-12 rounded-xl bg-green-100 dark:bg-green-900/30 text-green-600 flex items-center justify-center text-2xl"><i class="ph-fill ph-circuitry"></i></div>
                         <div><h4 class="font-bold">Laboratório Próprio</h4><p class="text-sm text-muted">Peças originais e ferramentas de precisão.</p></div>
                     </div>
-                    <div class="flex gap-4">
-                         <div class="w-12 h-12 rounded-xl bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 flex items-center justify-center text-2xl"><i class="ph-fill ph-check-circle"></i></div>
+                    <div class="flex gap-4 service-row cursor-default">
+                         <div class="service-icon-box w-12 h-12 rounded-xl bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 flex items-center justify-center text-2xl"><i class="ph-fill ph-check-circle"></i></div>
                         <div><h4 class="font-bold">Garantia Real</h4><p class="text-sm text-muted">3 Meses de garantia em todos os serviços.</p></div>
                     </div>
                 </div>
             </div>
             
-            <div class="bg-base p-8 rounded-3xl shadow-xl border border-yellow-500/30 relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-500 opacity-10 rounded-full blur-3xl"></div>
+            <div class="bg-base p-8 rounded-3xl shadow-xl border border-yellow-500/30 relative overflow-hidden reveal-on-scroll" style="transition-delay: 200ms;">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-500 opacity-10 rounded-full blur-3xl animate-pulse"></div>
                 <h3 class="text-2xl font-bold mb-6">Simular Reparo</h3>
                 
                 <!-- NEW FORM WITH NAME/PHONE -->
                 <form id="serviceForm" class="space-y-4 relative z-10">
                     <div class="grid grid-cols-2 gap-4">
-                        <input type="text" id="clientName" placeholder="Seu Nome" required class="w-full p-3 rounded-lg bg-card border border-base focus:border-yellow-500 outline-none text-base">
-                        <input type="tel" id="clientPhone" placeholder="Seu Telefone/Zap" required class="w-full p-3 rounded-lg bg-card border border-base focus:border-yellow-500 outline-none text-base">
+                        <input type="text" id="clientName" placeholder="Seu Nome" required class="w-full p-3 rounded-lg bg-card border border-base focus:border-yellow-500 outline-none text-base transition focus:ring-2 focus:ring-yellow-500/20">
+                        <input type="tel" id="clientPhone" placeholder="Seu Telefone/Zap" required class="w-full p-3 rounded-lg bg-card border border-base focus:border-yellow-500 outline-none text-base transition focus:ring-2 focus:ring-yellow-500/20">
                     </div>
                     
-                    <select id="deviceSelect" class="w-full p-3 rounded-lg bg-card border border-base focus:border-yellow-500 outline-none text-base">
+                    <select id="deviceSelect" class="w-full p-3 rounded-lg bg-card border border-base focus:border-yellow-500 outline-none text-base transition">
                         <option value="">Selecione o Aparelho...</option>
                         <option value="PS5">PlayStation 5</option>
                         <option value="PS4">PlayStation 4</option>
@@ -347,7 +393,7 @@
                         <option value="Nintendo Switch">Nintendo Switch</option>
                         <option value="PC">Computador / Notebook</option>
                     </select>
-                    <select id="issueSelect" class="w-full p-3 rounded-lg bg-card border border-base focus:border-yellow-500 outline-none text-base">
+                    <select id="issueSelect" class="w-full p-3 rounded-lg bg-card border border-base focus:border-yellow-500 outline-none text-base transition">
                         <option value="">Qual o defeito?</option>
                         <option value="Limpeza">Limpeza / Aquecimento</option>
                         <option value="Nao Liga">Não Liga</option>
@@ -358,7 +404,7 @@
                     <div id="serviceResult" class="hidden p-4 bg-card rounded-lg border border-yellow-500/50">
                         <p class="text-sm">Estimativa: <span class="font-bold text-yellow-600 dark:text-yellow-400" id="timeEstimate">--</span></p>
                     </div>
-                    <button type="submit" class="w-full py-4 atomic-yellow-bg text-black font-bold rounded-lg hover:brightness-110 transition shadow-md">
+                    <button type="submit" class="w-full py-4 atomic-yellow-bg text-black font-bold rounded-lg hover:brightness-110 transition shadow-md transform active:scale-95">
                         Agendar via WhatsApp
                     </button>
                 </form>
@@ -369,13 +415,13 @@
     <!-- SECTION 4: Reputation Stats + REVIEWS -->
     <section id="dashboard" class="py-16 bg-base border-t border-b border-base">
         <div class="container mx-auto px-4">
-            <div class="text-center max-w-3xl mx-auto mb-12">
+            <div class="text-center max-w-3xl mx-auto mb-12 reveal-on-scroll">
                 <h2 class="text-3xl font-bold mb-4">Aprovado pelos Gamers</h2>
                 <p class="text-muted">Transparência total: veja nossos números e o que dizem nossos clientes.</p>
             </div>
             
             <!-- Charts -->
-            <div class="grid md:grid-cols-2 gap-8 mb-16">
+            <div class="grid md:grid-cols-2 gap-8 mb-16 reveal-on-scroll" style="transition-delay: 100ms;">
                 <div class="bg-card p-6 rounded-2xl shadow-sm border border-base">
                     <h3 class="font-bold mb-4 flex items-center gap-2 text-base"><i class="ph-fill ph-star text-yellow-400"></i> Pontos Fortes (Média)</h3>
                     <div class="chart-box"><canvas id="reputationChart"></canvas></div>
@@ -387,7 +433,7 @@
             </div>
 
             <!-- GOOGLE REVIEWS MOCKUP (LINKED TO OFFICIAL MAPS) -->
-            <div id="reviews" class="bg-card rounded-3xl p-8 border border-base shadow-lg relative overflow-hidden">
+            <div id="reviews" class="bg-card rounded-3xl p-8 border border-base shadow-lg relative overflow-hidden reveal-on-scroll">
                 <!-- Google Badge Top Right -->
                 <div class="absolute top-0 right-0 p-4 opacity-10">
                     <i class="ph-fill ph-google-logo text-8xl"></i>
@@ -402,14 +448,14 @@
                         <h3 class="text-2xl font-bold">O que falam da Atomic?</h3>
                         <p class="text-muted text-sm">Baseado em avaliações reais do Google Maps.</p>
                     </div>
-                    <a href="https://www.google.com/maps/place/Atomic+Games+Assist%C3%AAncia+t%C3%A9cnica+%26+Inform%C3%A1tica/@-22.8742874,-43.3398724,18z/data=!3m1!4b1!4m6!3m5!1s0x9962d705a97465:0xe1880b1ec757dd4f!8m2!3d-22.8742899!4d-43.3374369!16s%2Fg%2F1thxxfhs?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D" target="_blank" class="mt-4 md:mt-0 text-blue-600 hover:text-blue-700 font-bold text-sm flex items-center gap-1">
+                    <a href="https://www.google.com/maps/place/Atomic+Games+Assist%C3%AAncia+t%C3%A9cnica+%26+Inform%C3%A1tica/@-22.8742874,-43.3398724,18z/data=!3m1!4b1!4m6!3m5!1s0x9962d705a97465:0xe1880b1ec757dd4f!8m2!3d-22.8742899!4d-43.3374369!16s%2Fg%2F1thxxfhs?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D" target="_blank" class="mt-4 md:mt-0 text-blue-600 hover:text-blue-700 font-bold text-sm flex items-center gap-1 hover:underline">
                         Ver no Google <i class="ph-bold ph-arrow-square-out"></i>
                     </a>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
                     <!-- Review 1 -->
-                    <div class="review-card bg-base p-6 rounded-xl border border-base">
+                    <div class="review-card bg-base p-6 rounded-xl border border-base hover:border-yellow-400/50">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="w-10 h-10 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold">R</div>
                             <div>
@@ -423,7 +469,7 @@
                     </div>
 
                     <!-- Review 2 -->
-                    <div class="review-card bg-base p-6 rounded-xl border border-base">
+                    <div class="review-card bg-base p-6 rounded-xl border border-base hover:border-yellow-400/50">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">F</div>
                             <div>
@@ -437,7 +483,7 @@
                     </div>
 
                     <!-- Review 3 -->
-                    <div class="review-card bg-base p-6 rounded-xl border border-base">
+                    <div class="review-card bg-base p-6 rounded-xl border border-base hover:border-yellow-400/50">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center font-bold">J</div>
                             <div>
@@ -457,7 +503,7 @@
     <!-- NEW SECTION: ABOUT US -->
     <section id="about" class="py-16 bg-card border-b border-base">
         <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row items-center gap-12">
+            <div class="flex flex-col md:flex-row items-center gap-12 reveal-on-scroll">
                 <div class="md:w-1/2">
                     <div class="inline-block px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-xs font-bold uppercase tracking-wider text-muted mb-4">
                         Nossa História
@@ -476,17 +522,17 @@
                     </div>
                 </div>
                 <div class="md:w-1/2 grid grid-cols-2 gap-4">
-                    <div class="bg-base p-6 rounded-2xl border border-base text-center">
+                    <div class="bg-base p-6 rounded-2xl border border-base text-center hover:scale-105 transition duration-300 cursor-default">
                         <i class="ph-fill ph-users-three text-4xl text-yellow-500 mb-3"></i>
                         <h4 class="font-bold text-lg">+5.000</h4>
                         <p class="text-sm text-muted">Clientes Atendidos</p>
                     </div>
-                    <div class="bg-base p-6 rounded-2xl border border-base text-center">
+                    <div class="bg-base p-6 rounded-2xl border border-base text-center hover:scale-105 transition duration-300 cursor-default">
                         <i class="ph-fill ph-wrench text-4xl text-blue-500 mb-3"></i>
                         <h4 class="font-bold text-lg">Especialistas</h4>
                         <p class="text-sm text-muted">Em Hardware e Games</p>
                     </div>
-                    <div class="bg-base p-6 rounded-2xl border border-base text-center col-span-2">
+                    <div class="bg-base p-6 rounded-2xl border border-base text-center col-span-2 hover:scale-105 transition duration-300 cursor-default">
                         <i class="ph-fill ph-heart text-4xl text-red-500 mb-3"></i>
                         <h4 class="font-bold text-lg">Paixão Gamer</h4>
                         <p class="text-sm text-muted">De jogador para jogador</p>
@@ -499,12 +545,12 @@
     <!-- NEW SECTION: LOCATION MAP (OFFICIAL LINK UPDATED) -->
     <section id="location" class="py-16 bg-base">
         <div class="container mx-auto px-4">
-            <div class="text-center mb-10">
+            <div class="text-center mb-10 reveal-on-scroll">
                 <h2 class="text-3xl font-bold mb-4">Venha Conhecer Nosso QG</h2>
                 <p class="text-muted">Fácil acesso no coração de Madureira.</p>
             </div>
 
-            <div class="bg-card rounded-2xl overflow-hidden shadow-lg border border-base flex flex-col md:flex-row h-[500px]">
+            <div class="bg-card rounded-2xl overflow-hidden shadow-lg border border-base flex flex-col md:flex-row h-[500px] reveal-on-scroll">
                 <!-- Info Side -->
                 <div class="md:w-1/3 p-8 flex flex-col justify-center space-y-8 bg-card relative z-10">
                     <div>
@@ -529,7 +575,7 @@
                         </p>
                     </div>
 
-                    <a href="https://www.google.com/maps/place/Atomic+Games+Assist%C3%AAncia+t%C3%A9cnica+%26+Inform%C3%A1tica/@-22.8742874,-43.3398724,18z/data=!3m1!4b1!4m6!3m5!1s0x9962d705a97465:0xe1880b1ec757dd4f!8m2!3d-22.8742899!4d-43.3374369!16s%2Fg%2F1thxxfhs?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D" target="_blank" class="bg-black text-white text-center py-3 rounded-lg font-bold hover:bg-gray-800 transition flex items-center justify-center gap-2">
+                    <a href="https://www.google.com/maps/place/Atomic+Games+Assist%C3%AAncia+t%C3%A9cnica+%26+Inform%C3%A1tica/@-22.8742874,-43.3398724,18z/data=!3m1!4b1!4m6!3m5!1s0x9962d705a97465:0xe1880b1ec757dd4f!8m2!3d-22.8742899!4d-43.3374369!16s%2Fg%2F1thxxfhs?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D" target="_blank" class="bg-black text-white text-center py-3 rounded-lg font-bold hover:bg-gray-800 transition flex items-center justify-center gap-2 transform active:scale-95">
                         <i class="ph-bold ph-arrow-bend-up-right"></i> Traçar Rota
                     </a>
                 </div>
@@ -550,8 +596,8 @@
     <!-- FAQ -->
     <section id="faq" class="py-16 bg-card border-t border-base">
         <div class="container mx-auto px-4 max-w-4xl">
-            <h2 class="text-3xl font-bold text-center mb-10 text-base">Perguntas Frequentes</h2>
-            <div class="space-y-4" id="faqContainer">
+            <h2 class="text-3xl font-bold text-center mb-10 text-base reveal-on-scroll">Perguntas Frequentes</h2>
+            <div class="space-y-4 reveal-on-scroll" id="faqContainer">
                 <!-- FAQs via JS -->
             </div>
         </div>
@@ -561,15 +607,15 @@
     <footer class="bg-base border-t border-base py-12">
         <div class="container mx-auto px-4 text-center">
             <!-- LOGO CLICÁVEL NO FOOTER -->
-            <a href="#" onclick="location.reload()" class="inline-block hover:opacity-80 transition">
+            <a href="#" onclick="location.reload()" class="inline-block hover:opacity-80 transition transform hover:scale-110 duration-300">
                 <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/atomiclogo.webp" class="h-16 w-16 mx-auto rounded-full shadow-lg mb-4 bg-black">
             </a>
             <h4 class="font-bold text-xl mb-2 brand-font">ATOMIC GAMES</h4>
             <p class="text-muted mb-6">Madureira - Rio de Janeiro</p>
             <div class="flex justify-center gap-4 text-2xl text-muted">
-                <a href="#" class="hover:text-pink-600 transition"><i class="ph-fill ph-instagram-logo"></i></a>
-                <a href="#" class="hover:text-blue-600 transition"><i class="ph-fill ph-facebook-logo"></i></a>
-                <a href="#" class="hover:text-black dark:hover:text-white transition"><i class="ph-fill ph-tiktok-logo"></i></a>
+                <a href="#" class="hover:text-pink-600 transition hover:-translate-y-1"><i class="ph-fill ph-instagram-logo"></i></a>
+                <a href="#" class="hover:text-blue-600 transition hover:-translate-y-1"><i class="ph-fill ph-facebook-logo"></i></a>
+                <a href="#" class="hover:text-black dark:hover:text-white transition hover:-translate-y-1"><i class="ph-fill ph-tiktok-logo"></i></a>
             </div>
             <p class="text-xs text-muted mt-8">&copy; 2025 Atomic Games. Todos os direitos reservados.</p>
         </div>
@@ -577,6 +623,26 @@
 
     <!-- JS Logic -->
     <script>
+        // --- ANIMATIONS ON SCROLL (INTERSECTION OBSERVER) ---
+        // Isso faz os elementos "aparecerem" suavemente quando você rola a página
+        const observerOptions = {
+            threshold: 0.1, // Dispara quando 10% do elemento está visível
+            rootMargin: "0px 0px -50px 0px" // Pequena margem para antecipar a animação
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Só anima uma vez
+                }
+            });
+        }, observerOptions);
+
+        function refreshAnimations() {
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+        }
+
         // --- BACK TO TOP LOGIC ---
         const backToTopBtn = document.getElementById('backToTop');
         
@@ -625,7 +691,7 @@
                     total += priceNumber;
                     
                     const div = document.createElement('div');
-                    div.className = 'flex justify-between items-center bg-base p-3 rounded-lg border border-base';
+                    div.className = 'flex justify-between items-center bg-base p-3 rounded-lg border border-base animate-[pop-in_0.3s_ease-out]';
                     div.innerHTML = `
                         <div class="flex items-center gap-3">
                             <img src="${item.image}" class="w-12 h-12 object-contain bg-white rounded">
@@ -700,9 +766,8 @@
             { q: "Entregam em todo o Rio de Janeiro?", a: "Sim, trabalhamos com entregas expressas no RJ. Consulte a taxa no WhatsApp." }
         ];
 
-        // --- MOBILE LOAD MORE LOGIC ---
+        // --- UNIVERSAL LOAD MORE LOGIC (DESKTOP & MOBILE) ---
         let currentFilter = 'all';
-        let isExpanded = false;
 
         function renderProducts(filter, searchTerm = "", forceAll = false) {
             const grid = document.getElementById('productGrid');
@@ -712,23 +777,28 @@
 
             let filtered = products;
 
-            // Filtra primeiro
+            // 1. Filtro de Categoria
             if (filter !== 'all') filtered = filtered.filter(p => p.category === filter);
+            
+            // 2. Filtro de Busca
             if (searchTerm) {
                 const lowerTerm = searchTerm.toLowerCase();
                 filtered = filtered.filter(p => p.name.toLowerCase().includes(lowerTerm) || p.desc.toLowerCase().includes(lowerTerm));
             }
 
-            // Lógica de "Load More" Mobile
-            const isMobile = window.innerWidth < 768; // Tailwind md breakpoint
+            // 3. Definição do Limite Inicial (Responsivo)
+            const isMobile = window.innerWidth < 768; 
+            // Mobile: 4 itens | Desktop: 10 itens (2 linhas de 5)
+            const initialLimit = isMobile ? 4 : 10; 
+
             let productsToShow = filtered;
             
-            // Só limita se for mobile, se não tiver sido expandido ainda e se não for uma busca
-            if (isMobile && !forceAll && !searchTerm) {
-                productsToShow = filtered.slice(0, 4); // Mostra apenas 4
+            // 4. Aplica o corte se não tiver forçado "Ver Tudo" e não for busca
+            if (!forceAll && !searchTerm) {
+                productsToShow = filtered.slice(0, initialLimit);
                 
-                // Se tiver mais produtos para mostrar, exibe o botão
-                if (filtered.length > 4) {
+                // Mostra botão se houver mais itens escondidos
+                if (filtered.length > initialLimit) {
                     loadMoreContainer.classList.remove('hidden');
                 } else {
                     loadMoreContainer.classList.add('hidden');
@@ -737,14 +807,19 @@
                 loadMoreContainer.classList.add('hidden');
             }
 
+            // 5. Renderização
             if (filtered.length === 0) {
                 noRes.classList.remove('hidden');
+                loadMoreContainer.classList.add('hidden');
             } else {
                 noRes.classList.add('hidden');
-                productsToShow.forEach(p => {
+                productsToShow.forEach((p, index) => {
                     const card = document.createElement('div');
-                    card.className = 'product-card bg-card rounded-xl overflow-hidden border border-base flex flex-col h-full group cursor-pointer';
-                    // Tratamento de erro (onerror) adicionado
+                    // Adiciona delay na animação para efeito cascata
+                    const delay = index * 50; 
+                    card.style.animationDelay = `${delay}ms`;
+                    card.className = 'product-card bg-card rounded-xl overflow-hidden border border-base flex flex-col h-full group cursor-pointer animate-[pop-in_0.5s_ease-out_both]';
+                    
                     card.innerHTML = `
                         <div class="product-img-box">
                             <img src="${p.image}" alt="${p.name}" loading="lazy" 
@@ -756,7 +831,7 @@
                             <p class="text-xs text-muted mb-4 flex-grow line-clamp-2">${p.desc}</p>
                             <div class="mt-auto flex items-center justify-between">
                                 <span class="font-bold text-lg atomic-yellow-text">${p.price}</span>
-                                <button onclick="addToCart(${p.id})" class="bg-black hover:bg-gray-800 text-white w-10 h-10 rounded-full flex items-center justify-center transition shadow-md group-btn">
+                                <button onclick="addToCart(${p.id})" class="bg-black hover:bg-gray-800 text-white w-10 h-10 rounded-full flex items-center justify-center transition shadow-md group-btn transform active:scale-90">
                                     <i class="ph-bold ph-shopping-cart text-xl text-yellow-500"></i>
                                 </button>
                             </div>
@@ -804,19 +879,27 @@
             
             initCharts(savedTheme);
             renderFAQs();
-            renderProducts('all'); // Inicial
+            renderProducts('all'); // Inicializa (Mobile: 4, PC: 10)
+            refreshAnimations(); // Ativa observador de scroll
 
-            // Botão Load More
+            // Botão Load More (Universal)
             document.getElementById('btnLoadMore').addEventListener('click', () => {
                 const searchInput = document.getElementById('searchInput');
-                renderProducts(currentFilter, searchInput.value, true); // Force All = true
+                renderProducts(currentFilter, searchInput.value, true); // forceAll = true
             });
 
-            // Re-render on resize to fix layout
+            // Resize (Ajusta limite dinamicamente se redimensionar a janela)
+            let resizeTimeout;
             window.addEventListener('resize', () => {
-                 const searchInput = document.getElementById('searchInput');
-                 // Se já expandiu, mantém expandido. Se não, reseta para a lógica de mobile/desktop
-                 renderProducts(currentFilter, searchInput.value); 
+                 clearTimeout(resizeTimeout);
+                 resizeTimeout = setTimeout(() => {
+                     const searchInput = document.getElementById('searchInput');
+                     // Se o botão "Ver Mais" estiver visível, significa que ainda não expandiu. 
+                     // Podemos recalcular o limite. Se estiver oculto (já expandido), não faz nada.
+                     if(!document.getElementById('loadMoreContainer').classList.contains('hidden')) {
+                        renderProducts(currentFilter, searchInput.value); 
+                     }
+                 }, 200);
             });
 
             const buttons = document.querySelectorAll('.filter-btn');
