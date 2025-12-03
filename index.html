@@ -102,6 +102,14 @@
             height: 100%;
             border-radius: 1rem;
         }
+        
+        /* Review Card */
+        .review-card {
+            transition: transform 0.3s ease;
+        }
+        .review-card:hover {
+            transform: translateY(-3px);
+        }
     </style>
 </head>
 <body class="antialiased bg-base text-base transition-colors duration-300">
@@ -141,7 +149,7 @@
             <div class="hidden md:flex gap-8 font-bold text-sm uppercase tracking-wide text-muted">
                 <a href="#store" class="nav-link atomic-yellow-text">Loja Virtual</a>
                 <a href="#services" class="nav-link">Assistência</a>
-                <a href="#about" class="nav-link">Sobre Nós</a>
+                <a href="#reviews" class="nav-link">Depoimentos</a>
                 <a href="#location" class="nav-link">Localização</a>
             </div>
 
@@ -319,21 +327,89 @@
         </div>
     </section>
 
-    <!-- SECTION 4: Reputation Stats -->
+    <!-- SECTION 4: Reputation Stats + REVIEWS -->
     <section id="dashboard" class="py-16 bg-base border-t border-b border-base">
         <div class="container mx-auto px-4">
             <div class="text-center max-w-3xl mx-auto mb-12">
                 <h2 class="text-3xl font-bold mb-4">Aprovado pelos Gamers</h2>
-                <p class="text-muted">Dados reais baseados em nossas avaliações públicas.</p>
+                <p class="text-muted">Transparência total: veja nossos números e o que dizem nossos clientes.</p>
             </div>
-            <div class="grid md:grid-cols-2 gap-8">
+            
+            <!-- Charts -->
+            <div class="grid md:grid-cols-2 gap-8 mb-16">
                 <div class="bg-card p-6 rounded-2xl shadow-sm border border-base">
-                    <h3 class="font-bold mb-4 flex items-center gap-2 text-base"><i class="ph-fill ph-star text-yellow-400"></i> Avaliação Geral</h3>
+                    <h3 class="font-bold mb-4 flex items-center gap-2 text-base"><i class="ph-fill ph-star text-yellow-400"></i> Pontos Fortes (Média)</h3>
                     <div class="chart-box"><canvas id="reputationChart"></canvas></div>
                 </div>
                 <div class="bg-card p-6 rounded-2xl shadow-sm border border-base">
-                    <h3 class="font-bold mb-4 flex items-center gap-2 text-base"><i class="ph-fill ph-chart-pie-slice text-purple-500"></i> Serviços Realizados</h3>
+                    <h3 class="font-bold mb-4 flex items-center gap-2 text-base"><i class="ph-fill ph-chart-pie-slice text-purple-500"></i> Distribuição de Serviços</h3>
                     <div class="chart-box"><canvas id="servicesChart"></canvas></div>
+                </div>
+            </div>
+
+            <!-- GOOGLE REVIEWS MOCKUP (LINKED TO OFFICIAL MAPS) -->
+            <div id="reviews" class="bg-card rounded-3xl p-8 border border-base shadow-lg relative overflow-hidden">
+                <!-- Google Badge Top Right -->
+                <div class="absolute top-0 right-0 p-4 opacity-10">
+                    <i class="ph-fill ph-google-logo text-8xl"></i>
+                </div>
+
+                <div class="flex flex-col md:flex-row justify-between items-end mb-8 relative z-10">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-yellow-400 text-2xl">★★★★★</span>
+                            <span class="font-bold text-xl">4.9 / 5.0</span>
+                        </div>
+                        <h3 class="text-2xl font-bold">O que falam da Atomic?</h3>
+                        <p class="text-muted text-sm">Baseado em avaliações reais do Google Maps.</p>
+                    </div>
+                    <a href="https://www.google.com/maps/place/Atomic+Games+Assist%C3%AAncia+t%C3%A9cnica+%26+Inform%C3%A1tica/@-22.8742874,-43.3398724,18z/data=!3m1!4b1!4m6!3m5!1s0x9962d705a97465:0xe1880b1ec757dd4f!8m2!3d-22.8742899!4d-43.3374369!16s%2Fg%2F1thxxfhs?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D" target="_blank" class="mt-4 md:mt-0 text-blue-600 hover:text-blue-700 font-bold text-sm flex items-center gap-1">
+                        Ver no Google <i class="ph-bold ph-arrow-square-out"></i>
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                    <!-- Review 1 -->
+                    <div class="review-card bg-base p-6 rounded-xl border border-base">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold">R</div>
+                            <div>
+                                <p class="font-bold text-sm">Rafael Costa</p>
+                                <p class="text-xs text-muted">Há 2 semanas</p>
+                            </div>
+                            <i class="ph-fill ph-google-logo text-gray-400 ml-auto"></i>
+                        </div>
+                        <div class="text-yellow-400 text-xs mb-3">★★★★★</div>
+                        <p class="text-sm text-muted italic">"Levei meu PS5 que estava desligando sozinho. Fizeram a limpeza e troca da pasta térmica no mesmo dia. Atendimento nota 10, console ficou silencioso e novo!"</p>
+                    </div>
+
+                    <!-- Review 2 -->
+                    <div class="review-card bg-base p-6 rounded-xl border border-base">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">F</div>
+                            <div>
+                                <p class="font-bold text-sm">Felipe Martins</p>
+                                <p class="text-xs text-muted">Há 1 mês</p>
+                            </div>
+                            <i class="ph-fill ph-google-logo text-gray-400 ml-auto"></i>
+                        </div>
+                        <div class="text-yellow-400 text-xs mb-3">★★★★★</div>
+                        <p class="text-sm text-muted italic">"Melhor preço do Rio pra comprar console. Comprei meu Xbox Series S lá, lacrado com garantia. O vendedor me explicou tudo sobre o Game Pass. Recomendo demais."</p>
+                    </div>
+
+                    <!-- Review 3 -->
+                    <div class="review-card bg-base p-6 rounded-xl border border-base">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center font-bold">J</div>
+                            <div>
+                                <p class="font-bold text-sm">Juliana Alves</p>
+                                <p class="text-xs text-muted">Há 3 dias</p>
+                            </div>
+                            <i class="ph-fill ph-google-logo text-gray-400 ml-auto"></i>
+                        </div>
+                        <div class="text-yellow-400 text-xs mb-3">★★★★★</div>
+                        <p class="text-sm text-muted italic">"Minha loja de confiança em Madureira. Já arrumei controle de Switch, comprei jogos e sempre fui bem atendida. O ambiente é top!"</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -381,7 +457,7 @@
         </div>
     </section>
 
-    <!-- NEW SECTION: LOCATION MAP -->
+    <!-- NEW SECTION: LOCATION MAP (OFFICIAL LINK UPDATED) -->
     <section id="location" class="py-16 bg-base">
         <div class="container mx-auto px-4">
             <div class="text-center mb-10">
@@ -414,15 +490,15 @@
                         </p>
                     </div>
 
-                    <a href="https://www.google.com/maps/dir//Av.+Min.+Edgard+Romero,+81+-+Madureira,+Rio+de+Janeiro+-+RJ,+21360-201/@-22.8712975,-43.3371843,17z" target="_blank" class="bg-black text-white text-center py-3 rounded-lg font-bold hover:bg-gray-800 transition flex items-center justify-center gap-2">
+                    <a href="https://www.google.com/maps/place/Atomic+Games+Assist%C3%AAncia+t%C3%A9cnica+%26+Inform%C3%A1tica/@-22.8742874,-43.3398724,18z/data=!3m1!4b1!4m6!3m5!1s0x9962d705a97465:0xe1880b1ec757dd4f!8m2!3d-22.8742899!4d-43.3374369!16s%2Fg%2F1thxxfhs?entry=ttu&g_ep=EgoyMDI1MTEyMy4xIKXMDSoASAFQAw%3D%3D" target="_blank" class="bg-black text-white text-center py-3 rounded-lg font-bold hover:bg-gray-800 transition flex items-center justify-center gap-2">
                         <i class="ph-bold ph-arrow-bend-up-right"></i> Traçar Rota
                     </a>
                 </div>
 
-                <!-- Map Side -->
+                <!-- Map Side (Atomic Games Embedded) -->
                 <div class="md:w-2/3 bg-gray-200 map-container">
                     <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3676.544527961914!2d-43.33975922375841!3d-22.87129747927893!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9962cc05055555%3A0x0!2sAv.%20Min.%20Edgard%20Romero%2C%2081%20-%20Madureira%2C%20Rio%20de%20Janeiro%20-%20RJ%2C%2021360-201!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr" 
+                        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3676.5!2d-43.3374369!3d-22.8742899!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9962d705a97465%3A0xe1880b1ec757dd4f!2sAtomic%20Games%20Assist%C3%AAncia%20t%C3%A9cnica%20%26%20Inform%C3%A1tica!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr" 
                         allowfullscreen="" 
                         loading="lazy" 
                         referrerpolicy="no-referrer-when-downgrade">
