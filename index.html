@@ -323,7 +323,7 @@
         </div>
     </section>
 
-    <!-- SECTION 4: Reputation Stats + REVIEWS (RESTAURADO) -->
+    <!-- SECTION 4: Reputation Stats + REVIEWS -->
     <section id="dashboard" class="py-16 bg-base border-t border-b border-base">
         <div class="container mx-auto px-4">
             <div class="text-center max-w-3xl mx-auto mb-12 reveal-on-scroll">
@@ -358,7 +358,8 @@
                         <h3 class="text-2xl font-bold">O que falam da Atomic?</h3>
                         <p class="text-muted text-sm">Baseado em avaliações reais do Google Maps.</p>
                     </div>
-                    <a href="https://www.google.com/maps/place/Atomic+Games+Assist%C3%AAncia+t%C3%A9cnica+%26+Inform%C3%A1tica/@-22.8742874,-43.3398724,18z" target="_blank" class="mt-4 md:mt-0 text-blue-600 hover:text-blue-700 font-bold text-sm flex items-center gap-1 hover:underline">
+                    <!-- CORRIGIDO: Link do Google Maps mais específico -->
+                    <a href="https://www.google.com/maps/place/Atomic+Games+Assist%C3%AAncia+t%C3%A9cnica+%26+Inform%C3%A1tica/@-22.8742849,-43.3400118,17z/data=!3m1!4b1!4m6!3m5!1s0x9962d705a97465:0xe1880b1ec757dd4f!8m2!3d-22.8742899!4d-43.3374369!16s%2Fg%2F1thxxfhs?entry=ttu" target="_blank" class="mt-4 md:mt-0 text-blue-600 hover:text-blue-700 font-bold text-sm flex items-center gap-1 hover:underline">
                         Ver no Google <i class="ph-bold ph-arrow-square-out"></i>
                     </a>
                 </div>
@@ -407,7 +408,7 @@
         </div>
     </section>
 
-    <!-- NEW SECTION: ABOUT US (RESTAURADO) -->
+    <!-- NEW SECTION: ABOUT US -->
     <section id="about" class="py-16 bg-card border-b border-base">
         <div class="container mx-auto px-4">
             <div class="flex flex-col md:flex-row items-center gap-12 reveal-on-scroll">
@@ -449,7 +450,7 @@
         </div>
     </section>
 
-    <!-- NEW SECTION: LOCATION MAP (RESTAURADO) -->
+    <!-- NEW SECTION: LOCATION MAP -->
     <section id="location" class="py-16 bg-base">
         <div class="container mx-auto px-4">
             <div class="text-center mb-10 reveal-on-scroll">
@@ -482,7 +483,8 @@
                         </p>
                     </div>
 
-                    <a href="https://www.google.com/maps/place/Atomic+Games+Assist%C3%AAncia+t%C3%A9cnica+%26+Inform%C3%A1tica/@-22.8742874,-43.3398724,18z" target="_blank" class="bg-black text-white text-center py-3 rounded-lg font-bold hover:bg-gray-800 transition flex items-center justify-center gap-2 transform active:scale-95">
+                    <!-- CORRIGIDO: Link do Google Maps mais específico -->
+                    <a href="https://www.google.com/maps/place/Atomic+Games+Assist%C3%AAncia+t%C3%A9cnica+%26+Inform%C3%A1tica/@-22.8742849,-43.3400118,17z/data=!3m1!4b1!4m6!3m5!1s0x9962d705a97465:0xe1880b1ec757dd4f!8m2!3d-22.8742899!4d-43.3374369!16s%2Fg%2F1thxxfhs?entry=ttu" target="_blank" class="bg-black text-white text-center py-3 rounded-lg font-bold hover:bg-gray-800 transition flex items-center justify-center gap-2 transform active:scale-95">
                         <i class="ph-bold ph-arrow-bend-up-right"></i> Traçar Rota
                     </a>
                 </div>
@@ -583,7 +585,7 @@
 
         const backToTopBtn = document.getElementById('backToTop');
         
-        // --- LOGICA DE SCROLL PARA HEADER (MANTIDA) ---
+        // --- LOGICA DE SCROLL PARA HEADER ---
         let lastScrollY = window.scrollY;
         const navbar = document.getElementById('navbar');
 
@@ -592,8 +594,10 @@
 
             const currentScrollY = window.scrollY;
             if (currentScrollY > lastScrollY && currentScrollY > 60) {
+                // Esconde o menu se rolar para baixo (apenas em mobile/telas pequenas, embora a lógica seja universal, o efeito é mais notável lá)
                 navbar.classList.add('nav-hidden');
             } else {
+                // Mostra o menu se rolar para cima
                 navbar.classList.remove('nav-hidden');
             }
             lastScrollY = currentScrollY;
@@ -756,8 +760,8 @@
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.documentElement.className = savedTheme;
             
-            initCharts(savedTheme); // Restaurado
-            renderFAQs(); // Restaurado
+            initCharts(savedTheme);
+            renderFAQs();
             renderProducts('all');
             refreshAnimations();
 
@@ -809,11 +813,11 @@
                 const newTheme = html.classList.contains('dark') ? 'light' : 'dark';
                 html.className = newTheme;
                 localStorage.setItem('theme', newTheme);
-                initCharts(newTheme); // Atualiza gráficos ao trocar tema
+                initCharts(newTheme);
             });
         });
 
-        // Chart.js Setup (Restaurado)
+        // Chart.js Setup
         function initCharts(theme) {
             const isDark = theme === 'dark';
             const textColor = isDark ? '#f1f5f9' : '#1e293b';
