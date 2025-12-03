@@ -6,7 +6,6 @@
     <title>Atomic Games e Informática - Site Oficial</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Phosphor Icons para ícones mais modernos (Lupa, Whatsapp, etc) -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
     <style>
@@ -17,10 +16,10 @@
         h1, h2, h3, .brand-font { font-family: 'Rajdhani', sans-serif; }
 
         /* Cores da Marca */
-        .atomic-yellow { color: #FFD700; }
-        .bg-atomic-yellow { background-color: #FFD700; }
+        .atomic-yellow-bg { background-color: #FFD700; } 
+        .atomic-yellow-text { color: #d97706; } 
+        .dark .atomic-yellow-text { color: #FFD700; }
         .border-atomic-yellow { border-color: #FFD700; }
-        .hover-bg-atomic-yellow:hover { background-color: #e6c100; }
 
         /* Light/Dark Mode Classes */
         .light .bg-base { background-color: #f8fafc; }
@@ -30,26 +29,12 @@
         .light .border-base { border-color: #e2e8f0; }
         .light .hero-overlay { background: linear-gradient(90deg, rgba(248,250,252,0.95) 0%, rgba(248,250,252,0.7) 60%, rgba(248,250,252,0.4) 100%); }
 
-        .dark .bg-base { background-color: #0f172a; } /* Slate 900 for better contrast than pure black */
+        .dark .bg-base { background-color: #0f172a; } 
         .dark .bg-card { background-color: #1e293b; }
         .dark .text-base { color: #f1f5f9; }
         .dark .text-muted { color: #94a3b8; }
         .dark .border-base { border-color: #334155; }
         .dark .hero-overlay { background: linear-gradient(90deg, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.8) 60%, rgba(15,23,42,0.5) 100%); }
-
-        /* Video Facade */
-        .video-facade {
-            position: relative; width: 100%; height: 100%;
-            background-color: #000; cursor: pointer; overflow: hidden;
-        }
-        .video-facade img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: opacity 0.3s; }
-        .video-facade:hover img { opacity: 0.6; }
-        .play-btn {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 60px; height: 60px; bg-atomic-yellow; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); z-index: 10;
-        }
 
         /* Product Card & Images */
         .product-card { transition: all 0.3s ease; }
@@ -57,40 +42,84 @@
         .product-img-box {
             height: 200px; display: flex; align-items: center; justify-content: center;
             background: #fff; position: relative; overflow: hidden;
+            padding: 15px;
         }
         .product-img-box img {
-            max-height: 80%; max-width: 80%; object-fit: contain;
+            max-height: 100%; max-width: 100%; object-fit: contain;
             transition: transform 0.3s ease;
         }
-        .product-card:hover .product-img-box img { transform: scale(1.1); }
+        .product-card:hover .product-img-box img { transform: scale(1.05); }
 
-        /* Nav & Logo */
-        .nav-link { transition: color 0.2s; }
-        .light .nav-link:hover, .dark .nav-link:hover { color: #FFD700; }
-        .logo-text { filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1)); }
-        .dark .logo-text { filter: drop-shadow(0 0 2px rgba(255,215,0,0.5)); }
-
+        /* Video Facade */
+        .video-facade {
+            position: relative; width: 100%; height: 100%;
+            background-color: #000; cursor: pointer; overflow: hidden;
+        }
+        .video-facade img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; transition: opacity 0.3s; }
+        .video-facade:hover img { opacity: 0.7; }
+        
         /* Banner Fix */
         .hero-bg {
             background-size: cover;
-            background-position: center; /* Centraliza a imagem larga */
+            background-position: center; 
             background-repeat: no-repeat;
         }
         
-        /* Chart Container */
-        .chart-box { position: relative; height: 300px; width: 100%; }
+        /* Nav Links Hover */
+        .nav-link { transition: color 0.2s; }
+        .light .nav-link:hover { color: #d97706; }
+        .dark .nav-link:hover { color: #FFD700; }
 
-        /* Search Input */
-        .search-input {
-            transition: all 0.3s;
+        .chart-box { position: relative; height: 300px; width: 100%; }
+        .logo-shadow { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+
+        /* CART MODAL STYLES */
+        .cart-modal {
+            position: fixed; top: 0; right: 0; height: 100%; width: 100%; max-width: 400px;
+            background: var(--bg-card); box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+            z-index: 100; transform: translateX(100%); transition: transform 0.3s ease-in-out;
+            display: flex; flex-direction: column;
         }
-        .search-input:focus {
-            border-color: #FFD700;
-            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
+        .cart-modal.open { transform: translateX(0); }
+        .cart-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 99;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .cart-overlay.open { opacity: 1; pointer-events: auto; }
+        
+        .badge {
+            position: absolute; top: -5px; right: -5px;
+            background-color: #ef4444; color: white;
+            font-size: 0.7rem; font-weight: bold;
+            width: 18px; height: 18px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
         }
     </style>
 </head>
 <body class="antialiased bg-base text-base transition-colors duration-300">
+
+    <!-- CART OVERLAY & MODAL -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-modal bg-card border-l border-base" id="cartModal">
+        <div class="p-4 border-b border-base flex justify-between items-center bg-base">
+            <h3 class="font-bold text-lg flex items-center gap-2"><i class="ph-fill ph-shopping-cart text-yellow-500"></i> Seu Carrinho</h3>
+            <button onclick="toggleCart()" class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition"><i class="ph-bold ph-x"></i></button>
+        </div>
+        <div class="flex-grow overflow-y-auto p-4 space-y-4" id="cartItemsContainer">
+            <!-- Items injected by JS -->
+            <p class="text-center text-muted mt-10">Seu carrinho está vazio.</p>
+        </div>
+        <div class="p-4 border-t border-base bg-base">
+            <div class="flex justify-between font-bold text-lg mb-4">
+                <span>Total:</span>
+                <span id="cartTotal" class="atomic-yellow-text">R$ 0,00</span>
+            </div>
+            <button onclick="checkoutWhatsApp()" class="w-full py-3 atomic-yellow-bg text-black font-bold rounded-lg hover:brightness-110 transition shadow-md flex items-center justify-center gap-2">
+                <i class="ph-bold ph-whatsapp-logo"></i> Finalizar Pedido
+            </button>
+        </div>
+    </div>
 
     <!-- Navbar -->
     <nav class="sticky top-0 z-50 bg-card border-b border-base shadow-sm">
@@ -98,15 +127,14 @@
             <!-- Logos -->
             <div class="flex items-center gap-3">
                 <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/atomiclogo.webp" alt="Logo" class="h-12 w-12 rounded-full shadow-md bg-black">
-                <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/Atomic%20frase.webp" alt="Atomic Games" class="h-8 w-auto logo-text hidden sm:block">
+                <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/Atomic%20frase.webp" alt="Atomic Games" class="h-8 w-auto logo-shadow hidden sm:block">
             </div>
 
             <!-- Desktop Menu -->
             <div class="hidden md:flex gap-8 font-bold text-sm uppercase tracking-wide text-muted">
-                <a href="#dashboard" class="nav-link">Reputação</a>
-                <a href="#store" class="nav-link text-atomic-yellow">Loja</a>
+                <a href="#store" class="nav-link atomic-yellow-text">Loja Virtual</a>
                 <a href="#services" class="nav-link">Assistência</a>
-                <a href="#faq" class="nav-link">Dúvidas</a>
+                <a href="#dashboard" class="nav-link">Reputação</a>
             </div>
 
             <!-- Actions -->
@@ -115,7 +143,14 @@
                     <i class="ph ph-sun text-2xl hidden dark:block text-yellow-400"></i>
                     <i class="ph ph-moon text-2xl block dark:hidden text-slate-700"></i>
                 </button>
-                <a href="https://wa.me/5521999999999" target="_blank" class="hidden sm:flex items-center gap-2 bg-atomic-yellow text-black px-5 py-2 rounded-full font-bold text-sm hover:bg-yellow-500 transition shadow-lg">
+                
+                <!-- CART BUTTON -->
+                <button onclick="toggleCart()" class="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition group">
+                    <i class="ph-bold ph-shopping-cart text-2xl group-hover:text-yellow-500 transition"></i>
+                    <div id="cartCount" class="badge hidden">0</div>
+                </button>
+
+                <a href="https://wa.me/5521995969378" target="_blank" class="hidden sm:flex items-center gap-2 atomic-yellow-bg text-black px-5 py-2 rounded-full font-bold text-sm hover:brightness-110 transition shadow-lg">
                     <i class="ph-bold ph-whatsapp-logo text-lg"></i>
                     <span>Fale Conosco</span>
                 </a>
@@ -123,44 +158,39 @@
         </div>
     </nav>
 
-    <!-- Hero Section (Banner Ajustado) -->
-    <header class="relative border-b border-base overflow-hidden" style="min-height: 550px;">
-        <!-- Banner Background Image -->
+    <!-- Hero Section -->
+    <header class="relative border-b border-base overflow-hidden" style="min-height: 600px;">
         <div class="absolute inset-0 z-0 hero-bg" style="background-image: url('https://raw.githubusercontent.com/creativethb/SITE/main/img/painelv6.webp');"></div>
-        
-        <!-- Gradient Overlay -->
         <div class="absolute inset-0 z-0 hero-overlay"></div>
 
-        <div class="container mx-auto px-4 h-full relative z-10 flex flex-col md:flex-row items-center justify-center py-20 gap-12">
+        <div class="container mx-auto px-4 h-full relative z-10 flex flex-col md:flex-row items-center justify-center py-24 gap-12">
             
-            <!-- Text Content -->
             <div class="md:w-1/2 space-y-6">
-                <div class="inline-flex items-center gap-2 px-3 py-1 bg-atomic-yellow text-black rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
+                <div class="inline-flex items-center gap-2 px-3 py-1 atomic-yellow-bg text-black rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
                     <i class="ph-fill ph-map-pin"></i> Madureira - RJ
                 </div>
-                <h1 class="text-5xl md:text-7xl font-bold leading-tight drop-shadow-sm">
-                    O Quartel General do <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">Gamer Carioca</span>
+                <h1 class="text-5xl md:text-7xl font-bold leading-tight drop-shadow-sm text-base">
+                    O Quartel General do <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-orange-600 dark:from-yellow-400 dark:to-orange-500">Gamer Carioca</span>
                 </h1>
                 <p class="text-lg text-muted font-medium max-w-lg">
                     Console quebrado? PC lento? Ou procurando aquele upgrade? 
                     Somos especialistas em assistência técnica e a loja mais completa da região.
                 </p>
-                <div class="flex flex-wrap gap-4 pt-2">
-                    <button onclick="document.getElementById('store').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 bg-atomic-yellow text-black rounded-lg font-bold shadow-md hover:-translate-y-1 transition flex items-center gap-2">
+                <div class="flex flex-wrap gap-4 pt-4">
+                    <button onclick="document.getElementById('store').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 atomic-yellow-bg text-black rounded-lg font-bold shadow-md hover:-translate-y-1 transition flex items-center gap-2">
                         <i class="ph-bold ph-shopping-bag"></i> Ver Produtos
                     </button>
-                    <button onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 bg-card border border-base rounded-lg font-bold hover:text-yellow-500 transition flex items-center gap-2">
+                    <button onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-base text-base rounded-lg font-bold hover:text-yellow-600 transition flex items-center gap-2">
                         <i class="ph-bold ph-wrench"></i> Assistência
                     </button>
                 </div>
             </div>
 
-            <!-- Video Player -->
             <div class="md:w-1/2 w-full flex justify-center">
                 <div class="relative w-full max-w-lg aspect-video bg-black rounded-2xl shadow-2xl overflow-hidden border-4 border-white dark:border-slate-700">
                     <div class="video-facade" id="videoFacade" onclick="loadVideo()" data-video-id="bDAR4bkn0mY">
                         <img src="https://img.youtube.com/vi/bDAR4bkn0mY/maxresdefault.jpg" onerror="this.src='https://placehold.co/800x450/000/FFD700?text=ATOMIC+GAMES'">
-                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-atomic-yellow rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition z-20">
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 atomic-yellow-bg rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition z-20 cursor-pointer">
                             <i class="ph-fill ph-play text-2xl text-black ml-1"></i>
                         </div>
                         <div class="absolute bottom-4 w-full text-center text-white font-bold tracking-wider text-sm z-20 uppercase shadow-black drop-shadow-md">
@@ -173,73 +203,48 @@
         </div>
     </header>
 
-    <!-- Reputation Stats -->
-    <section id="dashboard" class="py-16 bg-base border-b border-base">
-        <div class="container mx-auto px-4">
-            <div class="text-center max-w-3xl mx-auto mb-12">
-                <h2 class="text-3xl font-bold mb-4">Aprovado pelos Gamers</h2>
-                <p class="text-muted">Dados reais baseados em nossas avaliações públicas.</p>
-            </div>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-card p-6 rounded-2xl shadow-sm border border-base">
-                    <h3 class="font-bold mb-4 flex items-center gap-2"><i class="ph-fill ph-star text-yellow-400"></i> Avaliação Geral</h3>
-                    <div class="chart-box"><canvas id="reputationChart"></canvas></div>
-                </div>
-                <div class="bg-card p-6 rounded-2xl shadow-sm border border-base">
-                    <h3 class="font-bold mb-4 flex items-center gap-2"><i class="ph-fill ph-chart-pie-slice text-purple-500"></i> Serviços Realizados</h3>
-                    <div class="chart-box"><canvas id="servicesChart"></canvas></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Store / Catalog Section -->
-    <section id="store" class="py-16 bg-card border-b border-base scroll-mt-20">
+    <!-- SECTION 2: Catálogo -->
+    <section id="store" class="py-16 bg-base border-b border-base scroll-mt-20">
         <div class="container mx-auto px-4">
             
-            <!-- Header & Controls -->
             <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-6">
                 <div>
-                    <h2 class="text-4xl font-bold mb-2">Catálogo <span class="text-yellow-500">Atomic</span></h2>
-                    <p class="text-muted">Selecione uma categoria ou busque seu item favorito.</p>
+                    <h2 class="text-4xl font-bold mb-2 text-base">Catálogo <span class="atomic-yellow-text">Atomic</span></h2>
+                    <p class="text-muted">Adicione itens ao carrinho e finalize no WhatsApp.</p>
                 </div>
                 
                 <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-                    <!-- Search Bar -->
                     <div class="relative group w-full sm:w-64">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="ph-bold ph-magnifying-glass text-muted group-focus-within:text-yellow-500"></i>
                         </div>
-                        <input type="text" id="searchInput" placeholder="Buscar produto..." class="search-input w-full bg-base text-base border border-base rounded-full py-2.5 pl-10 pr-4 focus:outline-none text-sm font-medium">
+                        <input type="text" id="searchInput" placeholder="Buscar produto..." class="w-full bg-card text-base border border-base rounded-full py-2.5 pl-10 pr-4 focus:outline-none focus:border-yellow-500 transition text-sm font-medium shadow-sm">
                     </div>
                 </div>
             </div>
 
-            <!-- Category Filters -->
             <div class="flex flex-wrap gap-2 mb-8 justify-center md:justify-start" id="categoryFilters">
                 <button class="filter-btn active px-5 py-2 rounded-full text-sm font-bold border border-transparent transition bg-black text-white hover:bg-gray-800" data-category="all">Todos</button>
-                <button class="filter-btn px-5 py-2 rounded-full text-sm font-bold border border-base text-muted hover:border-yellow-400 hover:text-yellow-600 transition bg-base" data-category="console">Consoles</button>
-                <button class="filter-btn px-5 py-2 rounded-full text-sm font-bold border border-base text-muted hover:border-yellow-400 hover:text-yellow-600 transition bg-base" data-category="games">Jogos</button>
-                <button class="filter-btn px-5 py-2 rounded-full text-sm font-bold border border-base text-muted hover:border-yellow-400 hover:text-yellow-600 transition bg-base" data-category="acessorios">Acessórios</button>
-                <button class="filter-btn px-5 py-2 rounded-full text-sm font-bold border border-base text-muted hover:border-yellow-400 hover:text-yellow-600 transition bg-base" data-category="hardware">Hardware</button>
+                <button class="filter-btn px-5 py-2 rounded-full text-sm font-bold border border-base bg-card text-muted hover:border-yellow-400 hover:text-yellow-600 transition" data-category="console">Consoles</button>
+                <button class="filter-btn px-5 py-2 rounded-full text-sm font-bold border border-base bg-card text-muted hover:border-yellow-400 hover:text-yellow-600 transition" data-category="games">Jogos</button>
+                <button class="filter-btn px-5 py-2 rounded-full text-sm font-bold border border-base bg-card text-muted hover:border-yellow-400 hover:text-yellow-600 transition" data-category="acessorios">Acessórios</button>
+                <button class="filter-btn px-5 py-2 rounded-full text-sm font-bold border border-base bg-card text-muted hover:border-yellow-400 hover:text-yellow-600 transition" data-category="hardware">Hardware</button>
             </div>
 
-            <!-- Products Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6" id="productGrid">
                 <!-- Products injected by JS -->
             </div>
 
-            <!-- Not Found / CTA -->
             <div id="noResults" class="hidden text-center py-12">
                 <i class="ph-duotone ph-magnifying-glass text-6xl text-muted mb-4"></i>
                 <h3 class="text-xl font-bold">Nenhum produto encontrado.</h3>
                 <p class="text-muted">Tente buscar por outro termo.</p>
             </div>
 
-            <div class="mt-16 bg-base rounded-2xl p-8 text-center border border-base border-dashed">
+            <div class="mt-16 bg-card rounded-2xl p-8 text-center border border-base border-dashed shadow-sm">
                 <h3 class="text-2xl font-bold mb-2">Não encontrou o que procura?</h3>
                 <p class="text-muted mb-6">Temos muito mais itens na loja física. Fale direto com um vendedor.</p>
-                <a href="https://wa.me/5521999999999?text=Ol%C3%A1%2C%20n%C3%A3o%20achei%20o%20produto%20que%20eu%20queria%20no%20site.%20Pode%20me%20ajudar%3F" target="_blank" class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-bold transition shadow-lg transform hover:scale-105">
+                <a href="https://wa.me/5521995969378?text=Ol%C3%A1%2C%20n%C3%A3o%20achei%20o%20produto%20que%20eu%20queria%20no%20site.%20Pode%20me%20ajudar%3F" target="_blank" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full font-bold transition shadow-lg transform hover:scale-105">
                     <i class="ph-bold ph-whatsapp-logo text-xl"></i>
                     Tire sua dúvida aqui
                 </a>
@@ -247,8 +252,8 @@
         </div>
     </section>
 
-    <!-- Services -->
-    <section id="services" class="py-16 bg-base border-t border-base">
+    <!-- SECTION 3: Services (Simulador de Reparo) -->
+    <section id="services" class="py-16 bg-card border-b border-base">
         <div class="container mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
             <div>
                 <h2 class="text-3xl font-bold mb-6">Assistência Técnica de Elite</h2>
@@ -261,14 +266,25 @@
                         <div class="w-12 h-12 rounded-xl bg-green-100 dark:bg-green-900/30 text-green-600 flex items-center justify-center text-2xl"><i class="ph-fill ph-circuitry"></i></div>
                         <div><h4 class="font-bold">Laboratório Próprio</h4><p class="text-sm text-muted">Peças originais e ferramentas de precisão.</p></div>
                     </div>
+                    <div class="flex gap-4">
+                         <div class="w-12 h-12 rounded-xl bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 flex items-center justify-center text-2xl"><i class="ph-fill ph-check-circle"></i></div>
+                        <div><h4 class="font-bold">Garantia Real</h4><p class="text-sm text-muted">3 Meses de garantia em todos os serviços.</p></div>
+                    </div>
                 </div>
             </div>
             
-            <div class="bg-card p-8 rounded-3xl shadow-xl border border-yellow-500/30 relative overflow-hidden">
+            <div class="bg-base p-8 rounded-3xl shadow-xl border border-yellow-500/30 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-500 opacity-10 rounded-full blur-3xl"></div>
                 <h3 class="text-2xl font-bold mb-6">Simular Reparo</h3>
-                <form id="serviceForm" class="space-y-4">
-                    <select id="deviceSelect" class="w-full p-3 rounded-lg bg-base border border-base focus:border-yellow-500 outline-none">
+                
+                <!-- NEW FORM WITH NAME/PHONE -->
+                <form id="serviceForm" class="space-y-4 relative z-10">
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="text" id="clientName" placeholder="Seu Nome" required class="w-full p-3 rounded-lg bg-card border border-base focus:border-yellow-500 outline-none text-base">
+                        <input type="tel" id="clientPhone" placeholder="Seu Telefone/Zap" required class="w-full p-3 rounded-lg bg-card border border-base focus:border-yellow-500 outline-none text-base">
+                    </div>
+                    
+                    <select id="deviceSelect" class="w-full p-3 rounded-lg bg-card border border-base focus:border-yellow-500 outline-none text-base">
                         <option value="">Selecione o Aparelho...</option>
                         <option value="PS5">PlayStation 5</option>
                         <option value="PS4">PlayStation 4</option>
@@ -276,17 +292,18 @@
                         <option value="Nintendo Switch">Nintendo Switch</option>
                         <option value="PC">Computador / Notebook</option>
                     </select>
-                    <select id="issueSelect" class="w-full p-3 rounded-lg bg-base border border-base focus:border-yellow-500 outline-none">
+                    <select id="issueSelect" class="w-full p-3 rounded-lg bg-card border border-base focus:border-yellow-500 outline-none text-base">
                         <option value="">Qual o defeito?</option>
                         <option value="Limpeza">Limpeza / Aquecimento</option>
                         <option value="Nao Liga">Não Liga</option>
                         <option value="Sem Imagem">Sem Imagem (HDMI)</option>
                         <option value="Controle">Drift no Controle</option>
+                        <option value="Outro">Outro Defeito</option>
                     </select>
-                    <div id="serviceResult" class="hidden p-4 bg-base rounded-lg border border-yellow-500/50">
-                        <p class="text-sm">Estimativa: <span class="font-bold text-yellow-500" id="timeEstimate">--</span></p>
+                    <div id="serviceResult" class="hidden p-4 bg-card rounded-lg border border-yellow-500/50">
+                        <p class="text-sm">Estimativa: <span class="font-bold text-yellow-600 dark:text-yellow-400" id="timeEstimate">--</span></p>
                     </div>
-                    <button type="submit" class="w-full py-4 bg-atomic-yellow text-black font-bold rounded-lg hover:bg-yellow-500 transition">
+                    <button type="submit" class="w-full py-4 atomic-yellow-bg text-black font-bold rounded-lg hover:brightness-110 transition shadow-md">
                         Agendar via WhatsApp
                     </button>
                 </form>
@@ -294,10 +311,40 @@
         </div>
     </section>
 
+    <!-- SECTION 4: Reputation Stats -->
+    <section id="dashboard" class="py-16 bg-base border-t border-b border-base">
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-3xl font-bold mb-4">Aprovado pelos Gamers</h2>
+                <p class="text-muted">Dados reais baseados em nossas avaliações públicas.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-card p-6 rounded-2xl shadow-sm border border-base">
+                    <h3 class="font-bold mb-4 flex items-center gap-2 text-base"><i class="ph-fill ph-star text-yellow-400"></i> Avaliação Geral</h3>
+                    <div class="chart-box"><canvas id="reputationChart"></canvas></div>
+                </div>
+                <div class="bg-card p-6 rounded-2xl shadow-sm border border-base">
+                    <h3 class="font-bold mb-4 flex items-center gap-2 text-base"><i class="ph-fill ph-chart-pie-slice text-purple-500"></i> Serviços Realizados</h3>
+                    <div class="chart-box"><canvas id="servicesChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-16 bg-card">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <h2 class="text-3xl font-bold text-center mb-10 text-base">Perguntas Frequentes</h2>
+            <div class="space-y-4" id="faqContainer">
+                <!-- FAQs via JS -->
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
-    <footer class="bg-card border-t border-base py-12 mt-12">
+    <footer class="bg-base border-t border-base py-12">
         <div class="container mx-auto px-4 text-center">
-            <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/atomiclogo.webp" class="h-16 w-16 mx-auto rounded-full shadow-lg mb-4">
+            <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/atomiclogo.webp" class="h-16 w-16 mx-auto rounded-full shadow-lg mb-4 bg-black">
             <h4 class="font-bold text-xl mb-2 brand-font">ATOMIC GAMES</h4>
             <p class="text-muted mb-6">Madureira - Rio de Janeiro</p>
             <div class="flex justify-center gap-4 text-2xl text-muted">
@@ -311,40 +358,119 @@
 
     <!-- JS Logic -->
     <script>
-        // --- DATA WITH REAL IMAGES ---
-        // Expanded to 20 items
+        // --- CART LOGIC ---
+        let cart = [];
+        
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+            cart.push(product);
+            updateCartUI();
+            toggleCart(); // Opcional: abre o carrinho ao adicionar
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cartItemsContainer');
+            const totalEl = document.getElementById('cartTotal');
+            const countEl = document.getElementById('cartCount');
+            
+            // Badge Count
+            countEl.innerText = cart.length;
+            countEl.classList.toggle('hidden', cart.length === 0);
+
+            // Items List
+            container.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-center text-muted mt-10">Seu carrinho está vazio.</p>';
+            } else {
+                cart.forEach((item, index) => {
+                    const priceNumber = parseFloat(item.price.replace('R$ ', '').replace('.', '').replace(',', '.'));
+                    total += priceNumber;
+                    
+                    const div = document.createElement('div');
+                    div.className = 'flex justify-between items-center bg-base p-3 rounded-lg border border-base';
+                    div.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <img src="${item.image}" class="w-12 h-12 object-contain bg-white rounded">
+                            <div>
+                                <p class="font-bold text-sm line-clamp-1">${item.name}</p>
+                                <p class="text-xs text-atomic-yellow-text font-bold">${item.price}</p>
+                            </div>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-red-500 hover:bg-red-100 p-1 rounded"><i class="ph-bold ph-trash"></i></button>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+
+            // Total Formatting
+            totalEl.innerText = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function toggleCart() {
+            document.getElementById('cartModal').classList.toggle('open');
+            document.getElementById('cartOverlay').classList.toggle('open');
+        }
+
+        function checkoutWhatsApp() {
+            if (cart.length === 0) return alert('Seu carrinho está vazio!');
+            
+            let message = "Olá! Vim pelo site e gostaria de fechar o pedido dos seguintes itens:\n\n";
+            cart.forEach(item => {
+                message += `• ${item.name} - ${item.price}\n`;
+            });
+            
+            const totalText = document.getElementById('cartTotal').innerText;
+            message += `\n*Total Estimado: ${totalText}*`;
+            message += "\n\nComo podemos prosseguir com o pagamento e entrega?";
+
+            window.open(`https://wa.me/5521995969378?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        // --- PRODUCTS DATA ---
         const products = [
             // CONSOLES
-            { id: 1, name: "PlayStation 5 Slim", category: "console", price: "R$ 3.799,00", image: "https://gmedia.playstation.com/is/image/SIEPDC/ps5-slim-digital-edition-image-block-01-en-16nov23?$1600px$", desc: "Digital Edition, 1TB SSD" },
-            { id: 2, name: "Xbox Series S", category: "console", price: "R$ 2.699,00", image: "https://cms-images.xboxlive.com/apps/58c2/b8a0/58c2b8a0-2f9a-4122-834c-6a6825227709.jpg", desc: "512GB SSD, Compacto" },
-            { id: 3, name: "Nintendo Switch OLED", category: "console", price: "R$ 2.199,00", image: "https://assets.nintendo.com/image/upload/f_auto/q_auto/c_fill,w_800/ncom/en_US/switch/site-design-update/hardware-extras/switch-oled/switch-oled-model-white-01", desc: "Tela 7 pol, Branco" },
-            { id: 4, name: "PlayStation 4 Slim (Seminovo)", category: "console", price: "R$ 1.599,00", image: "https://gmedia.playstation.com/is/image/SIEPDC/ps4-slim-image-block-01-en-24jul20?$1600px$", desc: "500GB, Revisado c/ Garantia" },
-            { id: 5, name: "Xbox Series X", category: "console", price: "R$ 4.499,00", image: "https://cms-images.xboxlive.com/apps/58c2/b8a0/58c2b8a0-2f9a-4122-834c-6a6825227709.jpg", desc: "1TB SSD, 4K Nativo" }, // Placeholder for X
+            { id: 1, name: "PlayStation 5 Slim", category: "console", price: "R$ 3.799,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/PlayStation_5_and_DualSense_with_transparent_background.png/640px-PlayStation_5_and_DualSense_with_transparent_background.png", desc: "Digital Edition, 1TB SSD" },
+            { id: 2, name: "Xbox Series S", category: "console", price: "R$ 2.699,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Microsoft-Xbox-Series-S-Console-L.jpg/800px-Microsoft-Xbox-Series-S-Console-L.jpg", desc: "512GB SSD, Compacto" },
+            { id: 3, name: "Nintendo Switch OLED", category: "console", price: "R$ 2.199,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Nintendo_Switch_Console.png/640px-Nintendo_Switch_Console.png", desc: "Tela 7 pol, Joy-Cons" },
+            { id: 4, name: "PlayStation 4 Slim", category: "console", price: "R$ 1.599,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/PS4-Console-wDS4.jpg/640px-PS4-Console-wDS4.jpg", desc: "500GB, Seminovo c/ Garantia" },
+            { id: 5, name: "Xbox Series X", category: "console", price: "R$ 4.499,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Xbox-Series-X-Console-wController-FL.jpg/800px-Xbox-Series-X-Console-wController-FL.jpg", desc: "1TB SSD, 4K Nativo" },
             
             // GAMES
-            { id: 6, name: "God of War Ragnarok", category: "games", price: "R$ 299,00", image: "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/aqbmzG3C8e7t1l227r80l721.jpg", desc: "PS5 Mídia Física" },
-            { id: 7, name: "GTA V Premium", category: "games", price: "R$ 149,00", image: "https://media.rockstargames.com/rockstargames-newsite/uploads/product_cards/bc8074d20743603d4924a4962ce6518a287c8801.jpg", desc: "PS4 / Xbox One" },
+            { id: 6, name: "God of War Ragnarok", category: "games", price: "R$ 299,00", image: "https://upload.wikimedia.org/wikipedia/en/e/ee/God_of_War_Ragnar%C3%B6k_cover.jpg", desc: "PS5 Mídia Física" },
+            { id: 7, name: "GTA V Premium", category: "games", price: "R$ 149,00", image: "https://upload.wikimedia.org/wikipedia/en/a/a5/Grand_Theft_Auto_V.png", desc: "PS4 / Xbox One" },
             { id: 8, name: "EA Sports FC 24", category: "games", price: "R$ 249,00", image: "https://upload.wikimedia.org/wikipedia/en/thumb/8/88/EA_Sports_FC_24_cover.jpg/220px-EA_Sports_FC_24_cover.jpg", desc: "PS5 / PS4" },
-            { id: 9, name: "Spider-Man 2", category: "games", price: "R$ 349,00", image: "https://image.api.playstation.com/vulcan/ap/rnd/202306/1219/1c7b75d8ed9271516546560d219ad0b22ee0a263b4537d9e.png", desc: "Exclusivo PS5" },
-            { id: 10, name: "Mario Kart 8 Deluxe", category: "games", price: "R$ 299,00", image: "https://assets.nintendo.com/image/upload/ar_16:9,c_lpad,w_656/b_white/f_auto/q_auto/ncom/software/switch/70010000000141/de697f33d45e694dc744fa50604b391781254dd6f727c653069151c36b6d514d", desc: "Nintendo Switch" },
-            { id: 11, name: "Red Dead Redemption 2", category: "games", price: "R$ 179,00", image: "https://upload.wikimedia.org/wikipedia/en/4/44/Red_Dead_Redemption_II.jpg", desc: "Clássico Rockstar" },
-
+            { id: 9, name: "Spider-Man 2", category: "games", price: "R$ 349,00", image: "https://gmedia.playstation.com/is/image/SIEPDC/marvels-spider-man-2-keyart-01-en-25may23?$1600px$", desc: "Exclusivo PS5" },
+            { id: 10, name: "Mario Kart 8 Deluxe", category: "games", price: "R$ 299,00", image: "https://upload.wikimedia.org/wikipedia/en/b/b5/MarioKart8Boxart.jpg", desc: "Nintendo Switch" },
+            
             // ACESSÓRIOS
-            { id: 12, name: "Controle DualSense", category: "acessorios", price: "R$ 449,00", image: "https://gmedia.playstation.com/is/image/SIEPDC/dualsense-midnight-black-image-block-01-en-13may21?$1600px$", desc: "Midnight Black" },
-            { id: 13, name: "Controle Xbox Wireless", category: "acessorios", price: "R$ 399,00", image: "https://compass-ssl.xbox.com/assets/27/a1/27a1955d-35db-44d5-98d9-299f130932a3.jpg?n=Xbox-Wireless-Controller_Image-0_Robot-White_1920x720.jpg", desc: "Robot White" },
-            { id: 14, name: "Headset HyperX Stinger", category: "acessorios", price: "R$ 249,00", image: "https://row.hyperx.com/cdn/shop/products/hyperx_cloud_stinger_2_core_pc_1_frontal.jpg", desc: "PC e Consoles" },
-            { id: 15, name: "Joy-Con Par", category: "acessorios", price: "R$ 499,00", image: "https://assets.nintendo.com/image/upload/f_auto/q_auto/c_fill,w_800/ncom/en_US/switch/site-design-update/hardware-extras/joy-con-pair-neon-red-neon-blue", desc: "Neon Red/Blue" },
-            { id: 16, name: "Base Carregadora PS5", category: "acessorios", price: "R$ 199,00", image: "https://gmedia.playstation.com/is/image/SIEPDC/dualsense-charging-station-image-block-01-en-17sep20?$1600px$", desc: "Original Sony" },
-
+            { id: 12, name: "Controle DualSense", category: "acessorios", price: "R$ 449,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/DualSense_White.png/640px-DualSense_White.png", desc: "Original Sony" },
+            { id: 13, name: "Controle Xbox Series", category: "acessorios", price: "R$ 399,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Xbox-Series-X-Controller-FL.jpg/640px-Xbox-Series-X-Controller-FL.jpg", desc: "Carbon Black" },
+            { id: 14, name: "Headset Gamer", category: "acessorios", price: "R$ 249,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/HyperX_Cloud_II_Headset.jpg/640px-HyperX_Cloud_II_Headset.jpg", desc: "PC e Consoles" },
+            { id: 15, name: "Joy-Con Par", category: "acessorios", price: "R$ 499,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Nintendo-Switch-Joy-Con-Grip-FL.jpg/640px-Nintendo-Switch-Joy-Con-Grip-FL.jpg", desc: "Neon Red/Blue" },
+            
             // HARDWARE
             { id: 17, name: "Kit Upgrade Ryzen 5", category: "hardware", price: "R$ 1.899,00", image: "https://m.media-amazon.com/images/I/51f2hk8+jPL._AC_SL1000_.jpg", desc: "Ryzen 5600G + B450M" },
             { id: 18, name: "SSD NVMe 1TB", category: "hardware", price: "R$ 399,00", image: "https://m.media-amazon.com/images/I/61p6-M2X1AL._AC_SL1500_.jpg", desc: "Kingston NV2" },
             { id: 19, name: "Memória RAM 16GB", category: "hardware", price: "R$ 249,00", image: "https://m.media-amazon.com/images/I/61+4T0jkXQL._AC_SL1000_.jpg", desc: "DDR4 3200Mhz Fury" },
-            { id: 20, name: "Fonte 600W 80 Plus", category: "hardware", price: "R$ 299,00", image: "https://m.media-amazon.com/images/I/718t8tr+sIL._AC_SL1500_.jpg", desc: "Certificação Bronze" },
+            { id: 20, name: "Fonte 600W", category: "hardware", price: "R$ 299,00", image: "https://m.media-amazon.com/images/I/718t8tr+sIL._AC_SL1500_.jpg", desc: "80 Plus Bronze" },
+        ];
+
+        const faqs = [
+            { q: "Vocês aceitam consoles usados na troca?", a: "Sim! Avaliamos seu console usado (PS4, Xbox One, Switch) como parte do pagamento. Traga para avaliação." },
+            { q: "Qual o prazo de garantia dos serviços?", a: "Todos os nossos serviços de manutenção possuem 90 dias (3 meses) de garantia legal." },
+            { q: "Vocês montam PC Gamer?", a: "Com certeza. Temos consultoria especializada para montar o PC ideal para seu orçamento." },
+            { q: "Entregam em todo o Rio de Janeiro?", a: "Sim, trabalhamos com entregas expressas no RJ. Consulte a taxa no WhatsApp." }
         ];
 
         // --- CORE FUNCTIONS ---
-
         function renderProducts(filter, searchTerm = "") {
             const grid = document.getElementById('productGrid');
             const noRes = document.getElementById('noResults');
@@ -352,12 +478,7 @@
 
             let filtered = products;
 
-            // 1. Filter by Category
-            if (filter !== 'all') {
-                filtered = filtered.filter(p => p.category === filter);
-            }
-
-            // 2. Filter by Search
+            if (filter !== 'all') filtered = filtered.filter(p => p.category === filter);
             if (searchTerm) {
                 const lowerTerm = searchTerm.toLowerCase();
                 filtered = filtered.filter(p => p.name.toLowerCase().includes(lowerTerm) || p.desc.toLowerCase().includes(lowerTerm));
@@ -371,17 +492,18 @@
                     const card = document.createElement('div');
                     card.className = 'product-card bg-card rounded-xl overflow-hidden border border-base flex flex-col h-full group cursor-pointer';
                     card.innerHTML = `
-                        <div class="product-img-box p-4">
-                            <img src="${p.image}" alt="${p.name}" onerror="this.src='https://placehold.co/300x300/eee/333?text=Sem+Foto'">
+                        <div class="product-img-box">
+                            <img src="${p.image}" alt="${p.name}" loading="lazy" 
+                                 onerror="this.src='https://placehold.co/400x400/e2e8f0/1e293b?text=Sem+Foto'">
                             <span class="absolute top-2 right-2 bg-black text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide border border-atomic-yellow">${p.category}</span>
                         </div>
                         <div class="p-4 flex-grow flex flex-col">
-                            <h3 class="font-bold text-base mb-1 leading-tight group-hover:text-yellow-600 transition">${p.name}</h3>
+                            <h3 class="font-bold text-base mb-1 leading-tight group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition">${p.name}</h3>
                             <p class="text-xs text-muted mb-4 flex-grow line-clamp-2">${p.desc}</p>
                             <div class="mt-auto flex items-center justify-between">
-                                <span class="font-bold text-lg text-atomic-yellow">${p.price}</span>
-                                <button onclick="whatsappBuy('${p.name}')" class="bg-green-500 hover:bg-green-600 text-white w-10 h-10 rounded-full flex items-center justify-center transition shadow-md">
-                                    <i class="ph-bold ph-whatsapp-logo text-xl"></i>
+                                <span class="font-bold text-lg atomic-yellow-text">${p.price}</span>
+                                <button onclick="addToCart(${p.id})" class="bg-black hover:bg-gray-800 text-white w-10 h-10 rounded-full flex items-center justify-center transition shadow-md group-btn">
+                                    <i class="ph-bold ph-shopping-cart text-xl text-yellow-500"></i>
                                 </button>
                             </div>
                         </div>
@@ -399,63 +521,74 @@
             container.classList.remove('hidden');
             container.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${videoId}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
         }
-
-        function whatsappBuy(name) {
-            const text = `Olá! Vi o produto *${name}* no site e tenho interesse.`;
-            window.open(`https://wa.me/5521999999999?text=${encodeURIComponent(text)}`, '_blank');
+        
+        function renderFAQs() {
+            const container = document.getElementById('faqContainer');
+            container.innerHTML = '';
+            faqs.forEach((item) => {
+                const details = document.createElement('details');
+                details.className = 'group bg-base rounded-lg border border-base overflow-hidden transition-colors duration-300';
+                details.innerHTML = `
+                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4 bg-card group-open:bg-base transition-colors duration-300">
+                        <span class="text-base font-bold">${item.q}</span>
+                        <span class="transition group-open:rotate-180 text-base">
+                            <i class="ph-bold ph-caret-down"></i>
+                        </span>
+                    </summary>
+                    <div class="text-muted p-4 pt-2 leading-relaxed bg-base">
+                        ${item.a}
+                    </div>
+                `;
+                container.appendChild(details);
+            });
         }
 
         // --- INIT & EVENTS ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Theme Init
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.documentElement.className = savedTheme;
             
-            // Charts Init (Mock Data)
             initCharts(savedTheme);
+            renderFAQs();
+            renderProducts('all');
 
-            // Filter Logic
             const buttons = document.querySelectorAll('.filter-btn');
             const searchInput = document.getElementById('searchInput');
             let currentFilter = 'all';
 
-            // Filter Click
             buttons.forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    // Visual Reset
                     buttons.forEach(b => {
                         b.classList.remove('active', 'bg-black', 'text-white', 'border-transparent');
-                        b.classList.add('bg-base', 'text-muted', 'border-base');
+                        b.classList.add('bg-card', 'text-muted', 'border-base');
                     });
-                    // Active State
-                    e.target.classList.remove('bg-base', 'text-muted', 'border-base');
+                    e.target.classList.remove('bg-card', 'text-muted', 'border-base');
                     e.target.classList.add('active', 'bg-black', 'text-white', 'border-transparent');
                     
-                    // Logic
                     currentFilter = e.target.dataset.category;
                     renderProducts(currentFilter, searchInput.value);
                 });
             });
 
-            // Search Input Logic
             searchInput.addEventListener('input', (e) => {
                 renderProducts(currentFilter, e.target.value);
             });
 
-            // Initial Render
-            renderProducts('all');
-
-            // Service Form
+            // Service Form Handler - Updated
             document.getElementById('serviceForm').addEventListener('submit', (e) => {
                 e.preventDefault();
+                const name = document.getElementById('clientName').value;
+                const phone = document.getElementById('clientPhone').value;
                 const dev = document.getElementById('deviceSelect').value;
                 const iss = document.getElementById('issueSelect').value;
-                if(!dev || !iss) return alert('Selecione as opções.');
-                const text = `Olá! Quero simular um reparo para: ${dev} com problema: ${iss}`;
-                window.open(`https://wa.me/5521999999999?text=${encodeURIComponent(text)}`, '_blank');
+                
+                if(!name || !phone || !dev || !iss) return alert('Por favor, preencha todos os campos.');
+                
+                const message = `*SOLICITAÇÃO DE REPARO (SITE)*\n\n👤 *Nome:* ${name}\n📱 *Tel:* ${phone}\n🎮 *Aparelho:* ${dev}\n⚠️ *Problema:* ${iss}\n\n_Vim pelo site e gostaria de um orçamento._`;
+                
+                window.open(`https://wa.me/5521995969378?text=${encodeURIComponent(message)}`, '_blank');
             });
 
-            // Estimate Logic
             const form = document.getElementById('serviceForm');
             form.addEventListener('change', () => {
                 const dev = document.getElementById('deviceSelect').value;
@@ -467,23 +600,21 @@
                 }
             });
 
-            // Theme Toggle
             document.getElementById('themeToggle').addEventListener('click', () => {
                 const html = document.documentElement;
                 const newTheme = html.classList.contains('dark') ? 'light' : 'dark';
                 html.className = newTheme;
                 localStorage.setItem('theme', newTheme);
-                initCharts(newTheme); // Re-render charts for color update
+                initCharts(newTheme);
             });
         });
 
         // Chart.js Setup
         function initCharts(theme) {
             const isDark = theme === 'dark';
-            const textColor = isDark ? '#fff' : '#333';
+            const textColor = isDark ? '#f1f5f9' : '#1e293b';
             const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
 
-            // Destroy old instances if they exist to prevent duplication
             if(window.repChart) window.repChart.destroy();
             if(window.servChart) window.servChart.destroy();
 
@@ -493,7 +624,7 @@
                 data: {
                     labels: ['Atendimento', 'Preço', 'Rapidez', 'Variedade', 'Confiança'],
                     datasets: [{
-                        label: 'Nota Média (Google)',
+                        label: 'Nota Média',
                         data: [4.9, 4.7, 4.5, 4.8, 5.0],
                         backgroundColor: isDark ? 'rgba(255, 215, 0, 0.2)' : 'rgba(255, 215, 0, 0.5)',
                         borderColor: '#FFD700',
@@ -505,7 +636,7 @@
                     scales: {
                         r: {
                             grid: { color: gridColor },
-                            pointLabels: { color: textColor },
+                            pointLabels: { color: textColor, font: { size: 11 } },
                             ticks: { display: false }
                         }
                     },
@@ -517,7 +648,7 @@
             window.servChart = new Chart(ctx2, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Manutenção', 'Venda Jogos', 'Venda Consoles', 'Acessórios'],
+                    labels: ['Manutenção', 'Jogos', 'Consoles', 'Peças'],
                     datasets: [{
                         data: [40, 20, 25, 15],
                         backgroundColor: ['#FFD700', '#10B981', '#3B82F6', '#6366F1'],
@@ -526,7 +657,7 @@
                 },
                 options: {
                     maintainAspectRatio: false,
-                    plugins: { legend: { position: 'right', labels: { color: textColor } } }
+                    plugins: { legend: { position: 'right', labels: { color: textColor, font: { family: 'Inter' } } } }
                 }
             });
         }
