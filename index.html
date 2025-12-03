@@ -264,6 +264,16 @@
                 <i class="ph-duotone ph-magnifying-glass text-6xl text-muted mb-4"></i>
                 <h3 class="text-xl font-bold">Nenhum produto encontrado.</h3>
             </div>
+
+            <!-- MENSAGEM DE ATENDIMENTO HUMANO -->
+            <div class="mt-16 bg-card rounded-2xl p-8 text-center border border-base border-dashed shadow-sm reveal-on-scroll">
+                <h3 class="text-2xl font-bold mb-2">Não encontrou o que procura?</h3>
+                <p class="text-muted mb-6">Temos muito mais itens na loja física. Fale direto com um **atendente humano**.</p>
+                <a href="https://wa.me/5521995969378?text=Ol%C3%A1%2C%20n%C3%A3o%20achei%20o%20produto%20que%20eu%20queria%20no%20site.%20Pode%20me%20ajudar%3F" target="_blank" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full font-bold transition shadow-lg transform hover:scale-105">
+                    <i class="ph-bold ph-whatsapp-logo text-xl"></i>
+                    Tire sua dúvida aqui
+                </a>
+            </div>
         </div>
     </section>
 
@@ -358,7 +368,7 @@
                         <h3 class="text-2xl font-bold">O que falam da Atomic?</h3>
                         <p class="text-muted text-sm">Baseado em avaliações reais do Google Maps.</p>
                     </div>
-                    <!-- CORRIGIDO: Link do Google Maps mais específico -->
+                    <!-- Link do Google Maps (CORRIGIDO) -->
                     <a href="https://www.google.com/maps/place/Atomic+Games+Assist%C3%AAncia+t%C3%A9cnica+%26+Inform%C3%A1tica/@-22.8742849,-43.3400118,17z/data=!3m1!4b1!4m6!3m5!1s0x9962d705a97465:0xe1880b1ec757dd4f!8m2!3d-22.8742899!4d-43.3374369!16s%2Fg%2F1thxxfhs?entry=ttu" target="_blank" class="mt-4 md:mt-0 text-blue-600 hover:text-blue-700 font-bold text-sm flex items-center gap-1 hover:underline">
                         Ver no Google <i class="ph-bold ph-arrow-square-out"></i>
                     </a>
@@ -483,7 +493,7 @@
                         </p>
                     </div>
 
-                    <!-- CORRIGIDO: Link do Google Maps mais específico -->
+                    <!-- Link do Google Maps -->
                     <a href="https://www.google.com/maps/place/Atomic+Games+Assist%C3%AAncia+t%C3%A9cnica+%26+Inform%C3%A1tica/@-22.8742849,-43.3400118,17z/data=!3m1!4b1!4m6!3m5!1s0x9962d705a97465:0xe1880b1ec757dd4f!8m2!3d-22.8742899!4d-43.3374369!16s%2Fg%2F1thxxfhs?entry=ttu" target="_blank" class="bg-black text-white text-center py-3 rounded-lg font-bold hover:bg-gray-800 transition flex items-center justify-center gap-2 transform active:scale-95">
                         <i class="ph-bold ph-arrow-bend-up-right"></i> Traçar Rota
                     </a>
@@ -521,9 +531,10 @@
             <h4 class="font-bold text-xl mb-2 brand-font">ATOMIC GAMES</h4>
             <p class="text-muted mb-6">Madureira - Rio de Janeiro</p>
             <div class="flex justify-center gap-4 text-2xl text-muted">
-                <a href="#" class="hover:text-pink-600 transition hover:-translate-y-1"><i class="ph-fill ph-instagram-logo"></i></a>
-                <a href="#" class="hover:text-blue-600 transition hover:-translate-y-1"><i class="ph-fill ph-facebook-logo"></i></a>
-                <a href="#" class="hover:text-black dark:hover:text-white transition hover:-translate-y-1"><i class="ph-fill ph-tiktok-logo"></i></a>
+                <!-- REDES SOCIAIS CORRIGIDAS DEFINITIVAMENTE -->
+                <a href="https://www.instagram.com/atomicgames.rj/" target="_blank" class="hover:text-pink-600 transition hover:-translate-y-1"><i class="ph-fill ph-instagram-logo"></i></a>
+                <a href="https://www.facebook.com/AtomicGamesRj?locale=pt_BR" target="_blank" class="hover:text-blue-600 transition hover:-translate-y-1"><i class="ph-fill ph-facebook-logo"></i></a>
+                <a href="https://www.tiktok.com/@atomic.games.bras" target="_blank" class="hover:text-black dark:hover:text-white transition hover:-translate-y-1"><i class="ph-fill ph-tiktok-logo"></i></a>
             </div>
             <p class="text-xs text-muted mt-8">&copy; 2025 Atomic Games. Todos os direitos reservados.</p>
         </div>
@@ -594,7 +605,7 @@
 
             const currentScrollY = window.scrollY;
             if (currentScrollY > lastScrollY && currentScrollY > 60) {
-                // Esconde o menu se rolar para baixo (apenas em mobile/telas pequenas, embora a lógica seja universal, o efeito é mais notável lá)
+                // Esconde o menu se rolar para baixo
                 navbar.classList.add('nav-hidden');
             } else {
                 // Mostra o menu se rolar para cima
