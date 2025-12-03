@@ -59,10 +59,17 @@
         .video-facade:hover img { opacity: 0.7; }
         
         /* Banner Fix */
-        .hero-bg {
-            background-size: cover;
-            background-position: center; 
+        /* Desktop: Imagem de fundo completa. Mobile: Sem imagem de fundo (usaremos IMG tag) */
+        .hero-section {
+            background-position: center;
             background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+        }
+        @media (min-width: 768px) {
+            .hero-section {
+                background-image: url('https://raw.githubusercontent.com/creativethb/SITE/main/img/painelv6.webp');
+            }
         }
         
         /* Nav Links Hover */
@@ -174,29 +181,34 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="relative border-b border-base overflow-hidden" style="min-height: 600px;">
-        <div class="absolute inset-0 z-0 hero-bg" style="background-image: url('https://raw.githubusercontent.com/creativethb/SITE/main/img/painelv6.webp');"></div>
-        <div class="absolute inset-0 z-0 hero-overlay"></div>
+    <!-- Hero Section (ADAPTIVE HEADER) -->
+    <header class="relative border-b border-base overflow-hidden hero-section" style="min-height: 600px;">
+        <div class="absolute inset-0 z-0 hero-overlay md:block hidden"></div> <!-- Overlay só no Desktop -->
 
-        <div class="container mx-auto px-4 h-full relative z-10 flex flex-col md:flex-row items-center justify-center py-24 gap-12">
+        <div class="container mx-auto px-4 h-full relative z-10 flex flex-col md:flex-row items-center justify-center py-10 md:py-24 gap-8 md:gap-12">
             
-            <div class="md:w-1/2 space-y-6">
+            <div class="md:w-1/2 space-y-6 flex flex-col items-center md:items-start text-center md:text-left">
+                
+                <!-- MOBILE BANNER (SÓ APARECE NO CELULAR) -->
+                <div class="block md:hidden w-full mb-4 rounded-xl overflow-hidden shadow-lg">
+                    <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/baner%20mobile.webp" alt="Atomic Games Banner" class="w-full h-auto object-cover">
+                </div>
+
                 <div class="inline-flex items-center gap-2 px-3 py-1 atomic-yellow-bg text-black rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
                     <i class="ph-fill ph-map-pin"></i> Madureira - RJ
                 </div>
-                <h1 class="text-5xl md:text-7xl font-bold leading-tight drop-shadow-sm text-base">
+                <h1 class="text-4xl md:text-7xl font-bold leading-tight drop-shadow-sm text-base">
                     O Quartel General do <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-orange-600 dark:from-yellow-400 dark:to-orange-500">Gamer Carioca</span>
                 </h1>
                 <p class="text-lg text-muted font-medium max-w-lg">
                     Console quebrado? PC lento? Ou procurando aquele upgrade? 
                     Somos especialistas em assistência técnica e a loja mais completa da região.
                 </p>
-                <div class="flex flex-wrap gap-4 pt-4">
-                    <button onclick="document.getElementById('store').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 atomic-yellow-bg text-black rounded-lg font-bold shadow-md hover:-translate-y-1 transition flex items-center gap-2">
+                <div class="flex flex-wrap justify-center md:justify-start gap-4 pt-4 w-full">
+                    <button onclick="document.getElementById('store').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 atomic-yellow-bg text-black rounded-lg font-bold shadow-md hover:-translate-y-1 transition flex items-center gap-2 w-full md:w-auto justify-center">
                         <i class="ph-bold ph-shopping-bag"></i> Ver Produtos
                     </button>
-                    <button onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-base text-base rounded-lg font-bold hover:text-yellow-600 transition flex items-center gap-2">
+                    <button onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-base text-base rounded-lg font-bold hover:text-yellow-600 transition flex items-center gap-2 w-full md:w-auto justify-center">
                         <i class="ph-bold ph-wrench"></i> Assistência
                     </button>
                 </div>
@@ -611,33 +623,33 @@
             window.open(`https://wa.me/5521995969378?text=${encodeURIComponent(message)}`, '_blank');
         }
 
-        // --- PRODUCTS DATA (LINKS ESTÁVEIS DA WIKIMEDIA) ---
+        // --- PRODUCTS DATA (COM IMAGENS OFICIAIS RESTAURADAS) ---
         const products = [
             // CONSOLES
-            { id: 1, name: "PlayStation 5 Slim", category: "console", price: "R$ 3.799,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/PlayStation_5_and_DualSense_with_transparent_background.png/640px-PlayStation_5_and_DualSense_with_transparent_background.png", desc: "Digital Edition, 1TB SSD" },
+            { id: 1, name: "PlayStation 5 Slim", category: "console", price: "R$ 3.799,00", image: "https://gmedia.playstation.com/is/image/SIEPDC/ps5-slim-digital-edition-image-block-01-en-16nov23?$1600px$", desc: "Digital Edition, 1TB SSD" },
             { id: 2, name: "Xbox Series S", category: "console", price: "R$ 2.699,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Microsoft-Xbox-Series-S-Console-L.jpg/640px-Microsoft-Xbox-Series-S-Console-L.jpg", desc: "512GB SSD, Compacto" },
             { id: 3, name: "Nintendo Switch OLED", category: "console", price: "R$ 2.199,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Nintendo_Switch_Console.png/640px-Nintendo_Switch_Console.png", desc: "Tela 7 pol, Joy-Cons" },
             { id: 4, name: "PlayStation 4 Slim", category: "console", price: "R$ 1.599,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/PS4-Console-wDS4.jpg/640px-PS4-Console-wDS4.jpg", desc: "500GB, Seminovo c/ Garantia" },
             { id: 5, name: "Xbox Series X", category: "console", price: "R$ 4.499,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Xbox-Series-X-Console-wController-FL.jpg/640px-Xbox-Series-X-Console-wController-FL.jpg", desc: "1TB SSD, 4K Nativo" },
             
             // GAMES
-            { id: 6, name: "God of War Ragnarok", category: "games", price: "R$ 299,00", image: "https://upload.wikimedia.org/wikipedia/en/e/ee/God_of_War_Ragnar%C3%B6k_cover.jpg", desc: "PS5 Mídia Física" },
+            { id: 6, name: "God of War Ragnarok", category: "games", price: "R$ 299,00", image: "https://gmedia.playstation.com/is/image/SIEPDC/god-of-war-ragnarok-listing-thumb-01-09sep21$@600,600$1600px$", desc: "PS5 Mídia Física" },
             { id: 7, name: "GTA V Premium", category: "games", price: "R$ 149,00", image: "https://upload.wikimedia.org/wikipedia/en/a/a5/Grand_Theft_Auto_V.png", desc: "PS4 / Xbox One" },
             { id: 8, name: "EA Sports FC 24", category: "games", price: "R$ 249,00", image: "https://upload.wikimedia.org/wikipedia/en/thumb/8/88/EA_Sports_FC_24_cover.jpg/220px-EA_Sports_FC_24_cover.jpg", desc: "PS5 / PS4" },
-            { id: 9, name: "Spider-Man 2", category: "games", price: "R$ 349,00", image: "https://upload.wikimedia.org/wikipedia/en/thumb/4/46/Video_Game_Cover_-_Marvel%27s_Spider-Man_2.jpg/220px-Video_Game_Cover_-_Marvel%27s_Spider-Man_2.jpg", desc: "Exclusivo PS5" },
+            { id: 9, name: "Spider-Man 2", category: "games", price: "R$ 349,00", image: "https://gmedia.playstation.com/is/image/SIEPDC/marvels-spider-man-2-keyart-01-en-25may23?$1600px$", desc: "Exclusivo PS5" },
             { id: 10, name: "Mario Kart 8 Deluxe", category: "games", price: "R$ 299,00", image: "https://upload.wikimedia.org/wikipedia/en/b/b5/MarioKart8Boxart.jpg", desc: "Nintendo Switch" },
             
             // ACESSÓRIOS
-            { id: 12, name: "Controle DualSense", category: "acessorios", price: "R$ 449,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/DualSense_White.png/640px-DualSense_White.png", desc: "Original Sony" },
+            { id: 12, name: "Controle DualSense", category: "acessorios", price: "R$ 449,00", image: "https://gmedia.playstation.com/is/image/SIEPDC/dualsense-white-keyart-01-en-15jul22?$1600px$", desc: "Original Sony" },
             { id: 13, name: "Controle Xbox Series", category: "acessorios", price: "R$ 399,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Xbox-Series-X-Controller-FL.jpg/640px-Xbox-Series-X-Controller-FL.jpg", desc: "Carbon Black" },
-            { id: 14, name: "Headset Gamer", category: "acessorios", price: "R$ 249,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/HyperX_Cloud_II_Headset.jpg/640px-HyperX_Cloud_II_Headset.jpg", desc: "PC e Consoles" },
+            { id: 14, name: "Headset Gamer", category: "acessorios", price: "R$ 249,00", image: "https://m.media-amazon.com/images/I/61CGHv6kmWL._AC_SL1000_.jpg", desc: "PC e Consoles" },
             { id: 15, name: "Joy-Con Par", category: "acessorios", price: "R$ 499,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Nintendo-Switch-Joy-Con-Grip-FL.jpg/640px-Nintendo-Switch-Joy-Con-Grip-FL.jpg", desc: "Neon Red/Blue" },
             
             // HARDWARE
-            { id: 17, name: "Kit Upgrade Ryzen 5", category: "hardware", price: "R$ 1.899,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/AMD_Ryzen_5_2600_Box.jpg/640px-AMD_Ryzen_5_2600_Box.jpg", desc: "Ryzen 5600G + B450M" },
-            { id: 18, name: "SSD NVMe 1TB", category: "hardware", price: "R$ 399,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Samsung_960_PRO_512GB_NVMe_SSD.jpg/640px-Samsung_960_PRO_512GB_NVMe_SSD.jpg", desc: "Kingston NV2" },
-            { id: 19, name: "Memória RAM 16GB", category: "hardware", price: "R$ 249,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/DDR4_SDRAM_module.jpg/640px-DDR4_SDRAM_module.jpg", desc: "DDR4 3200Mhz Fury" },
-            { id: 20, name: "Fonte 600W", category: "hardware", price: "R$ 299,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Power_supply_unit_of_a_PC.jpg/640px-Power_supply_unit_of_a_PC.jpg", desc: "80 Plus Bronze" },
+            { id: 17, name: "Kit Upgrade Ryzen 5", category: "hardware", price: "R$ 1.899,00", image: "https://m.media-amazon.com/images/I/51f2hk8+jPL._AC_SL1000_.jpg", desc: "Ryzen 5600G + B450M" },
+            { id: 18, name: "SSD NVMe 1TB", category: "hardware", price: "R$ 399,00", image: "https://m.media-amazon.com/images/I/61p6-M2X1AL._AC_SL1500_.jpg", desc: "Kingston NV2" },
+            { id: 19, name: "Memória RAM 16GB", category: "hardware", price: "R$ 249,00", image: "https://m.media-amazon.com/images/I/61+4T0jkXQL._AC_SL1000_.jpg", desc: "DDR4 3200Mhz Fury" },
+            { id: 20, name: "Fonte 600W", category: "hardware", price: "R$ 299,00", image: "https://m.media-amazon.com/images/I/718t8tr+sIL._AC_SL1500_.jpg", desc: "80 Plus Bronze" },
         ];
 
         const faqs = [
