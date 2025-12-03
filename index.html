@@ -341,11 +341,9 @@
     <!-- JS Logic -->
     <script>
         // CONFIGURAÇÃO DAS IMAGENS (GITHUB)
-        // O código vai procurar exatamente por esses nomes no seu repositório.
-        // Se a imagem não existir ainda, ele usa um placeholder automático.
-        
         const repoUrl = "https://raw.githubusercontent.com/creativethb/SITE/main/img/";
         
+        // CORREÇÃO AQUI: "spiderman.webp" em vez de "game-spiderman.webp"
         const products = [
             // CONSOLES
             { id: 1, name: "PlayStation 5 Slim", category: "console", price: "R$ 3.799,00", image: repoUrl + "console-ps5.webp", desc: "Digital Edition, 1TB SSD" },
@@ -358,7 +356,8 @@
             { id: 6, name: "God of War Ragnarok", category: "games", price: "R$ 299,00", image: repoUrl + "game-gow.webp", desc: "PS5 Mídia Física" },
             { id: 7, name: "GTA V Premium", category: "games", price: "R$ 149,00", image: repoUrl + "game-gta.webp", desc: "PS4 / Xbox One" },
             { id: 8, name: "EA Sports FC 24", category: "games", price: "R$ 249,00", image: repoUrl + "game-fc24.webp", desc: "PS5 / PS4" },
-            { id: 9, name: "Spider-Man 2", category: "games", price: "R$ 349,00", image: repoUrl + "game-spiderman.webp", desc: "Exclusivo PS5" },
+            // AQUI ESTAVA O ERRO (Corrigido para spiderman.webp)
+            { id: 9, name: "Spider-Man 2", category: "games", price: "R$ 349,00", image: repoUrl + "spiderman.webp", desc: "Exclusivo PS5" },
             { id: 10, name: "Mario Kart 8 Deluxe", category: "games", price: "R$ 299,00", image: repoUrl + "game-mario.webp", desc: "Nintendo Switch" },
             
             // ACESSÓRIOS
