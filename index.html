@@ -95,6 +95,13 @@
             width: 18px; height: 18px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
         }
+
+        /* Map Container */
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border-radius: 1rem;
+        }
     </style>
 </head>
 <body class="antialiased bg-base text-base transition-colors duration-300">
@@ -134,7 +141,8 @@
             <div class="hidden md:flex gap-8 font-bold text-sm uppercase tracking-wide text-muted">
                 <a href="#store" class="nav-link atomic-yellow-text">Loja Virtual</a>
                 <a href="#services" class="nav-link">Assistência</a>
-                <a href="#dashboard" class="nav-link">Reputação</a>
+                <a href="#about" class="nav-link">Sobre Nós</a>
+                <a href="#location" class="nav-link">Localização</a>
             </div>
 
             <!-- Actions -->
@@ -331,8 +339,101 @@
         </div>
     </section>
 
+    <!-- NEW SECTION: ABOUT US -->
+    <section id="about" class="py-16 bg-card border-b border-base">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2">
+                    <div class="inline-block px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-xs font-bold uppercase tracking-wider text-muted mb-4">
+                        Nossa História
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Quem é a <span class="atomic-yellow-text">Atomic Games?</span></h2>
+                    <div class="space-y-4 text-muted leading-relaxed">
+                        <p>
+                            Mais do que uma loja, somos uma comunidade. Localizada no coração de <strong>Madureira</strong>, a Atomic Games nasceu da paixão genuína por tecnologia e games. 
+                        </p>
+                        <p>
+                            Com mais de <strong>5.000 clientes satisfeitos</strong>, nossa missão é oferecer não apenas produtos, mas soluções completas: desde o console de última geração até o reparo complexo daquela placa de vídeo ou controle que ninguém mais resolve.
+                        </p>
+                        <p>
+                            Aqui, falamos a sua língua. Seja você um jogador casual ou um entusiasta de hardware high-end, nosso QG está de portas abertas.
+                        </p>
+                    </div>
+                </div>
+                <div class="md:w-1/2 grid grid-cols-2 gap-4">
+                    <div class="bg-base p-6 rounded-2xl border border-base text-center">
+                        <i class="ph-fill ph-users-three text-4xl text-yellow-500 mb-3"></i>
+                        <h4 class="font-bold text-lg">+5.000</h4>
+                        <p class="text-sm text-muted">Clientes Atendidos</p>
+                    </div>
+                    <div class="bg-base p-6 rounded-2xl border border-base text-center">
+                        <i class="ph-fill ph-wrench text-4xl text-blue-500 mb-3"></i>
+                        <h4 class="font-bold text-lg">Especialistas</h4>
+                        <p class="text-sm text-muted">Em Hardware e Games</p>
+                    </div>
+                    <div class="bg-base p-6 rounded-2xl border border-base text-center col-span-2">
+                        <i class="ph-fill ph-heart text-4xl text-red-500 mb-3"></i>
+                        <h4 class="font-bold text-lg">Paixão Gamer</h4>
+                        <p class="text-sm text-muted">De jogador para jogador</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW SECTION: LOCATION MAP -->
+    <section id="location" class="py-16 bg-base">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold mb-4">Venha Conhecer Nosso QG</h2>
+                <p class="text-muted">Fácil acesso no coração de Madureira.</p>
+            </div>
+
+            <div class="bg-card rounded-2xl overflow-hidden shadow-lg border border-base flex flex-col md:flex-row h-[500px]">
+                <!-- Info Side -->
+                <div class="md:w-1/3 p-8 flex flex-col justify-center space-y-8 bg-card relative z-10">
+                    <div>
+                        <h3 class="font-bold text-xl mb-2 flex items-center gap-2">
+                            <i class="ph-fill ph-map-pin text-yellow-500"></i> Endereço
+                        </h3>
+                        <p class="text-muted">
+                            Av. Ministro Edgard Romero, 81<br>
+                            Loja 3 - Madureira<br>
+                            Rio de Janeiro - RJ
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-bold text-xl mb-2 flex items-center gap-2">
+                            <i class="ph-fill ph-clock text-yellow-500"></i> Horário
+                        </h3>
+                        <p class="text-muted">
+                            Segunda a Sexta: 09h às 19h<br>
+                            Sábado: 09h às 14h<br>
+                            Domingo: Fechado
+                        </p>
+                    </div>
+
+                    <a href="https://www.google.com/maps/dir//Av.+Min.+Edgard+Romero,+81+-+Madureira,+Rio+de+Janeiro+-+RJ,+21360-201/@-22.8712975,-43.3371843,17z" target="_blank" class="bg-black text-white text-center py-3 rounded-lg font-bold hover:bg-gray-800 transition flex items-center justify-center gap-2">
+                        <i class="ph-bold ph-arrow-bend-up-right"></i> Traçar Rota
+                    </a>
+                </div>
+
+                <!-- Map Side -->
+                <div class="md:w-2/3 bg-gray-200 map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3676.544527961914!2d-43.33975922375841!3d-22.87129747927893!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9962cc05055555%3A0x0!2sAv.%20Min.%20Edgard%20Romero%2C%2081%20-%20Madureira%2C%20Rio%20de%20Janeiro%20-%20RJ%2C%2021360-201!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- FAQ -->
-    <section id="faq" class="py-16 bg-card">
+    <section id="faq" class="py-16 bg-card border-t border-base">
         <div class="container mx-auto px-4 max-w-4xl">
             <h2 class="text-3xl font-bold text-center mb-10 text-base">Perguntas Frequentes</h2>
             <div class="space-y-4" id="faqContainer">
@@ -435,7 +536,6 @@
         }
 
         // --- PRODUCTS DATA (LINKS ESTÁVEIS DA WIKIMEDIA) ---
-        // Se a imagem falhar, o 'onerror' cria um placeholder com o nome do produto.
         const products = [
             // CONSOLES
             { id: 1, name: "PlayStation 5 Slim", category: "console", price: "R$ 3.799,00", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/PlayStation_5_and_DualSense_with_transparent_background.png/640px-PlayStation_5_and_DualSense_with_transparent_background.png", desc: "Digital Edition, 1TB SSD" },
@@ -492,7 +592,7 @@
                 filtered.forEach(p => {
                     const card = document.createElement('div');
                     card.className = 'product-card bg-card rounded-xl overflow-hidden border border-base flex flex-col h-full group cursor-pointer';
-                    // Tratamento de erro (onerror) adicionado: se a imagem não carregar, cria um quadrado cinza com o nome.
+                    // Tratamento de erro (onerror) adicionado
                     card.innerHTML = `
                         <div class="product-img-box">
                             <img src="${p.image}" alt="${p.name}" loading="lazy" 
