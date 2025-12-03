@@ -6,205 +6,165 @@
     <title>Atomic Games e Informática - Site Oficial</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Phosphor Icons para ícones mais modernos (Lupa, Whatsapp, etc) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Rajdhani:wght@500;700&display=swap');
 
-        /* Video Facade Styling */
-        .video-facade {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background-color: #000;
-            cursor: pointer;
-            overflow: hidden;
-        }
-        
-        .video-facade img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
-        }
+        /* --- STYLES GERAIS --- */
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .brand-font { font-family: 'Rajdhani', sans-serif; }
 
-        .video-facade:hover img {
-            opacity: 0.5;
-        }
+        /* Cores da Marca */
+        .atomic-yellow { color: #FFD700; }
+        .bg-atomic-yellow { background-color: #FFD700; }
+        .border-atomic-yellow { border-color: #FFD700; }
+        .hover-bg-atomic-yellow:hover { background-color: #e6c100; }
 
-        .play-button {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 64px;
-            height: 64px;
-            background-color: #FFD700;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            z-index: 20;
-        }
-
-        .play-button::before {
-            content: '';
-            display: block;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 10px 0 10px 20px;
-            border-color: transparent transparent transparent #0A0A0A;
-            margin-left: 4px;
-        }
-
-        .video-facade:hover .play-button {
-            transform: translate(-50%, -50%) scale(1.1);
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
-        }
-
-        /* Base Typography */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-
-        h1, h2, h3, .brand-font {
-            font-family: 'Rajdhani', sans-serif;
-        }
-
-        /* Chart Container */
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 300px;
-            max-height: 400px;
-        }
-
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 350px;
-            }
-        }
-
-        /* --- COLORS --- */
-        .atomic-vibrant-yellow { color: #FFD700; }
-        .atomic-deep-black { color: #0A0A0A; }
-        .atomic-bg-vibrant-yellow { background-color: #FFD700; }
-        .atomic-bg-deep-black { background-color: #0A0A0A; }
-        .atomic-hover-bg-vibrant-yellow:hover { background-color: #e6c100; }
-
-        /* Light Mode */
+        /* Light/Dark Mode Classes */
         .light .bg-base { background-color: #f8fafc; }
         .light .bg-card { background-color: #ffffff; }
         .light .text-base { color: #1e293b; }
-        .light .text-muted { color: #475569; }
+        .light .text-muted { color: #64748b; }
         .light .border-base { border-color: #e2e8f0; }
-        .light .shadow-base { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
-        .light .hero-overlay { background: linear-gradient(90deg, rgba(248,250,252,0.95) 0%, rgba(248,250,252,0.8) 50%, rgba(248,250,252,0.6) 100%); }
+        .light .hero-overlay { background: linear-gradient(90deg, rgba(248,250,252,0.95) 0%, rgba(248,250,252,0.7) 60%, rgba(248,250,252,0.4) 100%); }
 
-        /* Dark Mode */
-        .dark .bg-base { background-color: #0A0A0A; }
+        .dark .bg-base { background-color: #0f172a; } /* Slate 900 for better contrast than pure black */
         .dark .bg-card { background-color: #1e293b; }
-        .dark .text-base { color: #ffffff; }
+        .dark .text-base { color: #f1f5f9; }
         .dark .text-muted { color: #94a3b8; }
         .dark .border-base { border-color: #334155; }
-        .dark .shadow-base { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4); }
-        .dark .hero-overlay { background: linear-gradient(90deg, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.85) 50%, rgba(10,10,10,0.7) 100%); }
+        .dark .hero-overlay { background: linear-gradient(90deg, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.8) 60%, rgba(15,23,42,0.5) 100%); }
 
-        .product-card { transition: transform 0.2s, box-shadow 0.2s; }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
-        .dark .product-card:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); }
+        /* Video Facade */
+        .video-facade {
+            position: relative; width: 100%; height: 100%;
+            background-color: #000; cursor: pointer; overflow: hidden;
+        }
+        .video-facade img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: opacity 0.3s; }
+        .video-facade:hover img { opacity: 0.6; }
+        .play-btn {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 60px; height: 60px; bg-atomic-yellow; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); z-index: 10;
+        }
 
-        .nav-item { transition: color 0.3s ease; }
-        .light .nav-item:hover, .dark .nav-item:hover { color: #FFD700; }
+        /* Product Card & Images */
+        .product-card { transition: all 0.3s ease; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .product-img-box {
+            height: 200px; display: flex; align-items: center; justify-content: center;
+            background: #fff; position: relative; overflow: hidden;
+        }
+        .product-img-box img {
+            max-height: 80%; max-width: 80%; object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        .product-card:hover .product-img-box img { transform: scale(1.1); }
+
+        /* Nav & Logo */
+        .nav-link { transition: color 0.2s; }
+        .light .nav-link:hover, .dark .nav-link:hover { color: #FFD700; }
+        .logo-text { filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1)); }
+        .dark .logo-text { filter: drop-shadow(0 0 2px rgba(255,215,0,0.5)); }
+
+        /* Banner Fix */
+        .hero-bg {
+            background-size: cover;
+            background-position: center; /* Centraliza a imagem larga */
+            background-repeat: no-repeat;
+        }
         
-        .logo-text-img {
-            filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1));
-        }
-        .dark .logo-text-img {
-            filter: drop-shadow(0px 0px 5px rgba(255,215,0,0.2));
-        }
+        /* Chart Container */
+        .chart-box { position: relative; height: 300px; width: 100%; }
 
-        /* Product Image Fit */
-        .product-image-container img {
-            transition: transform 0.5s ease;
+        /* Search Input */
+        .search-input {
+            transition: all 0.3s;
         }
-        .product-card:hover .product-image-container img {
-            transform: scale(1.05);
+        .search-input:focus {
+            border-color: #FFD700;
+            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
         }
     </style>
 </head>
 <body class="antialiased bg-base text-base transition-colors duration-300">
 
-    <!-- Navigation -->
-    <nav class="sticky top-0 z-50 bg-card border-b border-base shadow-lg">
-        <div class="container mx-auto px-4 h-16 flex justify-between items-center">
-            <!-- LOGO AREA -->
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-card border-b border-base shadow-sm">
+        <div class="container mx-auto px-4 h-20 flex justify-between items-center">
+            <!-- Logos -->
             <div class="flex items-center gap-3">
-                <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/atomiclogo.webp" alt="Atomic Logo" class="h-10 w-10 object-contain rounded-full shadow-sm">
-                <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/Atomic%20frase.webp" alt="Atomic Games Texto" class="h-8 w-auto object-contain logo-text-img">
+                <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/atomiclogo.webp" alt="Logo" class="h-12 w-12 rounded-full shadow-md bg-black">
+                <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/Atomic%20frase.webp" alt="Atomic Games" class="h-8 w-auto logo-text hidden sm:block">
             </div>
-            
-            <div class="hidden md:flex gap-8 font-semibold text-sm uppercase tracking-wide text-muted">
-                <a href="#dashboard" class="nav-item">Reputação & Dados</a>
-                <a href="#store" class="nav-item">Loja Virtual</a>
-                <a href="#services" class="nav-item">Assistência</a>
-                <a href="#faq" class="nav-item">Ajuda</a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex gap-8 font-bold text-sm uppercase tracking-wide text-muted">
+                <a href="#dashboard" class="nav-link">Reputação</a>
+                <a href="#store" class="nav-link text-atomic-yellow">Loja</a>
+                <a href="#services" class="nav-link">Assistência</a>
+                <a href="#faq" class="nav-link">Dúvidas</a>
             </div>
+
+            <!-- Actions -->
             <div class="flex items-center gap-4">
-                <button id="themeToggle" class="p-2 rounded-full text-base hover:atomic-vibrant-yellow transition-colors">
-                    <svg id="sunIcon" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                    <svg id="moonIcon" class="w-6 h-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                    </svg>
+                <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                    <i class="ph ph-sun text-2xl hidden dark:block text-yellow-400"></i>
+                    <i class="ph ph-moon text-2xl block dark:hidden text-slate-700"></i>
                 </button>
-                <button onclick="scrollToSection('store')" class="bg-base border border-base text-base px-5 py-2 rounded-full font-bold text-sm atomic-hover-bg-vibrant-yellow hover:atomic-deep-black transition-colors duration-300">
-                    Fale no Zap ✆
-                </button>
+                <a href="https://wa.me/5521999999999" target="_blank" class="hidden sm:flex items-center gap-2 bg-atomic-yellow text-black px-5 py-2 rounded-full font-bold text-sm hover:bg-yellow-500 transition shadow-lg">
+                    <i class="ph-bold ph-whatsapp-logo text-lg"></i>
+                    <span>Fale Conosco</span>
+                </a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="relative border-b border-base overflow-hidden">
-        <div class="absolute inset-0 z-0 bg-cover bg-center" style="background-image: url('https://raw.githubusercontent.com/creativethb/SITE/main/img/painelv6.webp');"></div>
+    <!-- Hero Section (Banner Ajustado) -->
+    <header class="relative border-b border-base overflow-hidden" style="min-height: 550px;">
+        <!-- Banner Background Image -->
+        <div class="absolute inset-0 z-0 hero-bg" style="background-image: url('https://raw.githubusercontent.com/creativethb/SITE/main/img/painelv6.webp');"></div>
+        
+        <!-- Gradient Overlay -->
         <div class="absolute inset-0 z-0 hero-overlay"></div>
 
-        <div class="container mx-auto px-4 py-16 md:py-24 relative z-10 flex flex-col md:flex-row items-center gap-12">
+        <div class="container mx-auto px-4 h-full relative z-10 flex flex-col md:flex-row items-center justify-center py-20 gap-12">
+            
+            <!-- Text Content -->
             <div class="md:w-1/2 space-y-6">
-                <div class="inline-block px-3 py-1 atomic-bg-vibrant-yellow atomic-deep-black rounded-full text-xs font-bold uppercase tracking-wider">
-                    Madureira - RJ
+                <div class="inline-flex items-center gap-2 px-3 py-1 bg-atomic-yellow text-black rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
+                    <i class="ph-fill ph-map-pin"></i> Madureira - RJ
                 </div>
-                <h1 class="text-5xl md:text-6xl font-bold leading-tight text-base drop-shadow-sm">
-                    O Quartel General do <span class="text-transparent bg-clip-text atomic-bg-vibrant-yellow">Gamer Carioca</span>
+                <h1 class="text-5xl md:text-7xl font-bold leading-tight drop-shadow-sm">
+                    O Quartel General do <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">Gamer Carioca</span>
                 </h1>
-                <p class="text-lg text-muted font-medium">
-                    Mais que uma loja, um hub de tecnologia. Análise de dados confirma: somos referência em assistência técnica e hardware de alta performance no Rio de Janeiro.
+                <p class="text-lg text-muted font-medium max-w-lg">
+                    Console quebrado? PC lento? Ou procurando aquele upgrade? 
+                    Somos especialistas em assistência técnica e a loja mais completa da região.
                 </p>
-                <div class="flex gap-4 pt-4">
-                    <button onclick="scrollToSection('store')" class="px-8 py-3 atomic-bg-vibrant-yellow atomic-deep-black rounded-lg font-bold shadow-lg atomic-hover-bg-vibrant-yellow transition transform hover:-translate-y-1">
-                        Ver Ofertas
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <button onclick="document.getElementById('store').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 bg-atomic-yellow text-black rounded-lg font-bold shadow-md hover:-translate-y-1 transition flex items-center gap-2">
+                        <i class="ph-bold ph-shopping-bag"></i> Ver Produtos
                     </button>
-                    <button onclick="scrollToSection('services')" class="px-8 py-3 bg-card/80 backdrop-blur-sm border border-base text-base rounded-lg font-bold hover:atomic-vibrant-yellow transition-colors">
-                        Solicitar Reparo
+                    <button onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 bg-card border border-base rounded-lg font-bold hover:text-yellow-500 transition flex items-center gap-2">
+                        <i class="ph-bold ph-wrench"></i> Assistência
                     </button>
                 </div>
             </div>
-            <div class="md:w-1/2 flex justify-center">
-                <div class="relative w-full max-w-md aspect-video bg-black rounded-2xl shadow-2xl overflow-hidden border-4 border-base group">
+
+            <!-- Video Player -->
+            <div class="md:w-1/2 w-full flex justify-center">
+                <div class="relative w-full max-w-lg aspect-video bg-black rounded-2xl shadow-2xl overflow-hidden border-4 border-white dark:border-slate-700">
                     <div class="video-facade" id="videoFacade" onclick="loadVideo()" data-video-id="bDAR4bkn0mY">
-                        <img src="https://img.youtube.com/vi/bDAR4bkn0mY/maxresdefault.jpg" 
-                             alt="Vídeo Institucional Atomic Games" 
-                             onerror="this.src='https://placehold.co/800x450/0A0A0A/FFD700?text=ATOMIC+PLAY'">
-                        <div class="play-button" aria-label="Reproduzir Vídeo"></div>
-                        <div class="absolute bottom-4 left-0 right-0 text-center text-white text-sm font-bold tracking-widest opacity-80">
-                            ASSISTIR VÍDEO
+                        <img src="https://img.youtube.com/vi/bDAR4bkn0mY/maxresdefault.jpg" onerror="this.src='https://placehold.co/800x450/000/FFD700?text=ATOMIC+GAMES'">
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-atomic-yellow rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition z-20">
+                            <i class="ph-fill ph-play text-2xl text-black ml-1"></i>
+                        </div>
+                        <div class="absolute bottom-4 w-full text-center text-white font-bold tracking-wider text-sm z-20 uppercase shadow-black drop-shadow-md">
+                            Conheça a Loja
                         </div>
                     </div>
                     <div id="videoContainer" class="w-full h-full hidden"></div>
@@ -213,535 +173,362 @@
         </div>
     </header>
 
-    <!-- SECTION 1: Reputation -->
+    <!-- Reputation Stats -->
     <section id="dashboard" class="py-16 bg-base border-b border-base">
         <div class="container mx-auto px-4">
-            <div class="max-w-3xl mx-auto text-center mb-12">
-                <h2 class="text-3xl font-bold mb-4 text-base">Transparência em Dados</h2>
-                <p class="text-muted">
-                    Para construir este novo site, realizamos uma pesquisa profunda em nossas avaliações no Google e Facebook. 
-                    Abaixo, apresentamos os dados que comprovam nossa excelência técnica e identificam onde focamos nossa melhoria contínua.
-                </p>
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-3xl font-bold mb-4">Aprovado pelos Gamers</h2>
+                <p class="text-muted">Dados reais baseados em nossas avaliações públicas.</p>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                <div class="bg-card p-6 rounded-2xl border border-base shadow-base">
-                    <h3 class="text-lg font-bold mb-2 text-base">Análise de Satisfação (0-10)</h3>
-                    <p class="text-sm text-muted mb-6">Baseado em reviews agregados de Redes Sociais.</p>
-                    <div class="chart-container">
-                        <canvas id="reputationChart"></canvas>
-                    </div>
-                    <div class="mt-4 p-4 bg-base rounded-lg border-l-4 border-yellow-400 text-sm text-muted">
-                        <strong>Insight:</strong> Nossa pontuação em "Atendimento Técnico" supera a média local, validando nossa autoridade em reparos de consoles e PCs.
-                    </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-card p-6 rounded-2xl shadow-sm border border-base">
+                    <h3 class="font-bold mb-4 flex items-center gap-2"><i class="ph-fill ph-star text-yellow-400"></i> Avaliação Geral</h3>
+                    <div class="chart-box"><canvas id="reputationChart"></canvas></div>
                 </div>
-
-                <div class="bg-card p-6 rounded-2xl border border-base shadow-base">
-                    <h3 class="text-lg font-bold mb-2 text-base">Especialidades Mais Procuradas</h3>
-                    <p class="text-sm text-muted mb-6">Distribuição mensal de ordens de serviço.</p>
-                    <div class="chart-container">
-                        <canvas id="servicesChart"></canvas>
-                    </div>
-                    <div class="mt-4 p-4 bg-base rounded-lg border-l-4 border-yellow-400 text-sm text-muted">
-                        <strong>Insight:</strong> A alta demanda por "Limpeza e Manutenção" indica que nossos clientes priorizam a longevidade de seus equipamentos.
-                    </div>
+                <div class="bg-card p-6 rounded-2xl shadow-sm border border-base">
+                    <h3 class="font-bold mb-4 flex items-center gap-2"><i class="ph-fill ph-chart-pie-slice text-purple-500"></i> Serviços Realizados</h3>
+                    <div class="chart-box"><canvas id="servicesChart"></canvas></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SECTION 2: E-commerce / Catalog -->
-    <section id="store" class="py-16 bg-card border-b border-base">
+    <!-- Store / Catalog Section -->
+    <section id="store" class="py-16 bg-card border-b border-base scroll-mt-20">
         <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
-                <div class="max-w-2xl">
-                    <h2 class="text-3xl font-bold mb-4 text-base">Catálogo Atomic</h2>
-                    <p class="text-muted">
-                        Explore nossa seleção curada. A estrutura deste catálogo foi pensada para agilidade: encontre o produto e finalize a negociação diretamente com nossos especialistas no WhatsApp.
-                    </p>
+            
+            <!-- Header & Controls -->
+            <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-6">
+                <div>
+                    <h2 class="text-4xl font-bold mb-2">Catálogo <span class="text-yellow-500">Atomic</span></h2>
+                    <p class="text-muted">Selecione uma categoria ou busque seu item favorito.</p>
                 </div>
-                <div class="flex flex-wrap gap-2" id="categoryFilters">
-                    <button class="filter-btn active atomic-bg-vibrant-yellow atomic-deep-black px-4 py-2 rounded-full text-sm font-bold transition duration-300" data-category="all">Todos</button>
-                    <button class="filter-btn bg-base text-muted border border-base px-4 py-2 rounded-full text-sm font-bold hover:atomic-bg-vibrant-yellow hover:atomic-deep-black transition duration-300" data-category="console">Consoles</button>
-                    <button class="filter-btn bg-base text-muted border border-base px-4 py-2 rounded-full text-sm font-bold hover:atomic-bg-vibrant-yellow hover:atomic-deep-black transition duration-300" data-category="games">Jogos</button>
-                    <button class="filter-btn bg-base text-muted border border-base px-4 py-2 rounded-full text-sm font-bold hover:atomic-bg-vibrant-yellow hover:atomic-deep-black transition duration-300" data-category="acessorios">Acessórios</button>
+                
+                <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+                    <!-- Search Bar -->
+                    <div class="relative group w-full sm:w-64">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="ph-bold ph-magnifying-glass text-muted group-focus-within:text-yellow-500"></i>
+                        </div>
+                        <input type="text" id="searchInput" placeholder="Buscar produto..." class="search-input w-full bg-base text-base border border-base rounded-full py-2.5 pl-10 pr-4 focus:outline-none text-sm font-medium">
+                    </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="productGrid">
-                <!-- Products via JS -->
+            <!-- Category Filters -->
+            <div class="flex flex-wrap gap-2 mb-8 justify-center md:justify-start" id="categoryFilters">
+                <button class="filter-btn active px-5 py-2 rounded-full text-sm font-bold border border-transparent transition bg-black text-white hover:bg-gray-800" data-category="all">Todos</button>
+                <button class="filter-btn px-5 py-2 rounded-full text-sm font-bold border border-base text-muted hover:border-yellow-400 hover:text-yellow-600 transition bg-base" data-category="console">Consoles</button>
+                <button class="filter-btn px-5 py-2 rounded-full text-sm font-bold border border-base text-muted hover:border-yellow-400 hover:text-yellow-600 transition bg-base" data-category="games">Jogos</button>
+                <button class="filter-btn px-5 py-2 rounded-full text-sm font-bold border border-base text-muted hover:border-yellow-400 hover:text-yellow-600 transition bg-base" data-category="acessorios">Acessórios</button>
+                <button class="filter-btn px-5 py-2 rounded-full text-sm font-bold border border-base text-muted hover:border-yellow-400 hover:text-yellow-600 transition bg-base" data-category="hardware">Hardware</button>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6" id="productGrid">
+                <!-- Products injected by JS -->
+            </div>
+
+            <!-- Not Found / CTA -->
+            <div id="noResults" class="hidden text-center py-12">
+                <i class="ph-duotone ph-magnifying-glass text-6xl text-muted mb-4"></i>
+                <h3 class="text-xl font-bold">Nenhum produto encontrado.</h3>
+                <p class="text-muted">Tente buscar por outro termo.</p>
+            </div>
+
+            <div class="mt-16 bg-base rounded-2xl p-8 text-center border border-base border-dashed">
+                <h3 class="text-2xl font-bold mb-2">Não encontrou o que procura?</h3>
+                <p class="text-muted mb-6">Temos muito mais itens na loja física. Fale direto com um vendedor.</p>
+                <a href="https://wa.me/5521999999999?text=Ol%C3%A1%2C%20n%C3%A3o%20achei%20o%20produto%20que%20eu%20queria%20no%20site.%20Pode%20me%20ajudar%3F" target="_blank" class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-bold transition shadow-lg transform hover:scale-105">
+                    <i class="ph-bold ph-whatsapp-logo text-xl"></i>
+                    Tire sua dúvida aqui
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="py-16 bg-base border-t border-base">
+        <div class="container mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <h2 class="text-3xl font-bold mb-6">Assistência Técnica de Elite</h2>
+                <div class="space-y-6">
+                    <div class="flex gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center text-2xl"><i class="ph-fill ph-clock-countdown"></i></div>
+                        <div><h4 class="font-bold">Orçamento Rápido</h4><p class="text-sm text-muted">Diagnóstico ágil para você não ficar sem jogar.</p></div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-green-100 dark:bg-green-900/30 text-green-600 flex items-center justify-center text-2xl"><i class="ph-fill ph-circuitry"></i></div>
+                        <div><h4 class="font-bold">Laboratório Próprio</h4><p class="text-sm text-muted">Peças originais e ferramentas de precisão.</p></div>
+                    </div>
+                </div>
             </div>
             
-            <div class="text-center mt-12">
-                <button class="text-muted hover:atomic-vibrant-yellow font-semibold flex items-center justify-center gap-2 mx-auto transition-colors">
-                    <span>Ver catálogo completo no Instagram</span>
-                    <span class="text-xl">↗</span>
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECTION 3: Services -->
-    <section id="services" class="py-16 bg-base border-t border-base">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                
-                <div>
-                    <h2 class="text-3xl font-bold mb-6 text-base">Assistência Técnica de Elite</h2>
-                    <p class="text-muted mb-6 leading-relaxed">
-                        Sabemos que ficar sem seu console ou PC é difícil. Por isso, desenvolvemos um processo de manutenção transparente e ágil. Utilizamos peças originais e oferecemos garantia em todos os serviços.
-                    </p>
-                    
-                    <div class="space-y-4">
-                        <div class="flex gap-4">
-                            <div class="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center text-green-500 text-xl">✓</div>
-                            <div>
-                                <h4 class="font-bold text-base">Orçamento Rápido</h4>
-                                <p class="text-sm text-muted">Avaliação preliminar em até 24h.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-4">
-                            <div class="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500 text-xl">⚙</div>
-                            <div>
-                                <h4 class="font-bold text-base">Laboratório Próprio</h4>
-                                <p class="text-sm text-muted">Equipamentos de ponta em Madureira.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-4">
-                            <div class="w-12 h-12 rounded-full atomic-bg-vibrant-yellow/10 flex items-center justify-center atomic-vibrant-yellow text-xl">★</div>
-                            <div>
-                                <h4 class="font-bold text-base">Garantia Atomic</h4>
-                                <p class="text-sm text-muted">3 meses de garantia em serviços.</p>
-                            </div>
-                        </div>
+            <div class="bg-card p-8 rounded-3xl shadow-xl border border-yellow-500/30 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-500 opacity-10 rounded-full blur-3xl"></div>
+                <h3 class="text-2xl font-bold mb-6">Simular Reparo</h3>
+                <form id="serviceForm" class="space-y-4">
+                    <select id="deviceSelect" class="w-full p-3 rounded-lg bg-base border border-base focus:border-yellow-500 outline-none">
+                        <option value="">Selecione o Aparelho...</option>
+                        <option value="PS5">PlayStation 5</option>
+                        <option value="PS4">PlayStation 4</option>
+                        <option value="Xbox Series">Xbox Series S/X</option>
+                        <option value="Nintendo Switch">Nintendo Switch</option>
+                        <option value="PC">Computador / Notebook</option>
+                    </select>
+                    <select id="issueSelect" class="w-full p-3 rounded-lg bg-base border border-base focus:border-yellow-500 outline-none">
+                        <option value="">Qual o defeito?</option>
+                        <option value="Limpeza">Limpeza / Aquecimento</option>
+                        <option value="Nao Liga">Não Liga</option>
+                        <option value="Sem Imagem">Sem Imagem (HDMI)</option>
+                        <option value="Controle">Drift no Controle</option>
+                    </select>
+                    <div id="serviceResult" class="hidden p-4 bg-base rounded-lg border border-yellow-500/50">
+                        <p class="text-sm">Estimativa: <span class="font-bold text-yellow-500" id="timeEstimate">--</span></p>
                     </div>
-                </div>
-
-                <div class="bg-card p-8 rounded-3xl shadow-xl relative overflow-hidden border border-base">
-                    <div class="absolute top-0 right-0 w-32 h-32 atomic-bg-vibrant-yellow rounded-full blur-3xl opacity-10 -mr-10 -mt-10"></div>
-                    
-                    <h3 class="text-2xl font-bold brand-font mb-6 border-b border-base/50 pb-4 text-base">Pré-Orçamento Inteligente</h3>
-                    
-                    <form id="serviceForm" class="space-y-4 relative z-10">
-                        <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-muted mb-1">Seu Equipamento</label>
-                            <select id="deviceSelect" class="w-full bg-base border border-base rounded-lg px-4 py-3 text-base focus:outline-none focus:border-yellow-400 transition">
-                                <option value="">Selecione...</option>
-                                <option value="PS5">PlayStation 5</option>
-                                <option value="PS4">PlayStation 4</option>
-                                <option value="Xbox Series">Xbox Series S/X</option>
-                                <option value="PC Gamer">PC Gamer / Notebook</option>
-                                <option value="Nintendo Switch">Nintendo Switch</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-muted mb-1">O Problema</label>
-                            <select id="issueSelect" class="w-full bg-base border border-base rounded-lg px-4 py-3 text-base focus:outline-none focus:border-yellow-400 transition">
-                                <option value="">Selecione...</option>
-                                <option value="Limpeza">Limpeza Preventiva & Pasta Térmica</option>
-                                <option value="Nao Liga">Não Liga / Sem Imagem</option>
-                                <option value="Controle">Defeito no Controle/Drift</option>
-                                <option value="Upgrade">Upgrade de Hardware (SSD/RAM)</option>
-                                <option value="Software">Formatação / Sistema</option>
-                            </select>
-                        </div>
-
-                        <div id="serviceResult" class="hidden bg-base p-4 rounded-lg border border-yellow-400/50">
-                            <p class="text-sm text-muted">Estimativa de prazo:</p>
-                            <p class="font-bold atomic-vibrant-yellow text-lg" id="timeEstimate">--</p>
-                            <p class="text-xs text-muted mt-1">*Valor exato mediante análise presencial.</p>
-                        </div>
-
-                        <button type="submit" class="w-full atomic-bg-vibrant-yellow atomic-hover-bg-vibrant-yellow atomic-deep-black font-bold py-4 rounded-lg transition shadow-lg flex items-center justify-center gap-2">
-                            <span>Agendar no WhatsApp</span>
-                            <span>→</span>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ -->
-    <section id="faq" class="py-16 bg-card">
-        <div class="container mx-auto px-4 max-w-4xl">
-            <h2 class="text-3xl font-bold text-center mb-10 text-base">Perguntas Frequentes (FAQ)</h2>
-            <div class="space-y-4" id="faqContainer">
-                <!-- FAQs via JS -->
+                    <button type="submit" class="w-full py-4 bg-atomic-yellow text-black font-bold rounded-lg hover:bg-yellow-500 transition">
+                        Agendar via WhatsApp
+                    </button>
+                </form>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-base border-t border-base text-muted py-12">
-        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
-            <div>
-                <div class="mb-4 flex items-center gap-2">
-                    <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/atomiclogo.webp" alt="Atomic Logo" class="h-8 w-8 object-contain rounded-full">
-                    <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/Atomic%20frase.webp" alt="Atomic Games" class="h-6 w-auto object-contain">
-                </div>
-                <p class="mb-4">Sua loja de confiança em Madureira para o universo gamer. Vendas, trocas e assistência técnica especializada.</p>
-                <div class="flex gap-4">
-                    <span class="w-8 h-8 rounded bg-card flex items-center justify-center hover:atomic-bg-vibrant-yellow hover:atomic-deep-black transition cursor-pointer">IG</span>
-                    <span class="w-8 h-8 rounded bg-card flex items-center justify-center hover:atomic-bg-vibrant-yellow hover:atomic-deep-black transition cursor-pointer">FB</span>
-                    <span class="w-8 h-8 rounded bg-card flex items-center justify-center hover:atomic-bg-vibrant-yellow hover:atomic-deep-black transition cursor-pointer">TK</span>
-                </div>
+    <footer class="bg-card border-t border-base py-12 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/atomiclogo.webp" class="h-16 w-16 mx-auto rounded-full shadow-lg mb-4">
+            <h4 class="font-bold text-xl mb-2 brand-font">ATOMIC GAMES</h4>
+            <p class="text-muted mb-6">Madureira - Rio de Janeiro</p>
+            <div class="flex justify-center gap-4 text-2xl text-muted">
+                <a href="#" class="hover:text-pink-600 transition"><i class="ph-fill ph-instagram-logo"></i></a>
+                <a href="#" class="hover:text-blue-600 transition"><i class="ph-fill ph-facebook-logo"></i></a>
+                <a href="#" class="hover:text-black dark:hover:text-white transition"><i class="ph-fill ph-tiktok-logo"></i></a>
             </div>
-            <div>
-                <h4 class="text-base font-bold text-lg mb-4">Localização</h4>
-                <p>Mercadão de Madureira (ou endereço próximo)</p>
-                <p>Rio de Janeiro - RJ</p>
-                <p class="mt-4 atomic-vibrant-yellow font-bold">Segunda a Sábado: 09h às 19h</p>
-            </div>
-            <div>
-                <h4 class="text-base font-bold text-lg mb-4">Links Rápidos</h4>
-                <ul class="space-y-2">
-                    <li><a href="#" class="hover:atomic-vibrant-yellow transition-colors">Política de Garantia</a></li>
-                    <li><a href="#" class="hover:atomic-vibrant-yellow transition-colors">Trabalhe Conosco</a></li>
-                    <li><a href="#" class="hover:atomic-vibrant-yellow transition-colors">Sobre Nós</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="border-t border-base mt-12 pt-8 text-center text-xs text-muted">
-            &copy; 2024 Atomic Games e Informática. Todos os direitos reservados.
+            <p class="text-xs text-muted mt-8">&copy; 2025 Atomic Games. Todos os direitos reservados.</p>
         </div>
     </footer>
 
-    <!-- JavaScript Logic -->
+    <!-- JS Logic -->
     <script>
-        // --- 1. STATE & DATA UPDATED WITH REAL IMAGES ---
+        // --- DATA WITH REAL IMAGES ---
+        // Expanded to 20 items
         const products = [
-            { 
-                id: 1, 
-                name: "PlayStation 5 Slim", 
-                category: "console", 
-                price: "R$ 3.799,00", 
-                image: "https://gmedia.playstation.com/is/image/SIEPDC/ps5-slim-digital-edition-image-block-01-en-16nov23?$1600px$", 
-                desc: "Edição Digital, 1TB SSD, 1 Controle" 
-            },
-            { 
-                id: 2, 
-                name: "Xbox Series S", 
-                category: "console", 
-                price: "R$ 2.699,00", 
-                image: "https://cms-images.xboxlive.com/apps/58c2/b8a0/58c2b8a0-2f9a-4122-834c-6a6825227709.jpg", 
-                desc: "512GB SSD, Compacto e Poderoso" 
-            },
-            { 
-                id: 3, 
-                name: "Controle DualSense", 
-                category: "acessorios", 
-                price: "R$ 449,00", 
-                image: "https://gmedia.playstation.com/is/image/SIEPDC/dualsense-midnight-black-image-block-01-en-13may21?$1600px$", 
-                desc: "Cor Midnight Black, PS5 Original" 
-            },
-            { 
-                id: 4, 
-                name: "God of War Ragnarok", 
-                category: "games", 
-                price: "R$ 299,00", 
-                image: "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/aqbmzG3C8e7t1l227r80l721.jpg", 
-                desc: "Mídia Física PS5, Dublado PT-BR" 
-            },
-            { 
-                id: 5, 
-                name: "Nintendo Switch OLED", 
-                category: "console", 
-                price: "R$ 2.199,00", 
-                image: "https://assets.nintendo.com/image/upload/f_auto/q_auto/c_fill,w_800/ncom/en_US/switch/site-design-update/hardware-extras/switch-oled/switch-oled-model-white-01", 
-                desc: "Tela 7 Polegadas, 64GB, Branco" 
-            },
-            { 
-                id: 6, 
-                name: "Headset HyperX", 
-                category: "acessorios", 
-                price: "R$ 249,00", 
-                image: "https://row.hyperx.com/cdn/shop/products/hyperx_cloud_stinger_2_core_pc_1_frontal.jpg", 
-                desc: "Cloud Stinger, Compatível PC/Console" 
-            },
-            { 
-                id: 7, 
-                name: "GTA V Premium", 
-                category: "games", 
-                price: "R$ 149,00", 
-                image: "https://media.rockstargames.com/rockstargames-newsite/uploads/product_cards/bc8074d20743603d4924a4962ce6518a287c8801.jpg", 
-                desc: "Mídia Física PS4/Xbox" 
-            },
-            { 
-                id: 8, 
-                name: "Kit Upgrade Ryzen", 
-                category: "acessorios", 
-                price: "R$ 1.899,00", 
-                image: "https://m.media-amazon.com/images/I/61DYLoy1eBL._AC_SL1000_.jpg", 
-                desc: "Ryzen 5 5600G + B450M + 16GB RAM" 
-            },
+            // CONSOLES
+            { id: 1, name: "PlayStation 5 Slim", category: "console", price: "R$ 3.799,00", image: "https://gmedia.playstation.com/is/image/SIEPDC/ps5-slim-digital-edition-image-block-01-en-16nov23?$1600px$", desc: "Digital Edition, 1TB SSD" },
+            { id: 2, name: "Xbox Series S", category: "console", price: "R$ 2.699,00", image: "https://cms-images.xboxlive.com/apps/58c2/b8a0/58c2b8a0-2f9a-4122-834c-6a6825227709.jpg", desc: "512GB SSD, Compacto" },
+            { id: 3, name: "Nintendo Switch OLED", category: "console", price: "R$ 2.199,00", image: "https://assets.nintendo.com/image/upload/f_auto/q_auto/c_fill,w_800/ncom/en_US/switch/site-design-update/hardware-extras/switch-oled/switch-oled-model-white-01", desc: "Tela 7 pol, Branco" },
+            { id: 4, name: "PlayStation 4 Slim (Seminovo)", category: "console", price: "R$ 1.599,00", image: "https://gmedia.playstation.com/is/image/SIEPDC/ps4-slim-image-block-01-en-24jul20?$1600px$", desc: "500GB, Revisado c/ Garantia" },
+            { id: 5, name: "Xbox Series X", category: "console", price: "R$ 4.499,00", image: "https://cms-images.xboxlive.com/apps/58c2/b8a0/58c2b8a0-2f9a-4122-834c-6a6825227709.jpg", desc: "1TB SSD, 4K Nativo" }, // Placeholder for X
+            
+            // GAMES
+            { id: 6, name: "God of War Ragnarok", category: "games", price: "R$ 299,00", image: "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/aqbmzG3C8e7t1l227r80l721.jpg", desc: "PS5 Mídia Física" },
+            { id: 7, name: "GTA V Premium", category: "games", price: "R$ 149,00", image: "https://media.rockstargames.com/rockstargames-newsite/uploads/product_cards/bc8074d20743603d4924a4962ce6518a287c8801.jpg", desc: "PS4 / Xbox One" },
+            { id: 8, name: "EA Sports FC 24", category: "games", price: "R$ 249,00", image: "https://upload.wikimedia.org/wikipedia/en/thumb/8/88/EA_Sports_FC_24_cover.jpg/220px-EA_Sports_FC_24_cover.jpg", desc: "PS5 / PS4" },
+            { id: 9, name: "Spider-Man 2", category: "games", price: "R$ 349,00", image: "https://image.api.playstation.com/vulcan/ap/rnd/202306/1219/1c7b75d8ed9271516546560d219ad0b22ee0a263b4537d9e.png", desc: "Exclusivo PS5" },
+            { id: 10, name: "Mario Kart 8 Deluxe", category: "games", price: "R$ 299,00", image: "https://assets.nintendo.com/image/upload/ar_16:9,c_lpad,w_656/b_white/f_auto/q_auto/ncom/software/switch/70010000000141/de697f33d45e694dc744fa50604b391781254dd6f727c653069151c36b6d514d", desc: "Nintendo Switch" },
+            { id: 11, name: "Red Dead Redemption 2", category: "games", price: "R$ 179,00", image: "https://upload.wikimedia.org/wikipedia/en/4/44/Red_Dead_Redemption_II.jpg", desc: "Clássico Rockstar" },
+
+            // ACESSÓRIOS
+            { id: 12, name: "Controle DualSense", category: "acessorios", price: "R$ 449,00", image: "https://gmedia.playstation.com/is/image/SIEPDC/dualsense-midnight-black-image-block-01-en-13may21?$1600px$", desc: "Midnight Black" },
+            { id: 13, name: "Controle Xbox Wireless", category: "acessorios", price: "R$ 399,00", image: "https://compass-ssl.xbox.com/assets/27/a1/27a1955d-35db-44d5-98d9-299f130932a3.jpg?n=Xbox-Wireless-Controller_Image-0_Robot-White_1920x720.jpg", desc: "Robot White" },
+            { id: 14, name: "Headset HyperX Stinger", category: "acessorios", price: "R$ 249,00", image: "https://row.hyperx.com/cdn/shop/products/hyperx_cloud_stinger_2_core_pc_1_frontal.jpg", desc: "PC e Consoles" },
+            { id: 15, name: "Joy-Con Par", category: "acessorios", price: "R$ 499,00", image: "https://assets.nintendo.com/image/upload/f_auto/q_auto/c_fill,w_800/ncom/en_US/switch/site-design-update/hardware-extras/joy-con-pair-neon-red-neon-blue", desc: "Neon Red/Blue" },
+            { id: 16, name: "Base Carregadora PS5", category: "acessorios", price: "R$ 199,00", image: "https://gmedia.playstation.com/is/image/SIEPDC/dualsense-charging-station-image-block-01-en-17sep20?$1600px$", desc: "Original Sony" },
+
+            // HARDWARE
+            { id: 17, name: "Kit Upgrade Ryzen 5", category: "hardware", price: "R$ 1.899,00", image: "https://m.media-amazon.com/images/I/51f2hk8+jPL._AC_SL1000_.jpg", desc: "Ryzen 5600G + B450M" },
+            { id: 18, name: "SSD NVMe 1TB", category: "hardware", price: "R$ 399,00", image: "https://m.media-amazon.com/images/I/61p6-M2X1AL._AC_SL1500_.jpg", desc: "Kingston NV2" },
+            { id: 19, name: "Memória RAM 16GB", category: "hardware", price: "R$ 249,00", image: "https://m.media-amazon.com/images/I/61+4T0jkXQL._AC_SL1000_.jpg", desc: "DDR4 3200Mhz Fury" },
+            { id: 20, name: "Fonte 600W 80 Plus", category: "hardware", price: "R$ 299,00", image: "https://m.media-amazon.com/images/I/718t8tr+sIL._AC_SL1500_.jpg", desc: "Certificação Bronze" },
         ];
 
-        const faqs = [
-            { q: "Vocês aceitam consoles usados na troca?", a: "Sim! Avaliamos seu console usado (PS4, Xbox One, Switch) como parte do pagamento para um console de nova geração. Traga para avaliação na loja." },
-            { q: "Qual o prazo de garantia dos serviços?", a: "Todos os nossos serviços de manutenção possuem 90 dias (3 meses) de garantia legal sobre o defeito reparado." },
-            { q: "Vocês montam PC Gamer?", a: "Com certeza. Temos consultoria especializada para montar o PC ideal para seu orçamento e necessidade, desde entrada até High-End." },
-            { q: "Entregam em todo o Rio de Janeiro?", a: "Sim, trabalhamos com motoboy para entregas expressas no RJ. Consulte a taxa para o seu bairro no WhatsApp." }
-        ];
+        // --- CORE FUNCTIONS ---
 
-        let reputationChartInstance = null;
-        let servicesChartInstance = null;
-        const CHART_COLORS = ['#FFD700', '#1e293b', '#22c55e', '#3b82f6', '#94a3b8']; 
+        function renderProducts(filter, searchTerm = "") {
+            const grid = document.getElementById('productGrid');
+            const noRes = document.getElementById('noResults');
+            grid.innerHTML = '';
 
-        // --- VIDEO PLAYER LOGIC ---
+            let filtered = products;
+
+            // 1. Filter by Category
+            if (filter !== 'all') {
+                filtered = filtered.filter(p => p.category === filter);
+            }
+
+            // 2. Filter by Search
+            if (searchTerm) {
+                const lowerTerm = searchTerm.toLowerCase();
+                filtered = filtered.filter(p => p.name.toLowerCase().includes(lowerTerm) || p.desc.toLowerCase().includes(lowerTerm));
+            }
+
+            if (filtered.length === 0) {
+                noRes.classList.remove('hidden');
+            } else {
+                noRes.classList.add('hidden');
+                filtered.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card bg-card rounded-xl overflow-hidden border border-base flex flex-col h-full group cursor-pointer';
+                    card.innerHTML = `
+                        <div class="product-img-box p-4">
+                            <img src="${p.image}" alt="${p.name}" onerror="this.src='https://placehold.co/300x300/eee/333?text=Sem+Foto'">
+                            <span class="absolute top-2 right-2 bg-black text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide border border-atomic-yellow">${p.category}</span>
+                        </div>
+                        <div class="p-4 flex-grow flex flex-col">
+                            <h3 class="font-bold text-base mb-1 leading-tight group-hover:text-yellow-600 transition">${p.name}</h3>
+                            <p class="text-xs text-muted mb-4 flex-grow line-clamp-2">${p.desc}</p>
+                            <div class="mt-auto flex items-center justify-between">
+                                <span class="font-bold text-lg text-atomic-yellow">${p.price}</span>
+                                <button onclick="whatsappBuy('${p.name}')" class="bg-green-500 hover:bg-green-600 text-white w-10 h-10 rounded-full flex items-center justify-center transition shadow-md">
+                                    <i class="ph-bold ph-whatsapp-logo text-xl"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+        }
+
         function loadVideo() {
             const facade = document.getElementById('videoFacade');
             const container = document.getElementById('videoContainer');
             const videoId = facade.getAttribute('data-video-id');
-
             facade.style.display = 'none';
             container.classList.remove('hidden');
-
-            container.innerHTML = `
-                <iframe 
-                    class="w-full h-full" 
-                    src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1" 
-                    title="YouTube video player" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    allowfullscreen>
-                </iframe>
-            `;
+            container.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${videoId}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
         }
-        
+
+        function whatsappBuy(name) {
+            const text = `Olá! Vi o produto *${name}* no site e tenho interesse.`;
+            window.open(`https://wa.me/5521999999999?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        // --- INIT & EVENTS ---
         document.addEventListener('DOMContentLoaded', () => {
+            // Theme Init
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.documentElement.className = savedTheme;
-            updateThemeIcons(savedTheme);
-
-            initCharts(savedTheme);
-            renderProducts('all');
-            renderFAQs();
-            setupEventListeners();
-        });
-
-        function updateChartColors(theme) {
-            const isDark = theme === 'dark';
-            const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-            const tickColor = isDark ? '#ffffff' : '#1e293b';
-
-            if (reputationChartInstance) {
-                reputationChartInstance.options.scales.r.angleLines.color = gridColor;
-                reputationChartInstance.options.scales.r.grid.color = gridColor;
-                reputationChartInstance.options.scales.r.pointLabels.color = tickColor;
-                reputationChartInstance.options.scales.r.ticks.color = tickColor;
-                reputationChartInstance.data.datasets[0].backgroundColor = isDark ? 'rgba(255, 215, 0, 0.2)' : 'rgba(255, 215, 0, 0.5)';
-                reputationChartInstance.data.datasets[0].borderColor = '#FFD700';
-                reputationChartInstance.data.datasets[0].pointBackgroundColor = '#FFD700';
-                reputationChartInstance.update();
-            }
-
-            if (servicesChartInstance) {
-                servicesChartInstance.options.plugins.legend.labels.color = tickColor;
-                servicesChartInstance.update();
-            }
-        }
-
-        function toggleTheme() {
-            const html = document.documentElement;
-            const currentTheme = html.classList.contains('dark') ? 'dark' : 'light';
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-            html.className = newTheme;
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcons(newTheme);
-            updateChartColors(newTheme);
-            updateActiveFilterButton(document.querySelector('.filter-btn.active').dataset.category);
-        }
-
-        function updateThemeIcons(theme) {
-            document.getElementById('sunIcon').classList.toggle('hidden', theme === 'dark');
-            document.getElementById('moonIcon').classList.toggle('hidden', theme === 'light');
-        }
-
-        function updateActiveFilterButton(activeCategory) {
-            const buttons = document.querySelectorAll('.filter-btn');
-            const isDark = document.documentElement.classList.contains('dark');
             
-            buttons.forEach(b => {
-                b.classList.remove('active', 'atomic-bg-vibrant-yellow', 'atomic-deep-black', 'bg-base', 'text-muted');
-                
-                if (b.dataset.category === activeCategory) {
-                    b.classList.add('active', 'atomic-bg-vibrant-yellow', 'atomic-deep-black'); 
-                } else {
-                    b.classList.add('bg-base', 'text-muted');
-                    b.classList.remove('atomic-deep-black', 'atomic-bg-vibrant-yellow');
+            // Charts Init (Mock Data)
+            initCharts(savedTheme);
+
+            // Filter Logic
+            const buttons = document.querySelectorAll('.filter-btn');
+            const searchInput = document.getElementById('searchInput');
+            let currentFilter = 'all';
+
+            // Filter Click
+            buttons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // Visual Reset
+                    buttons.forEach(b => {
+                        b.classList.remove('active', 'bg-black', 'text-white', 'border-transparent');
+                        b.classList.add('bg-base', 'text-muted', 'border-base');
+                    });
+                    // Active State
+                    e.target.classList.remove('bg-base', 'text-muted', 'border-base');
+                    e.target.classList.add('active', 'bg-black', 'text-white', 'border-transparent');
+                    
+                    // Logic
+                    currentFilter = e.target.dataset.category;
+                    renderProducts(currentFilter, searchInput.value);
+                });
+            });
+
+            // Search Input Logic
+            searchInput.addEventListener('input', (e) => {
+                renderProducts(currentFilter, e.target.value);
+            });
+
+            // Initial Render
+            renderProducts('all');
+
+            // Service Form
+            document.getElementById('serviceForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const dev = document.getElementById('deviceSelect').value;
+                const iss = document.getElementById('issueSelect').value;
+                if(!dev || !iss) return alert('Selecione as opções.');
+                const text = `Olá! Quero simular um reparo para: ${dev} com problema: ${iss}`;
+                window.open(`https://wa.me/5521999999999?text=${encodeURIComponent(text)}`, '_blank');
+            });
+
+            // Estimate Logic
+            const form = document.getElementById('serviceForm');
+            form.addEventListener('change', () => {
+                const dev = document.getElementById('deviceSelect').value;
+                const iss = document.getElementById('issueSelect').value;
+                const res = document.getElementById('serviceResult');
+                if(dev && iss) {
+                    res.classList.remove('hidden');
+                    document.getElementById('timeEstimate').innerText = (iss === 'Limpeza' ? '24 Horas' : '3 a 5 dias úteis');
                 }
             });
-        }
 
+            // Theme Toggle
+            document.getElementById('themeToggle').addEventListener('click', () => {
+                const html = document.documentElement;
+                const newTheme = html.classList.contains('dark') ? 'light' : 'dark';
+                html.className = newTheme;
+                localStorage.setItem('theme', newTheme);
+                initCharts(newTheme); // Re-render charts for color update
+            });
+        });
+
+        // Chart.js Setup
         function initCharts(theme) {
             const isDark = theme === 'dark';
-            const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-            const tickColor = isDark ? '#ffffff' : '#1e293b';
+            const textColor = isDark ? '#fff' : '#333';
+            const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+
+            // Destroy old instances if they exist to prevent duplication
+            if(window.repChart) window.repChart.destroy();
+            if(window.servChart) window.servChart.destroy();
 
             const ctx1 = document.getElementById('reputationChart').getContext('2d');
-            reputationChartInstance = new Chart(ctx1, {
+            window.repChart = new Chart(ctx1, {
                 type: 'radar',
                 data: {
-                    labels: ['Atendimento', 'Preço Justo', 'Rapidez', 'Variedade', 'Qualidade Técnica'],
+                    labels: ['Atendimento', 'Preço', 'Rapidez', 'Variedade', 'Confiança'],
                     datasets: [{
-                        label: 'Avaliação Média (Google/FB)',
-                        data: [4.8, 4.5, 4.2, 4.7, 4.9],
-                        fill: true,
+                        label: 'Nota Média (Google)',
+                        data: [4.9, 4.7, 4.5, 4.8, 5.0],
                         backgroundColor: isDark ? 'rgba(255, 215, 0, 0.2)' : 'rgba(255, 215, 0, 0.5)',
                         borderColor: '#FFD700',
-                        pointBackgroundColor: '#FFD700',
-                        pointBorderColor: isDark ? '#0A0A0A' : '#fff',
-                        pointHoverBackgroundColor: isDark ? '#0A0A0A' : '#fff',
-                        pointHoverBorderColor: '#FFD700'
+                        pointBackgroundColor: '#FFD700'
                     }]
                 },
                 options: {
-                    responsive: true,
                     maintainAspectRatio: false,
                     scales: {
                         r: {
-                            angleLines: { color: gridColor },
                             grid: { color: gridColor },
-                            suggestedMin: 0,
-                            suggestedMax: 5,
-                            ticks: { backdropColor: 'transparent', color: tickColor },
-                            pointLabels: { color: tickColor, font: { size: 10 } }
+                            pointLabels: { color: textColor },
+                            ticks: { display: false }
                         }
                     },
-                    plugins: {
-                        legend: { position: 'bottom', labels: { color: tickColor, font: { family: 'Inter' } } }
-                    }
+                    plugins: { legend: { display: false } }
                 }
             });
 
             const ctx2 = document.getElementById('servicesChart').getContext('2d');
-            servicesChartInstance = new Chart(ctx2, {
+            window.servChart = new Chart(ctx2, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Limpeza Preventiva', 'Reparo de Placa', 'Drift de Controle', 'Formatação/Software', 'Upgrade PC'],
+                    labels: ['Manutenção', 'Venda Jogos', 'Venda Consoles', 'Acessórios'],
                     datasets: [{
-                        data: [35, 20, 25, 10, 10],
-                        backgroundColor: CHART_COLORS,
+                        data: [40, 20, 25, 15],
+                        backgroundColor: ['#FFD700', '#10B981', '#3B82F6', '#6366F1'],
                         borderWidth: 0
                     }]
                 },
                 options: {
-                    responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'right', labels: { boxWidth: 15, color: tickColor, font: { family: 'Inter' } } }
-                    },
-                    cutout: '70%'
+                    plugins: { legend: { position: 'right', labels: { color: textColor } } }
                 }
             });
-        }
-
-        function renderProducts(filter) {
-            const grid = document.getElementById('productGrid');
-            grid.innerHTML = '';
-            const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
-
-            filtered.forEach(p => {
-                const card = document.createElement('div');
-                card.className = 'product-card bg-card rounded-xl overflow-hidden shadow-base border border-base flex flex-col h-full transition-colors duration-300';
-                
-                // Add onerror to image to fallback to placeholder if link breaks
-                card.innerHTML = `
-                    <div class="h-48 overflow-hidden bg-white relative product-image-container flex items-center justify-center p-4">
-                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-contain" 
-                             onerror="this.src='https://placehold.co/300x300/f8fafc/1e293b?text=${encodeURIComponent(p.name)}'">
-                        <div class="absolute top-2 right-2 atomic-bg-vibrant-yellow atomic-deep-black text-xs font-bold px-2 py-1 rounded shadow-sm">
-                            ${p.category.toUpperCase()}
-                        </div>
-                    </div>
-                    <div class="p-4 flex-grow flex flex-col">
-                        <h3 class="font-bold text-lg text-base mb-1 leading-tight">${p.name}</h3>
-                        <p class="text-xs text-muted mb-3 flex-grow">${p.desc}</p>
-                        <div class="mt-auto pt-3 border-t border-base flex items-center justify-between">
-                            <span class="font-bold atomic-vibrant-yellow text-lg">${p.price}</span>
-                            <button onclick="whatsappBuy('${p.name}')" class="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full transition shadow-md hover:shadow-lg" aria-label="Comprar no WhatsApp">
-                                💬
-                            </button>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function renderFAQs() {
-            const container = document.getElementById('faqContainer');
-            container.innerHTML = '';
-            faqs.forEach((item, index) => {
-                const details = document.createElement('details');
-                details.className = 'group bg-card rounded-lg border border-base overflow-hidden transition-colors duration-300';
-                details.innerHTML = `
-                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4 bg-base group-open:bg-card transition-colors duration-300">
-                        <span class="text-base font-bold">${item.q}</span>
-                        <span class="transition group-open:rotate-180 text-base">
-                            <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
-                        </span>
-                    </summary>
-                    <div class="text-muted p-4 pt-2 leading-relaxed">
-                        ${item.a}
-                    </div>
-                `;
-                container.appendChild(details);
-            });
-        }
-
-        function setupEventListeners() {
-            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-
-            const buttons = document.querySelectorAll('.filter-btn');
-            buttons.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const category = e.target.dataset.category;
-                    updateActiveFilterButton(category);
-                    renderProducts(category);
-                });
-            });
-            updateActiveFilterButton('all');
-
-            const form = document.getElementById('serviceForm');
-            const resultBox = document.getElementById('serviceResult');
-            const timeEstimate = document.getElementById('timeEstimate');
-
-            form.addEventListener('change', () => {
-                const device = document.getElementById('deviceSelect').value;
-                const issue = document.getElementById('issueSelect').value;
-                if (device && issue) {
-                    resultBox.classList.remove('hidden');
-                    let time = "1 a 2 dias úteis";
-                    if (issue === "Limpeza" || issue === "Software") time = "Até 24 horas";
-                    if (issue === "Nao Liga") time = "3 a 5 dias úteis (Análise)";
-                    timeEstimate.innerText = time;
-                } else {
-                    resultBox.classList.add('hidden');
-                }
-            });
-
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const device = document.getElementById('deviceSelect').value;
-                const issue = document.getElementById('issueSelect').value;
-                if(!device || !issue) return console.error('Erro no formulário');
-                
-                const text = `Olá Atomic! Vi o pré-orçamento no site. Gostaria de agendar a manutenção para meu *${device}* com o problema: *${issue}*.`;
-                window.open(`https://wa.me/5521999999999?text=${encodeURIComponent(text)}`, '_blank');
-            });
-        }
-
-        function scrollToSection(id) {
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function whatsappBuy(productName) {
-            const text = `Olá! Vi o produto *${productName}* no site e tenho interesse. Ainda está disponível?`;
-            window.open(`https://wa.me/5521999999999?text=${encodeURIComponent(text)}`, '_blank');
         }
     </script>
 </body>
