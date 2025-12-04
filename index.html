@@ -541,11 +541,30 @@
     </footer>
 
     <!-- JS Logic -->
-    <script>
+    <script type="module">
+        // FIREBASE IMPORTS
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, query } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        // FIREBASE CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyBywoUqD9Q19kFYd_Qan9DAQAJS2Nu5-04",
+            authDomain: "banco-de-dados-e-controle.firebaseapp.com",
+            projectId: "banco-de-dados-e-controle",
+            storageBucket: "banco-de-dados-e-controle.firebasestorage.app",
+            messagingSenderId: "1086382958528",
+            appId: "1:1086382958528:web:89f296d4694140da048a25",
+            measurementId: "G-5F6F5KE89L"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app';
+
         // CONFIGURAÇÃO DAS IMAGENS (GITHUB)
         const repoUrl = "https://raw.githubusercontent.com/creativethb/SITE/main/img/";
         
-        const products = [
+        // PRODUTOS INICIAIS (STATIC)
+        const initialProducts = [
             // CONSOLES
             { id: 1, name: "PlayStation 5 Slim", category: "console", price: "R$ 3.799,00", image: repoUrl + "console-ps5.webp", desc: "Digital Edition, 1TB SSD" },
             { id: 2, name: "Xbox Series S", category: "console", price: "R$ 2.699,00", image: repoUrl + "console-xbox-s.webp", desc: "512GB SSD, Compacto" },
@@ -573,12 +592,55 @@
             { id: 20, name: "Fonte 600W", category: "hardware", price: "R$ 299,00", image: repoUrl + "hardware-fonte.webp", desc: "80 Plus Bronze" },
         ];
 
+        let allProducts = [...initialProducts]; // Combina estáticos + DB
+
         const faqs = [
             { q: "Vocês aceitam consoles usados na troca?", a: "Sim! Avaliamos seu console usado (PS4, Xbox One, Switch) como parte do pagamento. Traga para avaliação." },
             { q: "Qual o prazo de garantia dos serviços?", a: "Todos os nossos serviços de manutenção possuem 90 dias (3 meses) de garantia legal." },
             { q: "Vocês montam PC Gamer?", a: "Com certeza. Temos consultoria especializada para montar o PC ideal para seu orçamento." },
             { q: "Entregam em todo o Rio de Janeiro?", a: "Sim, trabalhamos com entregas expressas no RJ. Consulte a taxa no WhatsApp." }
         ];
+
+        // --- FIREBASE LOGIC ---
+        function loadGamesFromDB() {
+            // Escuta em tempo real a coleção 'games' que o Admin popula
+            const gamesRef = collection(db, 'artifacts', appId, 'public', 'data', 'games');
+            
+            onSnapshot(query(gamesRef), (snapshot) => {
+                const dbGames = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    // Adapta o formato do DB para o formato do Site
+                    dbGames.push({
+                        id: doc.id, // Usa ID do Firestore
+                        name: data.title || "Produto Sem Nome",
+                        category: mapCategory(data.genre),
+                        price: typeof data.price === 'number' ? `R$ ${data.price.toFixed(2).replace('.', ',')}` : data.price,
+                        image: data.image || "https://placehold.co/400x400/e2e8f0/1e293b?text=ATOMIC",
+                        desc: data.description || "Sem descrição."
+                    });
+                });
+
+                // Atualiza a lista global (Estáticos + DB)
+                // Se quiser que o DB substitua, use: allProducts = [...dbGames];
+                // Aqui estamos adicionando:
+                allProducts = [...initialProducts, ...dbGames];
+                
+                // Re-renderiza a tela
+                renderProducts(currentFilter, document.getElementById('searchInput').value);
+            });
+        }
+
+        function mapCategory(genre) {
+            // Mapeia generos antigos para categorias do novo layout
+            if(!genre) return 'games';
+            const g = genre.toLowerCase();
+            if(g.includes('rpg') || g.includes('ação') || g.includes('tiro')) return 'games';
+            if(g.includes('console')) return 'console';
+            if(g.includes('acess')) return 'acessorios';
+            if(g.includes('pc') || g.includes('hardware')) return 'hardware';
+            return 'games'; // fallback
+        }
 
         // --- ANIMATIONS & LOGIC ---
         const observer = new IntersectionObserver((entries) => {
@@ -618,15 +680,17 @@
         let cart = [];
         let currentFilter = 'all';
 
-        function addToCart(id) {
-            const product = products.find(p => p.id === id);
+        // Torna funções globais para o HTML acessar (já que é module)
+        window.addToCart = (id) => {
+            // Procura por ID numérico ou string
+            const product = allProducts.find(p => p.id == id);
             if (!product) return;
             cart.push(product);
             updateCartUI();
             toggleCart();
         }
 
-        function removeFromCart(index) {
+        window.removeFromCart = (index) => {
             cart.splice(index, 1);
             updateCartUI();
         }
@@ -645,7 +709,9 @@
                 container.innerHTML = '<p class="text-center text-muted mt-10">Seu carrinho está vazio.</p>';
             } else {
                 cart.forEach((item, index) => {
-                    const priceNumber = parseFloat(item.price.replace('R$ ', '').replace('.', '').replace(',', '.'));
+                    // Limpa string de preço para float
+                    let priceString = item.price.toString().replace('R$ ', '').replace('.', '').replace(',', '.');
+                    const priceNumber = parseFloat(priceString) || 0;
                     total += priceNumber;
                     
                     const div = document.createElement('div');
@@ -666,12 +732,12 @@
             totalEl.innerText = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
-        function toggleCart() {
+        window.toggleCart = () => {
             document.getElementById('cartModal').classList.toggle('open');
             document.getElementById('cartOverlay').classList.toggle('open');
         }
 
-        function checkoutWhatsApp() {
+        window.checkoutWhatsApp = () => {
             if (cart.length === 0) return alert('Seu carrinho está vazio!');
             let message = "Olá! Vim pelo site e gostaria de fechar o pedido dos seguintes itens:\n\n";
             cart.forEach(item => message += `• ${item.name} - ${item.price}\n`);
@@ -686,7 +752,7 @@
             const loadMoreContainer = document.getElementById('loadMoreContainer');
             grid.innerHTML = '';
 
-            let filtered = products;
+            let filtered = allProducts;
             if (filter !== 'all') filtered = filtered.filter(p => p.category === filter);
             if (searchTerm) {
                 const lowerTerm = searchTerm.toLowerCase();
@@ -714,6 +780,7 @@
                     const card = document.createElement('div');
                     card.style.animationDelay = `${index * 50}ms`;
                     card.className = 'product-card bg-card rounded-xl overflow-hidden border border-base flex flex-col h-full group cursor-pointer animate-[pop-in_0.5s_ease-out_both]';
+                    // Nota: aspas no argumento da função onclick para suportar IDs string
                     card.innerHTML = `
                         <div class="product-img-box">
                             <img src="${p.image}" alt="${p.name}" loading="lazy" 
@@ -725,7 +792,7 @@
                             <p class="text-xs text-muted mb-4 flex-grow line-clamp-2">${p.desc}</p>
                             <div class="mt-auto flex items-center justify-between">
                                 <span class="font-bold text-lg atomic-yellow-text">${p.price}</span>
-                                <button onclick="addToCart(${p.id})" class="bg-black hover:bg-gray-800 text-white w-10 h-10 rounded-full flex items-center justify-center transition shadow-md group-btn transform active:scale-90">
+                                <button onclick="addToCart('${p.id}')" class="bg-black hover:bg-gray-800 text-white w-10 h-10 rounded-full flex items-center justify-center transition shadow-md group-btn transform active:scale-90">
                                     <i class="ph-bold ph-shopping-cart text-xl text-yellow-500"></i>
                                 </button>
                             </div>
@@ -736,7 +803,7 @@
             }
         }
         
-        function loadVideo() {
+        window.loadVideo = () => {
             const facade = document.getElementById('videoFacade');
             const container = document.getElementById('videoContainer');
             const videoId = facade.getAttribute('data-video-id');
@@ -773,7 +840,10 @@
             
             initCharts(savedTheme);
             renderFAQs();
-            renderProducts('all');
+            
+            // Carrega Firebase + Renderiza
+            loadGamesFromDB();
+            
             refreshAnimations();
 
             document.getElementById('btnLoadMore').addEventListener('click', () => {
