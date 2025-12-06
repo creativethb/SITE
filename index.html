@@ -1,955 +1,110 @@
-<!DOCTYPE html>
-<html lang="pt-BR" class="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atomic Games e Informática - Site Oficial</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Rajdhani:wght@500;700&display=swap');
+
+    /* --- STYLES GERAIS --- */
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
+    h1, h2, h3, .brand-font { font-family: 'Rajdhani', sans-serif; }
+
+    /* Cores da Marca */
+    .atomic-yellow-bg { background-color: #FFD700; } 
+    .atomic-yellow-text { color: #d97706; } 
+    .dark .atomic-yellow-text { color: #FFD700; }
+    .border-atomic-yellow { border-color: #FFD700; }
+
+    /* Light/Dark Mode Classes */
+    .light .bg-base { background-color: #f8fafc; }
+    .light .bg-card { background-color: #ffffff; }
+    .light .text-base { color: #1e293b; }
+    .light .text-muted { color: #64748b; }
+    .light .border-base { border-color: #e2e8f0; }
+    .light .hero-overlay { background: linear-gradient(90deg, rgba(248,250,252,0.95) 0%, rgba(248,250,252,0.7) 60%, rgba(248,250,252,0.4) 100%); }
+
+    .dark .bg-base { background-color: #0f172a; } 
+    .dark .bg-card { background-color: #1e293b; }
+    .dark .text-base { color: #f1f5f9; }
+    .dark .text-muted { color: #94a3b8; }
+    .dark .border-base { border-color: #334155; }
+    .dark .hero-overlay { background: linear-gradient(90deg, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.8) 60%, rgba(15,23,42,0.5) 100%); }
+
+    /* --- ANIMAÇÕES (MICRO-MOVIMENTOS) --- */
+    .reveal-on-scroll { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+    .reveal-on-scroll.visible { opacity: 1; transform: translateY(0); }
+
+    @keyframes subtle-pulse {
+        0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+        70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+    }
+    .btn-pulse { animation: subtle-pulse 2s infinite; }
+
+    /* Product Card & Images */
+    .product-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .product-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
+    .product-img-box {
+        height: 200px; display: flex; align-items: center; justify-content: center;
+        background: #fff; position: relative; overflow: hidden;
+        padding: 15px;
+    }
+    .product-img-box img {
+        max-height: 100%; max-width: 100%; object-fit: contain;
+        transition: transform 0.5s ease;
+    }
+    .product-card:hover .product-img-box img { transform: scale(1.1); }
+
+    /* Video Facade */
+    .video-facade { position: relative; width: 100%; height: 100%; background-color: #000; cursor: pointer; overflow: hidden; }
+    .video-facade img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; transition: opacity 0.3s; }
+    .video-facade:hover img { opacity: 0.7; }
+    .play-btn { transition: transform 0.3s ease; }
+    .video-facade:hover .play-btn { transform: translate(-50%, -50%) scale(1.2); }
     
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Rajdhani:wght@500;700&display=swap');
-
-        /* --- STYLES GERAIS --- */
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        h1, h2, h3, .brand-font { font-family: 'Rajdhani', sans-serif; }
-
-        /* Cores da Marca */
-        .atomic-yellow-bg { background-color: #FFD700; } 
-        .atomic-yellow-text { color: #d97706; } 
-        .dark .atomic-yellow-text { color: #FFD700; }
-        .border-atomic-yellow { border-color: #FFD700; }
-
-        /* Light/Dark Mode Classes */
-        .light .bg-base { background-color: #f8fafc; }
-        .light .bg-card { background-color: #ffffff; }
-        .light .text-base { color: #1e293b; }
-        .light .text-muted { color: #64748b; }
-        .light .border-base { border-color: #e2e8f0; }
-        .light .hero-overlay { background: linear-gradient(90deg, rgba(248,250,252,0.95) 0%, rgba(248,250,252,0.7) 60%, rgba(248,250,252,0.4) 100%); }
-
-        .dark .bg-base { background-color: #0f172a; } 
-        .dark .bg-card { background-color: #1e293b; }
-        .dark .text-base { color: #f1f5f9; }
-        .dark .text-muted { color: #94a3b8; }
-        .dark .border-base { border-color: #334155; }
-        .dark .hero-overlay { background: linear-gradient(90deg, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.8) 60%, rgba(15,23,42,0.5) 100%); }
-
-        /* --- ANIMAÇÕES (MICRO-MOVIMENTOS) --- */
-        .reveal-on-scroll { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
-        .reveal-on-scroll.visible { opacity: 1; transform: translateY(0); }
-
-        @keyframes subtle-pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
-        }
-        .btn-pulse { animation: subtle-pulse 2s infinite; }
-
-        /* Product Card & Images */
-        .product-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .product-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
-        .product-img-box {
-            height: 200px; display: flex; align-items: center; justify-content: center;
-            background: #fff; position: relative; overflow: hidden;
-            padding: 15px;
-        }
-        .product-img-box img {
-            max-height: 100%; max-width: 100%; object-fit: contain;
-            transition: transform 0.5s ease;
-        }
-        .product-card:hover .product-img-box img { transform: scale(1.1); }
-
-        /* Video Facade */
-        .video-facade { position: relative; width: 100%; height: 100%; background-color: #000; cursor: pointer; overflow: hidden; }
-        .video-facade img { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; transition: opacity 0.3s; }
-        .video-facade:hover img { opacity: 0.7; }
-        .play-btn { transition: transform 0.3s ease; }
-        .video-facade:hover .play-btn { transform: translate(-50%, -50%) scale(1.2); }
-        
-        /* Banner Fix */
-        .hero-section {
-            background-position: center; background-repeat: no-repeat; background-size: cover; position: relative;
-        }
-        @media (min-width: 768px) {
-            .hero-section { background-image: url('https://raw.githubusercontent.com/creativethb/SITE/main/img/painelv6.webp'); }
-        }
-        
-        /* Nav Links */
-        .nav-link { position: relative; transition: color 0.2s; }
-        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -2px; left: 0; background-color: #FFD700; transition: width 0.3s ease; }
-        .nav-link:hover::after { width: 100%; }
-        .light .nav-link:hover { color: #d97706; }
-        .dark .nav-link:hover { color: #FFD700; }
-
-        .chart-box { position: relative; height: 300px; width: 100%; }
-        
-        /* CART & MODAL */
-        .cart-modal {
-            position: fixed; top: 0; right: 0; height: 100%; width: 100%; max-width: 400px;
-            background: var(--bg-card); box-shadow: -5px 0 15px rgba(0,0,0,0.2);
-            z-index: 100; transform: translateX(100%); transition: transform 0.3s ease-in-out;
-            display: flex; flex-direction: column;
-        }
-        .cart-modal.open { transform: translateX(0); }
-        .cart-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 99; opacity: 0; pointer-events: none; transition: opacity 0.3s;
-        }
-        .cart-overlay.open { opacity: 1; pointer-events: auto; }
-        .badge {
-            position: absolute; top: -5px; right: -5px; background-color: #ef4444; color: white;
-            font-size: 0.7rem; font-weight: bold; width: 18px; height: 18px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            animation: pop-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        @keyframes pop-in { from { transform: scale(0); } to { transform: scale(1); } }
-
-        /* Map */
-        .map-container iframe { width: 100%; height: 100%; border-radius: 1rem; filter: grayscale(0.2); transition: filter 0.3s; }
-        .map-container:hover iframe { filter: grayscale(0); }
-        
-        /* Back to Top */
-        #backToTop { opacity: 0; pointer-events: none; transition: all 0.3s ease; transform: translateY(20px); }
-        #backToTop.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
-
-        /* NAVBAR HIDDEN STATE */
-        .nav-hidden { transform: translateY(-100%); }
-    </style>
-</head>
-<body class="antialiased bg-base text-base transition-colors duration-300" id="top">
-
-    <!-- Back To Top -->
-    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" id="backToTop" class="fixed bottom-6 right-6 z-40 bg-yellow-400 text-black p-3 rounded-full shadow-lg hover:bg-yellow-500 hover:scale-110 transition border-2 border-white dark:border-black">
-        <i class="ph-bold ph-arrow-up text-xl"></i>
-    </button>
-
-    <!-- Cart Overlay -->
-    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
-    <div class="cart-modal bg-card border-l border-base" id="cartModal">
-        <div class="p-4 border-b border-base flex justify-between items-center bg-base">
-            <h3 class="font-bold text-lg flex items-center gap-2"><i class="ph-fill ph-shopping-cart text-yellow-500"></i> Seu Carrinho</h3>
-            <button onclick="toggleCart()" class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition"><i class="ph-bold ph-x"></i></button>
-        </div>
-        <div class="flex-grow overflow-y-auto p-4 space-y-4" id="cartItemsContainer">
-            <p class="text-center text-muted mt-10">Seu carrinho está vazio.</p>
-        </div>
-        <div class="p-4 border-t border-base bg-base">
-            <div class="flex justify-between font-bold text-lg mb-4">
-                <span>Total:</span>
-                <span id="cartTotal" class="atomic-yellow-text">R$ 0,00</span>
-            </div>
-            <button onclick="checkoutWhatsApp()" class="w-full py-3 atomic-yellow-bg text-black font-bold rounded-lg hover:brightness-110 transition shadow-md flex items-center justify-center gap-2">
-                <i class="ph-bold ph-whatsapp-logo"></i> Finalizar Pedido
-            </button>
-        </div>
-    </div>
-
-    <!-- Navbar (Sticky & Auto-Hide) -->
-    <nav class="sticky top-0 z-50 bg-card border-b border-base shadow-sm transition-transform duration-300 ease-in-out" id="navbar">
-        <div class="container mx-auto px-4 h-20 flex justify-between items-center">
-            <a href="#" onclick="location.reload()" class="flex items-center gap-3 hover:opacity-80 transition transform hover:scale-105 duration-200">
-                <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/atomiclogo.webp" alt="Logo" class="h-12 w-12 rounded-full shadow-md bg-black">
-                <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/Atomic%20frase.webp" alt="Atomic Games" class="h-8 w-auto hidden sm:block">
-            </a>
-
-            <div class="hidden md:flex gap-8 font-bold text-sm uppercase tracking-wide text-muted">
-                <a href="#store" class="nav-link atomic-yellow-text">Loja Virtual</a>
-                <a href="#services" class="nav-link">Assistência</a>
-                <a href="#dashboard" class="nav-link">Depoimentos</a>
-                <a href="#location" class="nav-link">Localização</a>
-            </div>
-
-            <div class="flex items-center gap-4">
-                <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition transform hover:rotate-12">
-                    <i class="ph ph-sun text-2xl hidden dark:block text-yellow-400"></i>
-                    <i class="ph ph-moon text-2xl block dark:hidden text-slate-700"></i>
-                </button>
-                <button onclick="toggleCart()" class="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition group">
-                    <i class="ph-bold ph-shopping-cart text-2xl group-hover:text-yellow-500 transition"></i>
-                    <div id="cartCount" class="badge hidden">0</div>
-                </button>
-                <a href="https://wa.me/5521995969378" target="_blank" class="hidden sm:flex items-center gap-2 atomic-yellow-bg text-black px-5 py-2 rounded-full font-bold text-sm hover:brightness-110 transition shadow-lg hover:shadow-yellow-500/50">
-                    <i class="ph-bold ph-whatsapp-logo text-lg"></i>
-                    <span>Fale Conosco</span>
-                </a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <header class="relative border-b border-base overflow-hidden hero-section" style="min-height: 600px;">
-        <div class="absolute inset-0 z-0 hero-overlay md:block hidden"></div>
-
-        <div class="container mx-auto px-4 h-full relative z-10 flex flex-col md:flex-row items-center justify-center py-6 md:py-24 gap-8 md:gap-12">
-            <div class="md:w-1/2 space-y-6 flex flex-col items-center md:items-start text-center md:text-left reveal-on-scroll">
-                <!-- MOBILE BANNER -->
-                <div class="block md:hidden w-[calc(100%+2rem)] -ml-4 mb-2 overflow-hidden shadow-lg border-b border-yellow-500/50">
-                    <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/baner%20mobile.webp" alt="Atomic Games Banner" class="w-full h-auto object-cover">
-                </div>
-
-                <div class="inline-flex items-center gap-2 px-3 py-1 atomic-yellow-bg text-black rounded-full text-xs font-bold uppercase tracking-wider shadow-sm transform hover:scale-105 transition">
-                    <i class="ph-fill ph-map-pin"></i> Madureira - RJ
-                </div>
-                <h1 class="text-4xl md:text-7xl font-bold leading-tight drop-shadow-sm text-base">
-                    O Quartel General do <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-orange-600 dark:from-yellow-400 dark:to-orange-500">Gamer Carioca</span>
-                </h1>
-                <p class="text-lg text-muted font-medium max-w-lg">
-                    Console quebrado? PC lento? Ou procurando aquele upgrade? 
-                    Somos especialistas em assistência técnica e a loja mais completa da região.
-                </p>
-                <div class="flex flex-wrap justify-center md:justify-start gap-4 pt-4 w-full">
-                    <button onclick="document.getElementById('store').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 atomic-yellow-bg text-black rounded-lg font-bold shadow-md hover:-translate-y-1 transition flex items-center gap-2 w-full md:w-auto justify-center btn-pulse">
-                        <i class="ph-bold ph-shopping-bag"></i> Ver Produtos
-                    </button>
-                    <button onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-base text-base rounded-lg font-bold hover:text-yellow-600 transition flex items-center gap-2 w-full md:w-auto justify-center">
-                        <i class="ph-bold ph-wrench"></i> Assistência
-                    </button>
-                </div>
-            </div>
-
-            <div class="md:w-1/2 w-full flex justify-center reveal-on-scroll" style="transition-delay: 200ms;">
-                <div class="relative w-full max-w-lg aspect-video bg-black rounded-2xl shadow-2xl overflow-hidden border-4 border-white dark:border-slate-700 hidden md:block group">
-                    <div class="video-facade" id="videoFacade" onclick="loadVideo()" data-video-id="bDAR4bkn0mY">
-                        <img src="https://img.youtube.com/vi/bDAR4bkn0mY/maxresdefault.jpg" onerror="this.src='https://placehold.co/800x450/000/FFD700?text=ATOMIC+GAMES'">
-                        <div class="play-btn absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 atomic-yellow-bg rounded-full flex items-center justify-center shadow-lg z-20 cursor-pointer">
-                            <i class="ph-fill ph-play text-2xl text-black ml-1"></i>
-                        </div>
-                    </div>
-                    <div id="videoContainer" class="w-full h-full hidden"></div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Store Section -->
-    <section id="store" class="py-16 bg-base border-b border-base scroll-mt-20">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-6 reveal-on-scroll">
-                <div>
-                    <h2 class="text-4xl font-bold mb-2 text-base">Catálogo <span class="atomic-yellow-text">Atomic</span></h2>
-                    <p class="text-muted">Adicione itens ao carrinho e finalize no WhatsApp.</p>
-                </div>
-                <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-                    <div class="relative group w-full sm:w-64">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="ph-bold ph-magnifying-glass text-muted group-focus-within:text-yellow-500"></i>
-                        </div>
-                        <input type="text" id="searchInput" placeholder="Buscar produto..." class="w-full bg-card text-base border border-base rounded-full py-2.5 pl-10 pr-4 focus:outline-none focus:border-yellow-500 transition-all duration-300 focus:w-full text-sm font-medium shadow-sm">
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex flex-wrap gap-2 mb-8 justify-center md:justify-start reveal-on-scroll" id="categoryFilters" style="transition-delay: 100ms;">
-                <button class="filter-btn active px-5 py-2 rounded-full text-sm font-bold border border-transparent transition bg-black text-white hover:bg-gray-800" data-category="all">Todos</button>
-                <button class="filter-btn px-5 py-2 rounded-full text-sm font-bold border border-base bg-card text-muted hover:border-yellow-400 hover:text-yellow-600 transition" data-category="console">Consoles</button>
-                <button class="filter-btn px-5 py-2 rounded-full text-sm font-bold border border-base bg-card text-muted hover:border-yellow-400 hover:text-yellow-600 transition" data-category="games">Jogos</button>
-                <button class="filter-btn px-5 py-2 rounded-full text-sm font-bold border border-base bg-card text-muted hover:border-yellow-400 hover:text-yellow-600 transition" data-category="acessorios">Acessórios</button>
-                <button class="filter-btn px-5 py-2 rounded-full text-sm font-bold border border-base bg-card text-muted hover:border-yellow-400 hover:text-yellow-600 transition" data-category="hardware">Hardware</button>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6 reveal-on-scroll" id="productGrid" style="transition-delay: 200ms;">
-                <!-- JS Populates this -->
-            </div>
-            
-            <div id="loadMoreContainer" class="hidden text-center mt-12 reveal-on-scroll">
-                 <button id="btnLoadMore" class="group px-8 py-3 border-2 border-base bg-card text-base rounded-full font-bold hover:border-yellow-500 hover:text-yellow-600 transition shadow-sm">
-                    Ver Todos os Produtos <i class="ph-bold ph-caret-down group-hover:translate-y-1 transition-transform inline-block"></i>
-                </button>
-            </div>
-
-            <div id="noResults" class="hidden text-center py-12">
-                <i class="ph-duotone ph-magnifying-glass text-6xl text-muted mb-4"></i>
-                <h3 class="text-xl font-bold">Nenhum produto encontrado.</h3>
-            </div>
-
-            <!-- MENSAGEM DE ATENDIMENTO HUMANO -->
-            <div class="mt-16 bg-card rounded-2xl p-8 text-center border border-base border-dashed shadow-sm reveal-on-scroll">
-                <h3 class="text-2xl font-bold mb-2">Não encontrou o que procura?</h3>
-                <p class="text-muted mb-6">Temos muito mais itens na loja física. Fale direto com um **atendente humano**.</p>
-                <a href="https://wa.me/5521995969378?text=Ol%C3%A1%2C%20n%C3%A3o%20achei%20o%20produto%20que%20eu%20queria%20no%20site.%20Pode%20me%20ajudar%3F" target="_blank" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full font-bold transition shadow-lg transform hover:scale-105">
-                    <i class="ph-bold ph-whatsapp-logo text-xl"></i>
-                    Tire sua dúvida aqui
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section id="services" class="py-16 bg-card border-b border-base">
-        <div class="container mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
-            <div class="reveal-on-scroll">
-                <h2 class="text-3xl font-bold mb-6">Assistência Técnica de Elite</h2>
-                <div class="space-y-6">
-                    <div class="flex gap-4 cursor-default">
-                        <div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center text-2xl"><i class="ph-fill ph-clock-countdown"></i></div>
-                        <div><h4 class="font-bold">Orçamento Rápido</h4><p class="text-sm text-muted">Diagnóstico ágil para você não ficar sem jogar.</p></div>
-                    </div>
-                    <div class="flex gap-4 cursor-default">
-                        <div class="w-12 h-12 rounded-xl bg-green-100 dark:bg-green-900/30 text-green-600 flex items-center justify-center text-2xl"><i class="ph-fill ph-circuitry"></i></div>
-                        <div><h4 class="font-bold">Laboratório Próprio</h4><p class="text-sm text-muted">Peças originais e ferramentas de precisão.</p></div>
-                    </div>
-                    <div class="flex gap-4 cursor-default">
-                         <div class="w-12 h-12 rounded-xl bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 flex items-center justify-center text-2xl"><i class="ph-fill ph-check-circle"></i></div>
-                        <div><h4 class="font-bold">Garantia Real</h4><p class="text-sm text-muted">3 Meses de garantia em todos os serviços.</p></div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="bg-base p-8 rounded-3xl shadow-xl border border-yellow-500/30 relative overflow-hidden reveal-on-scroll" style="transition-delay: 200ms;">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-500 opacity-10 rounded-full blur-3xl animate-pulse"></div>
-                <h3 class="text-2xl font-bold mb-6">Simular Reparo</h3>
-                <form id="serviceForm" class="space-y-4 relative z-10">
-                    <div class="grid grid-cols-2 gap-4">
-                        <input type="text" id="clientName" placeholder="Seu Nome" required class="w-full p-3 rounded-lg bg-card border border-base focus:border-yellow-500 outline-none text-base">
-                        <input type="tel" id="clientPhone" placeholder="Seu Telefone/Zap" required class="w-full p-3 rounded-lg bg-card border border-base focus:border-yellow-500 outline-none text-base">
-                    </div>
-                    <select id="deviceSelect" class="w-full p-3 rounded-lg bg-card border border-base focus:border-yellow-500 outline-none text-base">
-                        <option value="">Selecione o Aparelho...</option>
-                        <option value="PS5">PlayStation 5</option>
-                        <option value="PS4">PlayStation 4</option>
-                        <option value="Xbox Series">Xbox Series S/X</option>
-                        <option value="Nintendo Switch">Nintendo Switch</option>
-                        <option value="PC">Computador / Notebook</option>
-                    </select>
-                    <select id="issueSelect" class="w-full p-3 rounded-lg bg-card border border-base focus:border-yellow-500 outline-none text-base">
-                        <option value="">Qual o defeito?</option>
-                        <option value="Limpeza">Limpeza / Aquecimento</option>
-                        <option value="Nao Liga">Não Liga</option>
-                        <option value="Sem Imagem">Sem Imagem (HDMI)</option>
-                        <option value="Controle">Drift no Controle</option>
-                        <option value="Outro">Outro Defeito</option>
-                    </select>
-                    <div id="serviceResult" class="hidden p-4 bg-card rounded-lg border border-yellow-500/50">
-                        <p class="text-sm">Estimativa: <span class="font-bold text-yellow-600 dark:text-yellow-400" id="timeEstimate">--</span></p>
-                    </div>
-                    <button type="submit" class="w-full py-4 atomic-yellow-bg text-black font-bold rounded-lg hover:brightness-110 transition shadow-md transform active:scale-95">
-                        Agendar via WhatsApp
-                    </button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECTION 4: Reputation Stats + REVIEWS -->
-    <section id="dashboard" class="py-16 bg-base border-t border-b border-base">
-        <div class="container mx-auto px-4">
-            <div class="text-center max-w-3xl mx-auto mb-12 reveal-on-scroll">
-                <h2 class="text-3xl font-bold mb-4">Aprovado pelos Gamers</h2>
-                <p class="text-muted">Transparência total: veja nossos números e o que dizem nossos clientes.</p>
-            </div>
-            
-            <!-- Charts -->
-            <div class="grid md:grid-cols-2 gap-8 mb-16 reveal-on-scroll" style="transition-delay: 100ms;">
-                <div class="bg-card p-6 rounded-2xl shadow-sm border border-base">
-                    <h3 class="font-bold mb-4 flex items-center gap-2 text-base"><i class="ph-fill ph-star text-yellow-400"></i> Pontos Fortes (Média)</h3>
-                    <div class="chart-box"><canvas id="reputationChart"></canvas></div>
-                </div>
-                <div class="bg-card p-6 rounded-2xl shadow-sm border border-base">
-                    <h3 class="font-bold mb-4 flex items-center gap-2 text-base"><i class="ph-fill ph-chart-pie-slice text-purple-500"></i> Distribuição de Serviços</h3>
-                    <div class="chart-box"><canvas id="servicesChart"></canvas></div>
-                </div>
-            </div>
-
-            <!-- GOOGLE REVIEWS MOCKUP -->
-            <div id="reviews" class="bg-card rounded-3xl p-8 border border-base shadow-lg relative overflow-hidden reveal-on-scroll">
-                <div class="absolute top-0 right-0 p-4 opacity-10">
-                    <i class="ph-fill ph-google-logo text-8xl"></i>
-                </div>
-
-                <div class="flex flex-col md:flex-row justify-between items-end mb-8 relative z-10">
-                    <div>
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="text-yellow-400 text-2xl">★★★★★</span>
-                            <span class="font-bold text-xl">4.9 / 5.0</span>
-                        </div>
-                        <h3 class="text-2xl font-bold">O que falam da Atomic?</h3>
-                        <p class="text-muted text-sm">Baseado em avaliações reais do Google Maps.</p>
-                    </div>
-                    <!-- Link do Google Maps (CORRIGIDO) -->
-                    <a href="https://www.google.com/maps/place/Atomic+Games+Assist%C3%AAncia+t%C3%A9cnica+%26+Inform%C3%A1tica/@-22.8742849,-43.3400118,17z/data=!3m1!4b1!4m6!3m5!1s0x9962d705a97465:0xe1880b1ec757dd4f!8m2!3d-22.8742899!4d-43.3374369!16s%2Fg%2F1thxxfhs?entry=ttu" target="_blank" class="mt-4 md:mt-0 text-blue-600 hover:text-blue-700 font-bold text-sm flex items-center gap-1 hover:underline">
-                        Ver no Google <i class="ph-bold ph-arrow-square-out"></i>
-                    </a>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
-                    <div class="review-card bg-base p-6 rounded-xl border border-base hover:border-yellow-400/50">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold">R</div>
-                            <div>
-                                <p class="font-bold text-sm">Rafael Costa</p>
-                                <p class="text-xs text-muted">Há 2 semanas</p>
-                            </div>
-                            <i class="ph-fill ph-google-logo text-gray-400 ml-auto"></i>
-                        </div>
-                        <div class="text-yellow-400 text-xs mb-3">★★★★★</div>
-                        <p class="text-sm text-muted italic">"Levei meu PS5 que estava desligando sozinho. Fizeram a limpeza e troca da pasta térmica no mesmo dia. Atendimento nota 10!"</p>
-                    </div>
-
-                    <div class="review-card bg-base p-6 rounded-xl border border-base hover:border-yellow-400/50">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">F</div>
-                            <div>
-                                <p class="font-bold text-sm">Felipe Martins</p>
-                                <p class="text-xs text-muted">Há 1 mês</p>
-                            </div>
-                            <i class="ph-fill ph-google-logo text-gray-400 ml-auto"></i>
-                        </div>
-                        <div class="text-yellow-400 text-xs mb-3">★★★★★</div>
-                        <p class="text-sm text-muted italic">"Melhor preço do Rio pra comprar console. Comprei meu Xbox Series S lá, lacrado com garantia. Recomendo demais."</p>
-                    </div>
-
-                    <div class="review-card bg-base p-6 rounded-xl border border-base hover:border-yellow-400/50">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center font-bold">J</div>
-                            <div>
-                                <p class="font-bold text-sm">Juliana Alves</p>
-                                <p class="text-xs text-muted">Há 3 dias</p>
-                            </div>
-                            <i class="ph-fill ph-google-logo text-gray-400 ml-auto"></i>
-                        </div>
-                        <div class="text-yellow-400 text-xs mb-3">★★★★★</div>
-                        <p class="text-sm text-muted italic">"Minha loja de confiança em Madureira. Já arrumei controle de Switch, comprei jogos e sempre fui bem atendida."</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- NEW SECTION: ABOUT US -->
-    <section id="about" class="py-16 bg-card border-b border-base">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row items-center gap-12 reveal-on-scroll">
-                <div class="md:w-1/2">
-                    <div class="inline-block px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-xs font-bold uppercase tracking-wider text-muted mb-4">
-                        Nossa História
-                    </div>
-                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Quem é a <span class="atomic-yellow-text">Atomic Games?</span></h2>
-                    <div class="space-y-4 text-muted leading-relaxed">
-                        <p>
-                            Mais do que uma loja, somos uma comunidade. Localizada no coração de <strong>Madureira</strong>, a Atomic Games nasceu da paixão genuína por tecnologia e games. 
-                        </p>
-                        <p>
-                            Com mais de <strong>5.000 clientes satisfeitos</strong>, nossa missão é oferecer não apenas produtos, mas soluções completas: desde o console de última geração até o reparo complexo daquela placa de vídeo ou controle que ninguém mais resolve.
-                        </p>
-                        <p>
-                            Aqui, falamos a sua língua. Seja você um jogador casual ou um entusiasta de hardware high-end, nosso QG está de portas abertas.
-                        </p>
-                    </div>
-                </div>
-                <div class="md:w-1/2 grid grid-cols-2 gap-4">
-                    <div class="bg-base p-6 rounded-2xl border border-base text-center hover:scale-105 transition duration-300 cursor-default">
-                        <i class="ph-fill ph-users-three text-4xl text-yellow-500 mb-3"></i>
-                        <h4 class="font-bold text-lg">+5.000</h4>
-                        <p class="text-sm text-muted">Clientes Atendidos</p>
-                    </div>
-                    <div class="bg-base p-6 rounded-2xl border border-base text-center hover:scale-105 transition duration-300 cursor-default">
-                        <i class="ph-fill ph-wrench text-4xl text-blue-500 mb-3"></i>
-                        <h4 class="font-bold text-lg">Especialistas</h4>
-                        <p class="text-sm text-muted">Em Hardware e Games</p>
-                    </div>
-                    <div class="bg-base p-6 rounded-2xl border border-base text-center col-span-2 hover:scale-105 transition duration-300 cursor-default">
-                        <i class="ph-fill ph-heart text-4xl text-red-500 mb-3"></i>
-                        <h4 class="font-bold text-lg">Paixão Gamer</h4>
-                        <p class="text-sm text-muted">De jogador para jogador</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- NEW SECTION: LOCATION MAP -->
-    <section id="location" class="py-16 bg-base">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-10 reveal-on-scroll">
-                <h2 class="text-3xl font-bold mb-4">Venha Conhecer Nosso QG</h2>
-                <p class="text-muted">Fácil acesso no coração de Madureira.</p>
-            </div>
-
-            <div class="bg-card rounded-2xl overflow-hidden shadow-lg border border-base flex flex-col md:flex-row h-[500px] reveal-on-scroll">
-                <!-- Info Side -->
-                <div class="md:w-1/3 p-8 flex flex-col justify-center space-y-8 bg-card relative z-10">
-                    <div>
-                        <h3 class="font-bold text-xl mb-2 flex items-center gap-2">
-                            <i class="ph-fill ph-map-pin text-yellow-500"></i> Endereço
-                        </h3>
-                        <p class="text-muted">
-                            Av. Ministro Edgard Romero, 81<br>
-                            Loja 3 - Madureira<br>
-                            Rio de Janeiro - RJ
-                        </p>
-                    </div>
-                    
-                    <div>
-                        <h3 class="font-bold text-xl mb-2 flex items-center gap-2">
-                            <i class="ph-fill ph-clock text-yellow-500"></i> Horário
-                        </h3>
-                        <p class="text-muted">
-                            Segunda a Sexta: 09h às 19h<br>
-                            Sábado: 09h às 14h<br>
-                            Domingo: Fechado
-                        </p>
-                    </div>
-
-                    <!-- Link do Google Maps -->
-                    <a href="https://www.google.com/maps/place/Atomic+Games+Assist%C3%AAncia+t%C3%A9cnica+%26+Inform%C3%A1tica/@-22.8742849,-43.3400118,17z/data=!3m1!4b1!4m6!3m5!1s0x9962d705a97465:0xe1880b1ec757dd4f!8m2!3d-22.8742899!4d-43.3374369!16s%2Fg%2F1thxxfhs?entry=ttu" target="_blank" class="bg-black text-white text-center py-3 rounded-lg font-bold hover:bg-gray-800 transition flex items-center justify-center gap-2 transform active:scale-95">
-                        <i class="ph-bold ph-arrow-bend-up-right"></i> Traçar Rota
-                    </a>
-                </div>
-
-                <!-- Map Side -->
-                <div class="md:w-2/3 bg-gray-200 map-container">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3676.5!2d-43.3374369!3d-22.8742899!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9962d705a97465%3A0xe1880b1ec757dd4f!2sAtomic%20Games%20Assist%C3%AAncia%20t%C3%A9cnica%20%26%20Inform%C3%A1tica!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr" 
-                        allowfullscreen="" 
-                        loading="lazy" 
-                        referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ -->
-    <section id="faq" class="py-16 bg-card border-t border-base">
-        <div class="container mx-auto px-4 max-w-4xl">
-            <h2 class="text-3xl font-bold text-center mb-10 text-base reveal-on-scroll">Perguntas Frequentes</h2>
-            <div class="space-y-4 reveal-on-scroll" id="faqContainer">
-                <!-- FAQs via JS -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-base border-t border-base py-12">
-        <div class="container mx-auto px-4 text-center">
-            <a href="#" onclick="location.reload()" class="inline-block hover:opacity-80 transition transform hover:scale-110 duration-300">
-                <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/atomiclogo.webp" class="h-16 w-16 mx-auto rounded-full shadow-lg mb-4 bg-black">
-            </a>
-            <h4 class="font-bold text-xl mb-2 brand-font">ATOMIC GAMES</h4>
-            <p class="text-muted mb-6">Madureira - Rio de Janeiro</p>
-            <div class="flex justify-center gap-4 text-2xl text-muted">
-                <!-- REDES SOCIAIS CORRIGIDAS DEFINITIVAMENTE -->
-                <a href="https://www.instagram.com/atomicgames.rj/" target="_blank" class="hover:text-pink-600 transition hover:-translate-y-1"><i class="ph-fill ph-instagram-logo"></i></a>
-                <a href="https://www.facebook.com/AtomicGamesRj?locale=pt_BR" target="_blank" class="hover:text-blue-600 transition hover:-translate-y-1"><i class="ph-fill ph-facebook-logo"></i></a>
-                <a href="https://www.tiktok.com/@atomic.games.bras" target="_blank" class="hover:text-black dark:hover:text-white transition hover:-translate-y-1"><i class="ph-fill ph-tiktok-logo"></i></a>
-            </div>
-            <p class="text-xs text-muted mt-8">&copy; 2025 Atomic Games. Todos os direitos reservados.</p>
-        </div>
-    </footer>
-
-    <!-- JS Logic -->
-    <script type="module">
-        // FIREBASE IMPORTS
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, query } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
-        // FIREBASE CONFIG
-        const firebaseConfig = {
-            apiKey: "AIzaSyBywoUqD9Q19kFYd_Qan9DAQAJS2Nu5-04",
-            authDomain: "banco-de-dados-e-controle.firebaseapp.com",
-            projectId: "banco-de-dados-e-controle",
-            storageBucket: "banco-de-dados-e-controle.firebasestorage.app",
-            messagingSenderId: "1086382958528",
-            appId: "1:1086382958528:web:89f296d4694140da048a25",
-            measurementId: "G-5F6F5KE89L"
-        };
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app';
-
-        // CONFIGURAÇÃO DAS IMAGENS (GITHUB)
-        const repoUrl = "https://raw.githubusercontent.com/creativethb/SITE/main/img/";
-        
-        // PRODUTOS INICIAIS (STATIC)
-        const initialProducts = [
-            // CONSOLES
-            { id: 1, name: "PlayStation 5 Slim", category: "console", price: "R$ 3.799,00", image: repoUrl + "console-ps5.webp", desc: "Digital Edition, 1TB SSD" },
-            { id: 2, name: "Xbox Series S", category: "console", price: "R$ 2.699,00", image: repoUrl + "console-xbox-s.webp", desc: "512GB SSD, Compacto" },
-            { id: 3, name: "Nintendo Switch OLED", category: "console", price: "R$ 2.199,00", image: repoUrl + "console-switch.webp", desc: "Tela 7 pol, Joy-Cons" },
-            { id: 4, name: "PlayStation 4 Slim", category: "console", price: "R$ 1.599,00", image: repoUrl + "console-ps4.webp", desc: "500GB, Seminovo c/ Garantia" },
-            { id: 5, name: "Xbox Series X", category: "console", price: "R$ 4.499,00", image: repoUrl + "console-xbox-x.webp", desc: "1TB SSD, 4K Nativo" },
-            
-            // GAMES
-            { id: 6, name: "God of War Ragnarok", category: "games", price: "R$ 299,00", image: repoUrl + "game-gow.webp", desc: "PS5 Mídia Física" },
-            { id: 7, name: "GTA V Premium", category: "games", price: "R$ 149,00", image: repoUrl + "game-gta.webp", desc: "PS4 / Xbox One" },
-            { id: 8, name: "EA Sports FC 24", category: "games", price: "R$ 249,00", image: repoUrl + "game-fc24.webp", desc: "PS5 / PS4" },
-            { id: 9, name: "Spider-Man 2", category: "games", price: "R$ 349,00", image: repoUrl + "spiderman.webp", desc: "Exclusivo PS5" },
-            { id: 10, name: "Mario Kart 8 Deluxe", category: "games", price: "R$ 299,00", image: repoUrl + "game-mario.webp", desc: "Nintendo Switch" },
-            
-            // ACESSÓRIOS
-            { id: 12, name: "Controle DualSense", category: "acessorios", price: "R$ 449,00", image: repoUrl + "acessorio-dualsense.webp", desc: "Original Sony" },
-            { id: 13, name: "Controle Xbox Series", category: "acessorios", price: "R$ 399,00", image: repoUrl + "acessorio-controle-xbox.webp", desc: "Carbon Black" },
-            { id: 14, name: "Headset Gamer", category: "acessorios", price: "R$ 249,00", image: repoUrl + "acessorio-headset.webp", desc: "PC e Consoles" },
-            { id: 15, name: "Joy-Con Par", category: "acessorios", price: "R$ 499,00", image: repoUrl + "acessorio-joycon.webp", desc: "Neon Red/Blue" },
-            
-            // HARDWARE
-            { id: 17, name: "Kit Upgrade Ryzen 5", category: "hardware", price: "R$ 1.899,00", image: repoUrl + "hardware-kit-ryzen.webp", desc: "Ryzen 5600G + B450M" },
-            { id: 18, name: "SSD NVMe 1TB", category: "hardware", price: "R$ 399,00", image: repoUrl + "hardware-ssd.webp", desc: "Kingston NV2" },
-            { id: 19, name: "Memória RAM 16GB", category: "hardware", price: "R$ 249,00", image: repoUrl + "hardware-ram.webp", desc: "DDR4 3200Mhz Fury" },
-            { id: 20, name: "Fonte 600W", category: "hardware", price: "R$ 299,00", image: repoUrl + "hardware-fonte.webp", desc: "80 Plus Bronze" },
-        ];
-
-        let allProducts = [...initialProducts]; // Combina estáticos + DB
-
-        const faqs = [
-            { q: "Vocês aceitam consoles usados na troca?", a: "Sim! Avaliamos seu console usado (PS4, Xbox One, Switch) como parte do pagamento. Traga para avaliação." },
-            { q: "Qual o prazo de garantia dos serviços?", a: "Todos os nossos serviços de manutenção possuem 90 dias (3 meses) de garantia legal." },
-            { q: "Vocês montam PC Gamer?", a: "Com certeza. Temos consultoria especializada para montar o PC ideal para seu orçamento." },
-            { q: "Entregam em todo o Rio de Janeiro?", a: "Sim, trabalhamos com entregas expressas no RJ. Consulte a taxa no WhatsApp." }
-        ];
-
-        // --- FIREBASE LOGIC ---
-        function loadGamesFromDB() {
-            // Escuta em tempo real a coleção 'games' que o Admin popula
-            const gamesRef = collection(db, 'artifacts', appId, 'public', 'data', 'games');
-            
-            onSnapshot(query(gamesRef), (snapshot) => {
-                const dbGames = [];
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    // Adapta o formato do DB para o formato do Site
-                    dbGames.push({
-                        id: doc.id, // Usa ID do Firestore
-                        name: data.title || "Produto Sem Nome",
-                        category: mapCategory(data.genre),
-                        price: typeof data.price === 'number' ? `R$ ${data.price.toFixed(2).replace('.', ',')}` : data.price,
-                        image: data.image || "https://placehold.co/400x400/e2e8f0/1e293b?text=ATOMIC",
-                        desc: data.description || "Sem descrição."
-                    });
-                });
-
-                // Atualiza a lista global (Estáticos + DB)
-                // Se quiser que o DB substitua, use: allProducts = [...dbGames];
-                // Aqui estamos adicionando:
-                allProducts = [...initialProducts, ...dbGames];
-                
-                // Re-renderiza a tela
-                renderProducts(currentFilter, document.getElementById('searchInput').value);
-            });
-        }
-
-        function mapCategory(genre) {
-            // Mapeia generos antigos para categorias do novo layout
-            if(!genre) return 'games';
-            const g = genre.toLowerCase();
-            if(g.includes('rpg') || g.includes('ação') || g.includes('tiro')) return 'games';
-            if(g.includes('console')) return 'console';
-            if(g.includes('acess')) return 'acessorios';
-            if(g.includes('pc') || g.includes('hardware')) return 'hardware';
-            return 'games'; // fallback
-        }
-
-        // --- ANIMATIONS & LOGIC ---
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
-
-        function refreshAnimations() {
-            document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
-        }
-
-        const backToTopBtn = document.getElementById('backToTop');
-        
-        // --- LOGICA DE SCROLL PARA HEADER ---
-        let lastScrollY = window.scrollY;
-        const navbar = document.getElementById('navbar');
-
-        window.addEventListener('scroll', () => {
-            backToTopBtn.classList.toggle('show', window.scrollY > 300);
-
-            const currentScrollY = window.scrollY;
-            if (currentScrollY > lastScrollY && currentScrollY > 60) {
-                // Esconde o menu se rolar para baixo
-                navbar.classList.add('nav-hidden');
-            } else {
-                // Mostra o menu se rolar para cima
-                navbar.classList.remove('nav-hidden');
-            }
-            lastScrollY = currentScrollY;
-        });
-
-        // --- CORE FUNCTIONS ---
-        let cart = [];
-        let currentFilter = 'all';
-
-        // Torna funções globais para o HTML acessar (já que é module)
-        window.addToCart = (id) => {
-            // Procura por ID numérico ou string
-            const product = allProducts.find(p => p.id == id);
-            if (!product) return;
-            cart.push(product);
-            updateCartUI();
-            toggleCart();
-        }
-
-        window.removeFromCart = (index) => {
-            cart.splice(index, 1);
-            updateCartUI();
-        }
-
-        function updateCartUI() {
-            const container = document.getElementById('cartItemsContainer');
-            const totalEl = document.getElementById('cartTotal');
-            const countEl = document.getElementById('cartCount');
-            
-            countEl.innerText = cart.length;
-            countEl.classList.toggle('hidden', cart.length === 0);
-            container.innerHTML = '';
-            let total = 0;
-
-            if (cart.length === 0) {
-                container.innerHTML = '<p class="text-center text-muted mt-10">Seu carrinho está vazio.</p>';
-            } else {
-                cart.forEach((item, index) => {
-                    // Limpa string de preço para float
-                    let priceString = item.price.toString().replace('R$ ', '').replace('.', '').replace(',', '.');
-                    const priceNumber = parseFloat(priceString) || 0;
-                    total += priceNumber;
-                    
-                    const div = document.createElement('div');
-                    div.className = 'flex justify-between items-center bg-base p-3 rounded-lg border border-base animate-[pop-in_0.3s_ease-out]';
-                    div.innerHTML = `
-                        <div class="flex items-center gap-3">
-                            <img src="${item.image}" class="w-12 h-12 object-contain bg-white rounded" onerror="this.onerror=null;this.src='https://placehold.co/100?text=ATOMIC'">
-                            <div>
-                                <p class="font-bold text-sm line-clamp-1">${item.name}</p>
-                                <p class="text-xs text-atomic-yellow-text font-bold">${item.price}</p>
-                            </div>
-                        </div>
-                        <button onclick="removeFromCart(${index})" class="text-red-500 hover:bg-red-100 p-1 rounded"><i class="ph-bold ph-trash"></i></button>
-                    `;
-                    container.appendChild(div);
-                });
-            }
-            totalEl.innerText = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        }
-
-        window.toggleCart = () => {
-            document.getElementById('cartModal').classList.toggle('open');
-            document.getElementById('cartOverlay').classList.toggle('open');
-        }
-
-        window.checkoutWhatsApp = () => {
-            if (cart.length === 0) return alert('Seu carrinho está vazio!');
-            let message = "Olá! Vim pelo site e gostaria de fechar o pedido dos seguintes itens:\n\n";
-            cart.forEach(item => message += `• ${item.name} - ${item.price}\n`);
-            message += `\n*Total Estimado: ${document.getElementById('cartTotal').innerText}*`;
-            message += "\n\nComo podemos prosseguir com o pagamento e entrega?";
-            window.open(`https://wa.me/5521995969378?text=${encodeURIComponent(message)}`, '_blank');
-        }
-
-        function renderProducts(filter, searchTerm = "", forceAll = false) {
-            const grid = document.getElementById('productGrid');
-            const noRes = document.getElementById('noResults');
-            const loadMoreContainer = document.getElementById('loadMoreContainer');
-            grid.innerHTML = '';
-
-            let filtered = allProducts;
-            if (filter !== 'all') filtered = filtered.filter(p => p.category === filter);
-            if (searchTerm) {
-                const lowerTerm = searchTerm.toLowerCase();
-                filtered = filtered.filter(p => p.name.toLowerCase().includes(lowerTerm) || p.desc.toLowerCase().includes(lowerTerm));
-            }
-
-            const isMobile = window.innerWidth < 768;
-            const initialLimit = isMobile ? 4 : 10;
-            let productsToShow = filtered;
-
-            if (!forceAll && !searchTerm) {
-                productsToShow = filtered.slice(0, initialLimit);
-                if (filtered.length > initialLimit) loadMoreContainer.classList.remove('hidden');
-                else loadMoreContainer.classList.add('hidden');
-            } else {
-                loadMoreContainer.classList.add('hidden');
-            }
-
-            if (filtered.length === 0) {
-                noRes.classList.remove('hidden');
-                loadMoreContainer.classList.add('hidden');
-            } else {
-                noRes.classList.add('hidden');
-                productsToShow.forEach((p, index) => {
-                    const card = document.createElement('div');
-                    card.style.animationDelay = `${index * 50}ms`;
-                    card.className = 'product-card bg-card rounded-xl overflow-hidden border border-base flex flex-col h-full group cursor-pointer animate-[pop-in_0.5s_ease-out_both]';
-                    // Nota: aspas no argumento da função onclick para suportar IDs string
-                    card.innerHTML = `
-                        <div class="product-img-box">
-                            <img src="${p.image}" alt="${p.name}" loading="lazy" 
-                                 onerror="this.onerror=null;this.src='https://placehold.co/400x400/e2e8f0/1e293b?text=${encodeURIComponent(p.name)}'">
-                            <span class="absolute top-2 right-2 bg-black text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wide border border-atomic-yellow">${p.category}</span>
-                        </div>
-                        <div class="p-4 flex-grow flex flex-col">
-                            <h3 class="font-bold text-base mb-1 leading-tight group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition">${p.name}</h3>
-                            <p class="text-xs text-muted mb-4 flex-grow line-clamp-2">${p.desc}</p>
-                            <div class="mt-auto flex items-center justify-between">
-                                <span class="font-bold text-lg atomic-yellow-text">${p.price}</span>
-                                <button onclick="addToCart('${p.id}')" class="bg-black hover:bg-gray-800 text-white w-10 h-10 rounded-full flex items-center justify-center transition shadow-md group-btn transform active:scale-90">
-                                    <i class="ph-bold ph-shopping-cart text-xl text-yellow-500"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    grid.appendChild(card);
-                });
-            }
-        }
-        
-        window.loadVideo = () => {
-            const facade = document.getElementById('videoFacade');
-            const container = document.getElementById('videoContainer');
-            const videoId = facade.getAttribute('data-video-id');
-            facade.style.display = 'none';
-            container.classList.remove('hidden');
-            container.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${videoId}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-        }
-
-        function renderFAQs() {
-            const container = document.getElementById('faqContainer');
-            container.innerHTML = '';
-            faqs.forEach((item) => {
-                const details = document.createElement('details');
-                details.className = 'group bg-base rounded-lg border border-base overflow-hidden transition-colors duration-300';
-                details.innerHTML = `
-                    <summary class="flex justify-between items-center font-medium cursor-pointer list-none p-4 bg-card group-open:bg-base transition-colors duration-300">
-                        <span class="text-base font-bold">${item.q}</span>
-                        <span class="transition group-open:rotate-180 text-base">
-                            <i class="ph-bold ph-caret-down"></i>
-                        </span>
-                    </summary>
-                    <div class="text-muted p-4 pt-2 leading-relaxed bg-base">
-                        ${item.a}
-                    </div>
-                `;
-                container.appendChild(details);
-            });
-        }
-
-        // --- INIT ---
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.className = savedTheme;
-            
-            initCharts(savedTheme);
-            renderFAQs();
-            
-            // Carrega Firebase + Renderiza
-            loadGamesFromDB();
-            
-            refreshAnimations();
-
-            document.getElementById('btnLoadMore').addEventListener('click', () => {
-                const searchInput = document.getElementById('searchInput');
-                renderProducts(currentFilter, searchInput.value, true);
-            });
-
-            const buttons = document.querySelectorAll('.filter-btn');
-            const searchInput = document.getElementById('searchInput');
-            buttons.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    buttons.forEach(b => {
-                        b.classList.remove('active', 'bg-black', 'text-white', 'border-transparent');
-                        b.classList.add('bg-card', 'text-muted', 'border-base');
-                    });
-                    e.target.classList.remove('bg-card', 'text-muted', 'border-base');
-                    e.target.classList.add('active', 'bg-black', 'text-white', 'border-transparent');
-                    currentFilter = e.target.dataset.category;
-                    renderProducts(currentFilter, searchInput.value);
-                });
-            });
-            searchInput.addEventListener('input', (e) => renderProducts(currentFilter, e.target.value));
-
-            document.getElementById('serviceForm').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const name = document.getElementById('clientName').value;
-                const phone = document.getElementById('clientPhone').value;
-                const dev = document.getElementById('deviceSelect').value;
-                const iss = document.getElementById('issueSelect').value;
-                if(!name || !phone || !dev || !iss) return alert('Por favor, preencha todos os campos.');
-                const message = `*SOLICITAÇÃO DE REPARO (SITE)*\n\n👤 *Nome:* ${name}\n📱 *Tel:* ${phone}\n🎮 *Aparelho:* ${dev}\n⚠️ *Problema:* ${iss}\n\n_Vim pelo site e gostaria de um orçamento._`;
-                window.open(`https://wa.me/5521995969378?text=${encodeURIComponent(message)}`, '_blank');
-            });
-
-            const form = document.getElementById('serviceForm');
-            form.addEventListener('change', () => {
-                const dev = document.getElementById('deviceSelect').value;
-                const iss = document.getElementById('issueSelect').value;
-                const res = document.getElementById('serviceResult');
-                if(dev && iss) {
-                    res.classList.remove('hidden');
-                    document.getElementById('timeEstimate').innerText = (iss === 'Limpeza' ? '24 Horas' : '3 a 5 dias úteis');
-                }
-            });
-
-            document.getElementById('themeToggle').addEventListener('click', () => {
-                const html = document.documentElement;
-                const newTheme = html.classList.contains('dark') ? 'light' : 'dark';
-                html.className = newTheme;
-                localStorage.setItem('theme', newTheme);
-                initCharts(newTheme);
-            });
-        });
-
-        // Chart.js Setup
-        function initCharts(theme) {
-            const isDark = theme === 'dark';
-            const textColor = isDark ? '#f1f5f9' : '#1e293b';
-            const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
-
-            if(window.repChart) window.repChart.destroy();
-            if(window.servChart) window.servChart.destroy();
-
-            const ctx1 = document.getElementById('reputationChart').getContext('2d');
-            window.repChart = new Chart(ctx1, {
-                type: 'radar',
-                data: {
-                    labels: ['Atendimento', 'Preço', 'Rapidez', 'Variedade', 'Confiança'],
-                    datasets: [{
-                        label: 'Nota Média',
-                        data: [4.9, 4.7, 4.5, 4.8, 5.0],
-                        backgroundColor: isDark ? 'rgba(255, 215, 0, 0.2)' : 'rgba(255, 215, 0, 0.5)',
-                        borderColor: '#FFD700',
-                        pointBackgroundColor: '#FFD700'
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            grid: { color: gridColor },
-                            pointLabels: { color: textColor, font: { size: 11 } },
-                            ticks: { display: false }
-                        }
-                    },
-                    plugins: { legend: { display: false } }
-                }
-            });
-
-            const ctx2 = document.getElementById('servicesChart').getContext('2d');
-            window.servChart = new Chart(ctx2, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Manutenção', 'Jogos', 'Consoles', 'Peças'],
-                    datasets: [{
-                        data: [40, 20, 25, 15],
-                        backgroundColor: ['#FFD700', '#10B981', '#3B82F6', '#6366F1'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'right', labels: { color: textColor, font: { family: 'Inter' } } } }
-                }
-            });
-        }
-    </script>
-</body>
-</html>
+    /* Banner Fix */
+    .hero-section {
+        background-position: center; background-repeat: no-repeat; background-size: cover; position: relative;
+    }
+    @media (min-width: 768px) {
+        .hero-section { background-image: url('https://raw.githubusercontent.com/creativethb/SITE/main/img/painelv6.webp'); }
+    }
+    
+    /* Nav Links */
+    .nav-link { position: relative; transition: color 0.2s; }
+    .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -2px; left: 0; background-color: #FFD700; transition: width 0.3s ease; }
+    .nav-link:hover::after { width: 100%; }
+    .light .nav-link:hover { color: #d97706; }
+    .dark .nav-link:hover { color: #FFD700; }
+
+    .chart-box { position: relative; height: 300px; width: 100%; }
+    
+    /* CART & MODAL */
+    .cart-modal {
+        position: fixed; top: 0; right: 0; height: 100%; width: 100%; max-width: 400px;
+        background: var(--bg-card); box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+        z-index: 100; transform: translateX(100%); transition: transform 0.3s ease-in-out;
+        display: flex; flex-direction: column;
+    }
+    .cart-modal.open { transform: translateX(0); }
+    .cart-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5); z-index: 99; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .cart-overlay.open { opacity: 1; pointer-events: auto; }
+    .badge {
+        position: absolute; top: -5px; right: -5px; background-color: #ef4444; color: white;
+        font-size: 0.7rem; font-weight: bold; width: 18px; height: 18px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        animation: pop-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes pop-in { from { transform: scale(0); } to { transform: scale(1); } }
+
+    /* Map */
+    .map-container iframe { width: 100%; height: 100%; border-radius: 1rem; filter: grayscale(0.2); transition: filter 0.3s; }
+    .map-container:hover iframe { filter: grayscale(0); }
+    
+    /* Back to Top */
+    #backToTop { opacity: 0; pointer-events: none; transition: all 0.3s ease; transform: translateY(20px); }
+    #backToTop.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+    /* NAVBAR HIDDEN STATE */
+    .nav-hidden { transform: translateY(-100%); }
+</style>
