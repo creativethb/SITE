@@ -1266,29 +1266,7 @@
     </footer>
 
     <!-- JavaScript -->
-    <script type="module">
-        // FIREBASE IMPORTS
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, query } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
-        // FIREBASE CONFIG
-        // Usando a configuração do ambiente se disponível, senão usa a sua configuração
-        const fallbackConfig = {
-            apiKey: "AIzaSyBywoUqD9Q19kFYd_Qan9DAQAJS2Nu5-04",
-            authDomain: "banco-de-dados-e-controle.firebaseapp.com",
-            projectId: "banco-de-dados-e-controle",
-            storageBucket: "banco-de-dados-e-controle.firebasestorage.app",
-            messagingSenderId: "1086382958528",
-            appId: "1:1086382958528:web:89f296d4694140da048a25",
-            measurementId: "G-5F6F5KE89L"
-        };
-        
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : fallbackConfig;
-        
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app';
-
+    <script>
         // IMAGE CONFIG
         const repoUrl = "https://raw.githubusercontent.com/creativethb/SITE/main/img/";
         
@@ -1346,27 +1324,6 @@
             document.getElementById('mobileMenu').classList.toggle('open');
             document.getElementById('mobileMenuOverlay').classList.toggle('open');
             document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
-        }
-
-        // Firebase Logic
-        function loadGamesFromDB() {
-            const gamesRef = collection(db, 'artifacts', appId, 'public', 'data', 'games');
-            onSnapshot(query(gamesRef), (snapshot) => {
-                const dbGames = [];
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    dbGames.push({
-                        id: doc.id,
-                        name: data.title || "Produto Sem Nome",
-                        category: mapCategory(data.genre),
-                        price: typeof data.price === 'number' ? `R$ ${data.price.toFixed(2).replace('.', ',')}` : data.price,
-                        image: data.image || "https://placehold.co/400x400/e2e8f0/1e293b?text=ATOMIC",
-                        desc: data.description || "Sem descrição."
-                    });
-                });
-                allProducts = [...initialProducts, ...dbGames];
-                renderProducts(currentFilter, document.getElementById('searchInput').value);
-            });
         }
 
         function mapCategory(genre) {
@@ -1596,7 +1553,8 @@
             
             initCharts(savedTheme);
             renderFAQs();
-            loadGamesFromDB();
+            // Agora chamamos o renderProducts diretamente com a lista local
+            renderProducts(currentFilter, "");
             refreshAnimations();
 
             document.getElementById('btnLoadMore').addEventListener('click', () => {
