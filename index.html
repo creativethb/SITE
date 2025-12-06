@@ -59,8 +59,9 @@
         .light .text-base { color: #1e293b; }
         .light .text-muted { color: #64748b; }
         .light .border-base { border-color: #e2e8f0; }
+        /* Overlay ajustado para funcionar bem tanto no mobile quanto desktop */
         .light .hero-overlay { 
-            background: linear-gradient(135deg, rgba(248,250,252,0.98) 0%, rgba(248,250,252,0.85) 40%, rgba(248,250,252,0.4) 100%); 
+            background: linear-gradient(135deg, rgba(248,250,252,0.98) 0%, rgba(248,250,252,0.92) 50%, rgba(248,250,252,0.7) 100%); 
         }
         .light .glass { 
             background: rgba(255, 255, 255, 0.8);
@@ -74,8 +75,9 @@
         .dark .text-base { color: #f1f5f9; }
         .dark .text-muted { color: #94a3b8; }
         .dark .border-base { border-color: #1e293b; }
+        /* Overlay ajustado para o modo escuro */
         .dark .hero-overlay { 
-            background: linear-gradient(135deg, rgba(10,15,26,0.98) 0%, rgba(10,15,26,0.9) 40%, rgba(10,15,26,0.5) 100%); 
+            background: linear-gradient(135deg, rgba(10,15,26,0.98) 0%, rgba(10,15,26,0.92) 50%, rgba(10,15,26,0.7) 100%); 
         }
         .dark .glass { 
             background: rgba(17, 24, 39, 0.8);
@@ -221,9 +223,10 @@
             box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
         }
         
-        /* Hero Section */
+        /* Hero Section - BANNER UNIFICADO */
         .hero-section {
-            background-position: center right;
+            background-image: url('https://raw.githubusercontent.com/creativethb/SITE/main/img/painelv6.webp');
+            background-position: center; /* Centraliza no mobile */
             background-repeat: no-repeat;
             background-size: cover;
             position: relative;
@@ -231,7 +234,7 @@
         }
         @media (min-width: 768px) {
             .hero-section { 
-                background-image: url('https://raw.githubusercontent.com/creativethb/SITE/main/img/painelv6.webp');
+                background-position: center right; /* Ajuste fino para desktop */
             }
         }
         .hero-section::before {
@@ -699,26 +702,24 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero Section - ATUALIZADO (Banner Unificado e Vídeo Mobile) -->
     <header class="relative border-b border-base overflow-hidden hero-section" style="min-height: 650px;">
-        <div class="absolute inset-0 z-0 hero-overlay hidden md:block"></div>
+        <!-- Overlay sempre visível para garantir leitura no mobile -->
+        <div class="absolute inset-0 z-0 hero-overlay block"></div>
 
-        <div class="container mx-auto px-4 lg:px-8 h-full relative z-10 flex flex-col md:flex-row items-center justify-center py-8 md:py-24 gap-10 md:gap-16">
+        <div class="container mx-auto px-4 lg:px-8 h-full relative z-10 flex flex-col md:flex-row items-center justify-center py-16 md:py-24 gap-10 md:gap-16">
             <div class="md:w-1/2 space-y-6 flex flex-col items-center md:items-start text-center md:text-left reveal-on-scroll">
-                <!-- MOBILE BANNER -->
-                <div class="block md:hidden w-[calc(100%+2rem)] -mx-4 -mt-8 mb-4 overflow-hidden shadow-xl">
-                    <img src="https://raw.githubusercontent.com/creativethb/SITE/main/img/baner%20mobile.webp" alt="Atomic Games Banner" class="w-full h-auto object-cover">
-                </div>
-
+                
+                <!-- Tag de Localização -->
                 <div class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black rounded-full text-xs font-bold uppercase tracking-wider shadow-lg transform hover:scale-105 transition cursor-default">
                     <i class="ph-fill ph-map-pin animate-pulse"></i> Madureira - RJ
                 </div>
                 
-                <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] text-base">
+                <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] text-base drop-shadow-sm">
                     O Quartel General do <span class="text-gradient">Gamer Carioca</span>
                 </h1>
                 
-                <p class="text-lg md:text-xl text-muted font-medium max-w-lg leading-relaxed">
+                <p class="text-lg md:text-xl text-muted font-medium max-w-lg leading-relaxed drop-shadow-sm">
                     Console quebrado? PC lento? Ou procurando aquele upgrade? 
                     Somos <strong class="text-base">especialistas em assistência técnica</strong> e a loja mais completa da região.
                 </p>
@@ -736,28 +737,29 @@
                 
                 <!-- Trust Badges -->
                 <div class="flex flex-wrap justify-center md:justify-start gap-6 pt-4">
-                    <div class="flex items-center gap-2 text-sm text-muted">
+                    <div class="flex items-center gap-2 text-sm text-muted font-medium">
                         <i class="ph-fill ph-shield-check text-green-500 text-xl"></i>
                         <span>Garantia Real</span>
                     </div>
-                    <div class="flex items-center gap-2 text-sm text-muted">
+                    <div class="flex items-center gap-2 text-sm text-muted font-medium">
                         <i class="ph-fill ph-star text-yellow-500 text-xl"></i>
                         <span>4.9 no Google</span>
                     </div>
-                    <div class="flex items-center gap-2 text-sm text-muted">
+                    <div class="flex items-center gap-2 text-sm text-muted font-medium">
                         <i class="ph-fill ph-users text-blue-500 text-xl"></i>
                         <span>+5000 Clientes</span>
                     </div>
                 </div>
             </div>
 
-            <div class="md:w-1/2 w-full flex justify-center reveal-on-scroll" style="transition-delay: 200ms;">
-                <div class="relative w-full max-w-lg aspect-video bg-black rounded-3xl shadow-2xl overflow-hidden border-4 border-white dark:border-slate-700 hidden md:block group float-animation glow-yellow">
+            <!-- VÍDEO AGORA VISÍVEL NO MOBILE -->
+            <div class="md:w-1/2 w-full flex justify-center reveal-on-scroll mt-4 md:mt-0" style="transition-delay: 200ms;">
+                <div class="relative w-full max-w-lg aspect-video bg-black rounded-3xl shadow-2xl overflow-hidden border-4 border-white dark:border-slate-700 block group float-animation glow-yellow">
                     <div class="video-facade" id="videoFacade" onclick="loadVideo()" data-video-id="bDAR4bkn0mY">
                         <img src="https://img.youtube.com/vi/bDAR4bkn0mY/maxresdefault.jpg" alt="Video thumbnail" 
                              onerror="this.src='https://placehold.co/800x450/000/FFD700?text=ATOMIC+GAMES'">
-                        <div class="play-btn absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-2xl z-20 cursor-pointer">
-                            <i class="ph-fill ph-play text-3xl text-black ml-1"></i>
+                        <div class="play-btn absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-2xl z-20 cursor-pointer">
+                            <i class="ph-fill ph-play text-2xl md:text-3xl text-black ml-1"></i>
                         </div>
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                         <div class="absolute bottom-4 left-4 right-4 flex items-center gap-3">
